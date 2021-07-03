@@ -334,7 +334,7 @@ singleTap(ui.timer.cancel, () => {
   switchPage(TIME);
 })
 
-ui.main.city.text = 'City'
+ui.main.city.text = 'City';
 
 // Heart
 const base = 5000;
@@ -440,9 +440,9 @@ const hrmRead = () => {
   if (now > ekg.long) {
     ekg.longs.push(avg(ekg.mids) || resting || 60);
     if (ekg.longs.length > 20) ekg.longs.shift();
-    ekg.minLongs.push(Math.min.apply(Math, ekg.mids) || resting || 60);
+    ekg.minLongs.push(Math.min.apply(Math, ekg.minMids) || resting || 60);
     if (ekg.minLongs.length > 20) ekg.minLongs.shift();
-    ekg.maxLongs.push(Math.max.apply(Math, ekg.mids) || resting || 60);
+    ekg.maxLongs.push(Math.max.apply(Math, ekg.maxMids) || resting || 60);
     if (ekg.maxLongs.length > 20) ekg.maxLongs.shift();
     bump = true;
     ekg.long = now + ekg.longt;
@@ -798,7 +798,7 @@ function updateExercise() {
       
       w.time.text = monoDigits(formatMilliseconds(ex.stats.activeTime, true));
       
-      w.floors.text = monoDigits(`${settings.temp ? mToF(ex.stats.elevationGain) : ex.stats.elevationGain || 0}`);
+      w.floors.text = monoDigits(`${settings.temp ? Math.round(mToF(ex.stats.elevationGain)) : ex.stats.elevationGain || 0}`);
       w.calories.text = monoDigits(`${ex.stats.calories || 0}`);
       w.steps.text = monoDigits(`${ex.stats.steps || 0}`);
       w.distance.text = monoDigits(`${settings.temp ? mToMi(ex.stats.distance || 0).toFixed(1) : mToKm(ex.stats.distance || 0).toFixed(1)}`);
@@ -827,7 +827,7 @@ function updateExercise() {
       
       const speed = ex.type === 'biking' ? 17 : ex.type === 'running' ? 10 : 3.5;
       
-      w.floors.text = monoDigits(`${settings.temp ? mToF(ex.stats.elevationGain) : ex.stats.elevationGain || 0}`);
+      w.floors.text = monoDigits(`${settings.temp ? Math.round(mToF(ex.stats.elevationGain)) : ex.stats.elevationGain || 0}`);
       w.calories.text = monoDigits(`${ex.stats.calories || 0}`);
       w.steps.text = monoDigits(`${ex.stats.steps || 0}`);
       w.distance.text = `${settings.temp ? mToMi(ex.stats.distance || 0).toFixed(1) : mToKm(ex.stats.distance || 0).toFixed(1)}`;
