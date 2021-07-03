@@ -1,7 +1,7 @@
 import clock from "clock";
 import document from "document";
 import { preferences } from "user-settings";
-import { avg, doubleTap, tripleTap, fill, find, kelvinToC, kelvinToF, keys, mToMi, zeroPad } from "../common/utils";
+import { avg, singleTap, doubleTap, tripleTap, fill, find, kelvinToC, kelvinToF, keys, mToMi, msToMph, msToKph, skmToMs, skmToSmi, formatSeconds, formatMilliseconds, zeroPad } from "../common/utils";
 import { HeartRateSensor } from "heart-rate";
 import { user } from "user-profile";
 import { battery } from "power";
@@ -10,18 +10,41 @@ import * as fs from "fs";
 import { me as app } from "appbit";
 import * as messaging from "messaging";
 import { today as activity, goals } from "user-activity";
+import exercise from "exercise";
+import { vibration } from "haptics";
+import { display } from "display";
 
-const MAIN = 1, HEARTL = 2, HEARTM = 3, HEARTS = 4, WEATHER = 5, STATS = 6, TIME = 7;
+import { ui, eid, eclass } from './elements';
+
+const MAIN = 1, HEARTL = 2, HEARTM = 3, HEARTS = 4, WEATHER = 5, STATS = 6, TIME = 7, EXERCISE = 8, TIMER = 9;
 let page = MAIN;
+let lastPage = 0;
 
 const ekgFile = "ekg-data.json";
 const otherFile = "other.json";
+
 let sw1 = 0;
 let sw2 = 0;
+let timer1 = 0;
+let timer2 = 0;
 let sw1Pause = 0;
 let sw2Pause = 0;
+let timer1Pause = 0;
+let timer2Pause = 0;
+let whichTimer = 0;
+let timer1TM;
+let timer2TM;
+
+let timer;
+
 let settings = {};
 let weather = {};
+
+let exercising = (exercise.state !== 'stopped' && exercise.type) || exercise.state === 'started';
+let pickExercise = 0;
+let exerciseTM;
+let beforeExercisePage = 0;
+let exerciseLap = 1;
 
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -42,234 +65,93 @@ const weatherIcon = {
   Squall: 'img/weather-thunder.png',
   Tornado: 'img/weather-tornado.png'
 };
+const exerciseIcon = {
+  run: 'img/exercise-run.png',
+  walk: 'img/exercise-walk.png',
+  elliptical: 'img/exercise-elliptical.png',
+  hiking: 'img/exercise-hike.png',
+  treadmill: 'img/exercise-treadmill.png',
+  cycling: 'img/exercise-cycle.png',
+  spinning: 'img/exercise-spin.png',
+  workout: 'img/exercise-workout.png'
+};
+const exercises = ['walk', 'run', 'cycling', 'workout', 'hiking', 'elliptical', 'treadmill', 'spinning'];
 
 // Save state
 app.onunload = () => {
   let data = JSON.stringify({ longs: ekg.longs, mids: ekg.mids, shorts: ekg.shorts });
   fs.writeFileSync(ekgFile, data, "json");
-  data = JSON.stringify({ settings, weather, sw1, sw2, sw1Pause, sw2Pause });
+  data = JSON.stringify({ settings, weather, sw1, sw2, sw1Pause, sw2Pause, timer1, timer2, timer1Pause, timer2Pause });
   fs.writeFileSync(otherFile, data, "json");
 }
 
-function eid(id) {
-  return document.getElementById(id);
-}
-
-function eclass(name) {
-  return document.getElementsByClassName(name);
-}
-
 // Init
-const ui = {
-  page: {
-    main: eid('main'),
-    heartl: eid('heart-long'),
-    weather: eid('weather'),
-    stats: eid('stats'),
-    time: eid('time')
-  },
-  main: {
-    hours: eid("hours"),
-    minutes: eid("minutes"),
-    hoursShadow: eid("hours-shadow"),
-    minutesShadow: eid("minutes-shadow"),
-    date: eid("date"),
-    battery: eid("battery"),
-    steps: eid("steps"),
-    stepsBar: eid("steps-bar"),
-    floors: eid("floors"),
-    floorsBar: eid("floors-bar"),
-    calories: eid("calories"),
-    caloriesBar: eid("calories-bar"),
-    distance: eid("distance"),
-    distanceBar: eid("distance-bar"),
-    activeMinutes: eid("active-minutes"),
-    activeMinutesBar: eid("active-minutes-bar"),
-    activeFatburnBar: eid('active-fatburn-bar'),
-    activeCardioBar: eid('active-cardio-bar'),
-    activePeakBar: eid('active-peak-bar'),
-    minRate: eid("min-rate"),
-    maxRate: eid("max-rate"),
-    city: eid("city"),
-    dayText: eclass("day-text"),
-    dayBox: eclass("day-box"),
-    heart: {
-      lines: eclass('ekg-line-main')
-    },
-    weather: eid('weather'),
-    temps: eclass('main-temp'),
-    descs: eclass('main-desc'),
-    imgs: eclass('weather-img'),
-    precips: eclass('weather-precip-bar'),
-    lows: eclass('weather-low-bar'),
-    highs: eclass('weather-high-bar'),
-    stats: eid('stats'),
-    weather1: eid('weather-plus1'),
-    weather2: eid('weather-plus2')
-  },
-  heart: {
-    long: {
-      lines: eclass('ekg-line-l'),
-      texts: eclass('ekg-text-l'),
-      time: eid('heart-long-time'),
-      battery: eid('heart-long-battery'),
-      l20: eid('heart-20'),
-      l40: eid('heart-40'),
-      l60: eid('heart-60'),
-      l80: eid('heart-80')
-    }
-  },
-  weather: {
-    time: eid('weather-time'),
-    battery: eid('weather-battery'),
-    where: eid('weather-where'),
-    when: eid('weather-when'),
-    whens: eclass('weather-when'),
-    feels: eclass('weather-feel'),
-    precips: eclass('weather-precip'),
-    temps: eclass('weather-temp'),
-    clouds: eclass('weather-cloud'),
-    hums: eclass('weather-hum'),
-    descs: eclass('weather-desc'),
-    imgs: eclass('weather-dimg'),
-    winds: eclass('weather-wind')
-  },
-  stats: {
-    time: eid('stats-time'),
-    battery: eid('stats-battery'),
-    pct: {
-      step: eid('step-pct'),
-      floor: eid('floor-pct'),
-      dist: eid('dist-pct'),
-      active: eid('active-pct'),
-      cal: eid('cal-pct'),
-      fatburn: eid('fatburn-pct'),
-      cardio: eid('cardio-pct'),
-      peak: eid('peak-pct')
-    },
-    amt: {
-      step: eid('step-amt'),
-      floor: eid('floor-amt'),
-      dist: eid('dist-amt'),
-      active: eid('active-amt'),
-      cal: eid('cal-amt'),
-      fatburn: eid('fatburn-amt'),
-      cardio: eid('cardio-amt'),
-      peak: eid('peak-amt')
-    },
-    goal: {
-      step: eid('step-goal'),
-      floor: eid('floor-goal'),
-      dist: eid('dist-goal'),
-      active: eid('active-goal'),
-      cal: eid('cal-goal'),
-      fatburn: eid('fatburn-goal'),
-      cardio: eid('cardio-goal'),
-      peak: eid('peak-goal')
-    }
-  },
-  time: {
-    battery: eid('time-battery'),
-    time: eid('time-time'),
-    date: eid('time-date'),
-    sw1: eid('time-sw1'),
-    sw2: eid('time-sw2')
-  }
-};
-
 const barWidth = ui.main.stepsBar.getBBox().width;
 
-document.getElementsByClassName('heart-target').forEach((el, i) => {
+function switchPage(which) {
+  // console.log(`switching to page ${which}`);
+  page = which;
+  draw();
+}
+function makeSwitchPage(which) {
+  return () => switchPage(which);
+}
+
+eclass('heart-target').forEach((el, i) => {
   doubleTap(el, () => {
-    ui.page.heartl.style.display = 'inline';
-    ui.page.heartl.layer = 11;
-    ui.page.main.style.display = 'none';
-    
     if (i === 0) {
-      page = HEARTL;
       ui.heart.long.l80.text = '2h 13\'';
       ui.heart.long.l60.text = '4h 26\'';
       ui.heart.long.l40.text = '6h 40\'';
       ui.heart.long.l20.text = '8h 48\'';
+      switchPage(HEARTL);
     } else if (i === 1) {
-      page = HEARTM;
       ui.heart.long.l80.text = '6\' 36"';
       ui.heart.long.l60.text = '13\' 12"';
       ui.heart.long.l40.text = '19\' 48"';
       ui.heart.long.l20.text = '26\' 24';
+      switchPage(HEARTM);
     } else {
-      page = HEARTS;
       ui.heart.long.l80.text = '0\' 20"';
       ui.heart.long.l60.text = '0\' 40"';
       ui.heart.long.l40.text = '1\' 0"';
       ui.heart.long.l20.text = '1\' 20';
+      switchPage(HEARTS);
     }
-    
-    draw();
   });
 });
 
-doubleTap(document.getElementById('weather-target'), () => {
-  ui.page.weather.style.display = 'inline';
-  ui.page.weather.layer = 11;
-  ui.page.main.style.display = 'none';
-  page = WEATHER;
-  draw();
+doubleTap(eid('weather-target'), makeSwitchPage(WEATHER));
+doubleTap(eid('multi-target'), () => {
+  if (exercising) {
+    beforeExercisePage = 2;
+    switchPage(EXERCISE);
+  } else {
+    switchPage(WEATHER);
+  }
 });
+doubleTap(eid('stats-target'), makeSwitchPage(STATS));
+doubleTap(eid('time-target'), makeSwitchPage(TIME));
+doubleTap(ui.page.heartl, makeSwitchPage(MAIN));
+doubleTap(ui.page.weather, makeSwitchPage(MAIN));
+doubleTap(ui.page.stats, makeSwitchPage(MAIN));
+doubleTap(ui.page.time, makeSwitchPage(MAIN));
+doubleTap(ui.exercise.activeEl, makeSwitchPage(MAIN));
+doubleTap(ui.page.timer, makeSwitchPage(TIME));
 
-doubleTap(document.getElementById('stats-target'), () => {
-  ui.page.stats.style.display = 'inline';
-  ui.page.stats.layer = 11;
-  ui.page.main.style.display = 'none';
-  page = STATS;
-  draw();
-});
-
-doubleTap(document.getElementById('time-target'), () => {
-  ui.page.time.style.display = 'inline';
-  ui.page.time.layer = 11;
-  ui.page.main.style.display = 'none';
-  page = TIME;
-  draw();
-});
-
-doubleTap(ui.page.heartl, () => {
-  ui.page.heartl.style.display = 'none';
-  ui.page.heartl.layer = 0;
-  ui.page.main.style.display = 'inline';
-  page = MAIN;
-  draw();
-});
-
-doubleTap(ui.page.weather, () => {
-  ui.page.weather.style.display = 'none';
-  ui.page.weather.layer = 3;
-  ui.page.main.style.display = 'inline';
-  page = MAIN;
-  draw();
-});
-
-doubleTap(ui.page.stats, () => {
-  ui.page.stats.style.display = 'none';
-  ui.page.stats.layer = 4;
-  ui.page.main.style.display = 'inline';
-  page = MAIN;
-  draw();
-});
-
-doubleTap(ui.page.time, () => {
-  ui.page.time.style.display = 'none';
-  ui.page.time.layer = 5;
-  ui.page.main.style.display = 'inline';
-  page = MAIN;
-  draw();
+doubleTap(ui.exercise.bg, () => {
+  if (exercising) switchPage(MAIN);
 });
 
 tripleTap(ui.weather.time, () => {
   getWeather(true);
 });
 
-document.getElementById('time-sw1-start').addEventListener('click', () => {
+singleTap(eid('stats-exercise'), () => {
+  beforeExercisePage = 1;
+  switchPage(EXERCISE);
+});
+singleTap(eid('time-sw1-start'), () => {
   if (!sw1) {
     sw1 = Date.now();
   } else if (sw1Pause) {
@@ -282,7 +164,7 @@ document.getElementById('time-sw1-start').addEventListener('click', () => {
   drawSW();
 });
 
-document.getElementById('time-sw2-start').addEventListener('click', () => {
+singleTap(eid('time-sw2-start'), () => {
   if (!sw2) {
     sw2 = Date.now();
   } else if (sw2Pause) {
@@ -295,7 +177,7 @@ document.getElementById('time-sw2-start').addEventListener('click', () => {
   drawSW();
 });
 
-document.getElementById('time-sw1-reset').addEventListener('click', () => {
+singleTap(eid('time-sw1-reset'), () => {
   if (sw1Pause) {
     sw1 = 0;
     sw1Pause = 0;
@@ -303,13 +185,154 @@ document.getElementById('time-sw1-reset').addEventListener('click', () => {
   }
 });
 
-document.getElementById('time-sw2-reset').addEventListener('click', () => {
+singleTap(eid('time-sw2-reset'), () => {
   if (sw2Pause) {
     sw2 = 0;
     sw2Pause = 0;
     drawSW();
   }
 });
+
+singleTap(eid('time-tm1-start'), () => {
+  if (!timer1) {
+    whichTimer = 1;
+    timer = { h: 0, m: 0, s: 0 };
+    switchPage(TIMER);
+  } else if (!timer1Pause) {
+    timer1Pause = timer1 - Date.now();
+  } else {
+    timer1 = Date.now() + timer1Pause;
+    timer1Pause = 0;
+    initTimers();
+  }
+  
+  drawSW();
+});
+
+singleTap(eid('time-tm2-start'), () => {
+  if (!timer2) {
+    whichTimer = 2;
+    timer = { h: 0, m: 0, s: 0 };
+    switchPage(TIMER);
+  } else if (!timer2Pause) {
+    timer2Pause = timer2 - Date.now();
+  } else {
+    timer2 = Date.now() + timer2Pause;
+    timer2Pause = 0;
+    initTimers();
+  }
+  
+  drawSW();
+});
+
+singleTap(eid('time-tm1-reset'), () => {
+  if (timer1Pause) {
+    timer1 = 0;
+    timer1Pause = 0;
+    drawSW();
+  }
+});
+
+singleTap(eid('time-tm2-reset'), () => {
+  if (timer2Pause) {
+    timer2 = 0;
+    timer2Pause = 0;
+    drawSW();
+  }
+});
+
+singleTap(ui.exercise.pick.cancel, () => {
+  if (beforeExercisePage === 1) switchPage(STATS);
+  else switchPage(MAIN);
+});
+singleTap(ui.exercise.pick.ok, () => {
+  if (exercise.state !== 'stopped') return;
+  exercise.start(exercises[pickExercise]);
+  exerciseLap = 1;
+});
+singleTap(ui.exercise.pick.left, () => {
+  if (pickExercise === 0) pickExercise = exercises.length - 1;
+  else pickExercise--;
+  updateExercise();
+});
+singleTap(ui.exercise.pick.right, () => {
+  if (pickExercise >= exercises.length - 1) pickExercise = 0;
+  else pickExercise++;
+  updateExercise();
+});
+singleTap(ui.exercise.active.stop, () => {
+  if (exercise.state !== 'stopped') exercise.stop();
+  exerciseLap = 0;
+});
+singleTap(ui.exercise.active.btn, () => {
+  if (exercise.state === 'started') exercise.pause();
+  else if (exercise.state === 'paused') exercise.resume();
+});
+singleTap(ui.exercise.active.lap, () => {
+  if (exercise.state === 'started') {
+    exercise.splitLap();
+    exerciseLap++;
+    updateExercise();
+  }
+})
+
+function makeTimerChange(h, m, s) {
+  return function() {
+    timer.h += h;
+    timer.m += m;
+    timer.s += s;
+    if (timer.s >= 60) {
+      timer.m += Math.floor(timer.s / 60);
+      timer.s = timer.s % 60;
+    } else if (timer.s < 0) {
+      timer.m += Math.floor(timer.s / 60);
+      timer.s = 60 + timer.s % 60;
+    }
+    if (timer.m >= 60) {
+      timer.h += Math.floor(timer.m / 60);
+      timer.m = timer.m % 60;
+    } else if (timer.m < 0) {
+      timer.h += Math.floor(timer.m / 60);
+      timer.m = 60 + timer.m % 60;
+    }
+    if (timer.h < 0) timer.h = 0;
+    
+    updateTimer();
+  }
+}
+
+singleTap(ui.timer.hplus1, makeTimerChange(1, 0, 0));
+singleTap(ui.timer.hplus5, makeTimerChange(5, 0, 0));
+singleTap(ui.timer.hminus1, makeTimerChange(-1, 0, 0));
+singleTap(ui.timer.hminus5, makeTimerChange(-5, 0, 0));
+
+singleTap(ui.timer.mplus1, makeTimerChange(0, 1, 0));
+singleTap(ui.timer.mplus5, makeTimerChange(0, 15, 0));
+singleTap(ui.timer.mminus1, makeTimerChange(0, -1, 0));
+singleTap(ui.timer.mminus5, makeTimerChange(0, -15, 0));
+
+singleTap(ui.timer.splus1, makeTimerChange(0, 0, 1));
+singleTap(ui.timer.splus5, makeTimerChange(0, 0, 15));
+singleTap(ui.timer.sminus1, makeTimerChange(0, 0, -1));
+singleTap(ui.timer.sminus5, makeTimerChange(0, 0, -15));
+
+singleTap(ui.timer.ok, () => {
+  const time = Date.now() + (timer.s + timer.m * 60 + timer.h * 3600) * 1000;
+  console.log(whichTimer, time)
+  if (whichTimer === 1) {
+    timer1 = time;
+    timer1Pause = 0;
+  } else if (whichTimer === 2) {
+    timer2 = time;
+    timer2Pause = 0;
+  }
+  initTimers();
+  switchPage(TIME);
+});
+
+singleTap(ui.timer.cancel, () => {
+  switchPage(TIME);
+})
 
 ui.main.city.text = 'City'
 
@@ -353,6 +376,7 @@ try {
   ekg.mid = now + ekg.midt;
   ekg.long = now + ekg.longt;
 } catch (e) { console.error(e); }
+
 try {
   const other = JSON.parse(fs.readFileSync(otherFile, "json"));
   if (other) {
@@ -362,13 +386,19 @@ try {
     sw2 = other.sw2 || 0;
     sw1Pause = other.sw1Pause || 0;
     sw2Pause = other.sw2Pause || 0;
+    timer1 = other.timer1 || 0;
+    timer2 = other.timer2 || 0;
+    timer1Pause = other.timer1Pause || 0;
+    timer2Pause = other.timer2Pause || 0;
   }
 } catch (e) { console.error(e); }
 
 function updateHeart() {
   if (page === MAIN) {
     ui.main.minRate.text = `${minRate}/${resting}`;
+    ui.main.minRateShadow.text = ui.main.minRate.text;
     ui.main.maxRate.text = `${currentRate}/${maxRate}`;
+    ui.main.maxRateShadow.text = ui.main.maxRate.text;
   }
 }
 
@@ -420,6 +450,12 @@ function initHrm() {
   hrm.start();
 }
 initHrm();
+
+exercise.onstatechange = () => {
+  exercising = (exercise.state !== 'stopped' && exercise.type) || exercise.state === 'started';
+  updateExercise();
+  drawWeather();
+};
 
 setInterval(() => {
   resting = user.restingHeartRate;
@@ -507,6 +543,8 @@ function updateTimeCb(evt) {
     ui.main.hoursShadow.text = hours;
     ui.main.minutesShadow.text = minutes;
     ui.main.date.text = date;
+    ui.main.dateShadow.text = date;
+    
     const day = today.getDay();
     ui.main.dayText.forEach((d, i) => {
       if (i == day) {
@@ -519,6 +557,8 @@ function updateTimeCb(evt) {
         ui.main.dayBox[i].style.opacity = 0.1;
       }
     });
+    
+    if (exercising) updateExercise();
   } else if (page === HEARTL) {
     ui.heart.long.time.text = `${hours}${minutes}`;
   } else if (page === HEARTM) {
@@ -532,6 +572,8 @@ function updateTimeCb(evt) {
   } else if (page === TIME) {
     ui.time.time.text = `${hours}${minutes}`;
     ui.time.date.text = `${days[today.getDay()]}, ${months[today.getMonth()]} ${ordinal(today.getDate())} ${today.getFullYear()}`;
+  } else if (page === EXERCISE) {
+    ui.exercise.time.text = `${hours}${minutes}`;
   }
 }
 clock.ontick = updateTimeCb;
@@ -608,6 +650,13 @@ function windDir(num) {
 function updateWeather() {
   if (page === MAIN) {
     const w = ui.main;
+    if (exercising) {
+      w.weather2block.display = 'none';
+      w.weather2block.layer = 1;
+    } else {
+      w.weather2block.display = 'inline';
+      w.weather2block.layer = 3;
+    }
     w.city.text = weather.city || 'unknown';
     const dt = weather.when ? new Date(weather.when) : new Date();
     let d = dt.getDay() + 1;
@@ -619,6 +668,26 @@ function updateWeather() {
     if (weather.list) {
       let list = weather.list;
       list = [list[0], list[1], list[2], list[3], list[5]];
+      list.forEach((l, i) => {
+        if (l) {
+          const img = w.imgs[i], temp = w.temps[i], precip = w.precips[i], low = w.lows[i], high = w.highs[i];
+          img.href = weatherIcon[l.desc] || '';
+          temp.text = `${settings.temp ? kelvinToF(l.temp) : kelvinToC(l.temp)}°`;
+          precip.height = Math.ceil(l.precip * 20);
+          precip.y = img.y + (20 - precip.height);
+          low.height = Math.min(20, Math.ceil((l.temp - l.min) * 4));
+          low.y = img.y + (20 - low.height);
+          high.height = Math.min(20, Math.ceil((l.max - l.temp) * 4));
+          high.y = img.y + (20 - high.height);
+          //ui.main.descs[i].text = l.desc;
+        }
+      });
+    }
+  } else if (page === EXERCISE && exercising) {
+    const w = ui.exercise.active;
+    if (weather.list) {
+      let list = weather.list;
+      list = [list[0], list[1]];
       list.forEach((l, i) => {
         if (l) {
           const img = w.imgs[i], temp = w.temps[i], precip = w.precips[i], low = w.lows[i], high = w.highs[i];
@@ -649,8 +718,86 @@ function updateWeather() {
       ui.weather.temps[i].text = `${settings.temp ? kelvinToF(w.temp) : kelvinToC(w.temp)}°`
       ui.weather.hums[i].text = `${w.hum}%`;
       ui.weather.clouds[i].text = `${w.clouds}%`;
-      ui.weather.winds[i].text = `${windDir(w.wind.deg)}${settings.temp ? mToMi(w.wind.speed * 3600).toFixed(1) : w.wind.speed.toFixed(1)}`;
+      ui.weather.winds[i].text = `${windDir(w.wind.deg)}${settings.temp ? msToMph(w.wind.speed).toFixed(1) : msToKph(w.wind.speed).toFixed(1)}`;
     })
+  }
+}
+
+// Exercise
+function updateExercise() {
+  const ex = exercise;
+  //const ex = { type: 'run', stats: { elevationGain: 113, speed: 5.49, calories: 1412, distance: 15115.5, steps: 16129, activeTime: 5978141 } };
+  
+  if (page === MAIN) {
+    const w = ui.main.exercise;
+    
+    if (exercising) {
+      w.main.style.display = 'inline';
+      w.main.layer = 3;
+      w.which.href = exerciseIcon[exercising] || exerciseIcon.workout;
+      
+      w.time.text = formatMilliseconds(ex.stats.activeTime, true);
+      
+      w.floors.text = `${ex.stats.elevationGain || 0}`;
+      w.calories.text = `${ex.stats.calories || 0}`;
+      w.steps.text = `${ex.stats.steps || 0}`;
+      w.distance.text = `${settings.temp ? mToMi(ex.stats.distance || 0).toFixed(1) : (ex.stats.distance || 0).toFixed(1)}`;
+      w.speed.text = `${settings.temp ? msToMph(ex.stats.speed.current).toFixed(1) : msToKph(ex.stats.speed.current).toFixed(1)}`;
+    } else {
+      w.main.style.dissplay = 'none';
+      w.main.layer = 2;
+    }
+  } else if (page === EXERCISE) {
+    const main = ui.exercise;
+    
+    if (ex.type && ex.stats && ex.state !== 'stopped') {
+      main.activeEl.style.display = 'inline';
+      main.activeEl.layer = 5;
+      main.pickEl.style.display = 'none';
+      main.pickEl.layer = 0;
+      
+      const w = main.active;
+      w.which.href = (exerciseIcon[exercising] || exerciseIcon.workout).replace(/\.png/, '-big.png');
+      if (ex.state === 'paused') w.btnImg.href = 'img/icons-play.png';
+      else if (ex.state === 'started') w.btnImg.href = 'img/icons-pause.png';
+      
+      w.laps.text = `${exerciseLap}`;
+      
+      w.time.text = formatMilliseconds(ex.stats.activeTime, true);
+      
+      const speed = ex.type === 'biking' ? 15 : ex.type === 'running' ? 6 : 2.5;
+      
+      w.floors.text = `${ex.stats.elevationGain || 0}`;
+      w.calories.text = `${ex.stats.calories || 0}`;
+      w.steps.text = `${ex.stats.steps || 0}`;
+      w.distance.text = `${settings.temp ? mToMi(ex.stats.distance || 0).toFixed(1) : (ex.stats.distance || 0).toFixed(1)}`;
+      
+      const paceMs = skmToMs(ex.stats.pace.current);
+      w.pace.text = `${settings.temp ? formatSeconds(skmToSmi(ex.stats.pace.current)) : formatSeconds(ex.stats.pace.current)}`;
+      w.paceo.sweepAngle = 180 - Math.floor(Math.min(1, paceMs / speed) * 180);
+      w.paceAvg.text = `${settings.temp ? formatSeconds(skmToSmi(ex.stats.pace.average)) : formatSeconds(ex.stats.pace.average)}`;
+      
+      w.speed.text = `${settings.temp ? msToMph(ex.stats.speed.current).toFixed(1) : msToKph(ex.stats.speed.current).toFixed(1)}`;
+      w.speedo.sweepAngle = Math.floor(Math.min(1, (ex.stats.speed.current || 0) / speed) * 180);
+      w.speedAvg.text = `${settings.temp ? msToMph(ex.stats.speed.average).toFixed(1) : msToKph(ex.stats.speed.average).toFixed(1)}`;
+      w.speedMax.text = `${settings.temp ? msToMph(ex.stats.speed.max).toFixed(1) : msToKph(ex.stats.speed.max).toFixed(1)}`;
+      
+      w.heart.text = `${ex.stats.heartRate.current || 0}`;
+      w.hearto.sweepAngle = Math.floor(Math.min(1, (ex.stats.heartRate.current || 0) / 200) * 180);
+      w.heartAvg.text = `${ex.stats.heartRate.average || 0}`;
+      w.heartMax.text = `${ex.stats.heartRate.max || 0}`;
+      
+      if (exerciseTM) clearTimeout(exerciseTM);
+      if (ex.state === 'started') exerciseTM = setTimeout(updateExercise, 1000);
+    } else {
+      main.pickEl.style.display = 'inline';
+      main.pickEl.layer = 5;
+      main.activeEl.style.display = 'none';
+      main.activeEl.layer = 0;
+      
+      const w = main.pick;
+      w.which.href = (exerciseIcon[exercises[pickExercise]] || exerciseIcon.workout).replace(/\.png/, '-big.png');
+    }
   }
 }
 
@@ -733,6 +880,8 @@ function updateStats() {
     w.amt.cardio.text = `${m.cardio || 0}`;
     w.amt.peak.text = `${m.peak || 0}`;
   }
+  
+  if (exercising) updateExercise();
 }
 setInterval(updateStats, 5000);
 
@@ -744,11 +893,53 @@ function updateBattery() {
   else if (page === WEATHER) ui.weather.battery.text = level;
   else if (page === STATS) ui.stats.battery.text = level;
   else if (page === TIME) ui.time.battery.text = level;
+  else if (page === EXERCISE) ui.exercise.battery.text = level;
 }
 battery.onchange = updateBattery;
 
 // Pages
 function draw() {
+  requestAnimationFrame(_draw);
+}
+function _draw() {
+  if (page !== lastPage) {
+    for (const p in ui.page) {
+      ui.page[p].style.display = 'none';
+      ui.page[p].layer = 0;
+    }
+
+      if (page === MAIN) {
+      ui.page.main.style.display = 'inline';
+      ui.page.main.layer = 20;
+    } else if (page === HEARTL) {
+      ui.page.heartl.style.display = 'inline';
+      ui.page.heartl.layer = 20;
+    } else if (page === HEARTM) {
+      ui.page.heartl.style.display = 'inline';
+      ui.page.heartl.layer = 20;
+    } else if (page === HEARTS) {
+      ui.page.heartl.style.display = 'inline';
+      ui.page.heartl.layer = 20;
+    } else if (page === WEATHER) {
+      ui.page.weather.style.display = 'inline';
+      ui.page.weather.layer = 20;
+    } else if (page === STATS) {
+      ui.page.stats.style.display = 'inline';
+      ui.page.stats.layer = 20;
+    } else if (page === TIME) {
+      ui.page.time.style.display = 'inline';
+      ui.page.time.layer = 20;
+    } else if (page === EXERCISE) {
+      ui.page.exercise.style.display = 'inline';
+      ui.page.exercise.layer = 20;
+    } else if (page === TIMER) {
+      ui.page.timer.style.display = 'inline';
+      ui.page.timer.layer = 20;
+    }
+    
+    lastPage = page;
+  }
+  
   if (page === MAIN) drawMain();
   else if (page === HEARTL) drawHeart(0);
   else if (page === HEARTM) drawHeart(1);
@@ -756,6 +947,8 @@ function draw() {
   else if (page === WEATHER) drawWeather();
   else if (page === STATS) drawStats();
   else if (page === TIME) drawTime();
+  else if (page === EXERCISE) drawExercise();
+  else if (page === TIMER) drawTimer();
   
   updateTime();
   updateBattery();
@@ -764,6 +957,7 @@ function draw() {
 function drawMain() {
   updateStats();
   updateWeather();
+  updateExercise();
   drawEKG();
 }
 
@@ -777,10 +971,20 @@ function drawWeather() {
 
 function drawStats() {
   updateStats();
+  updateExercise();
 }
 
 function drawTime() {
   drawSW(true);
+}
+
+function drawExercise() {
+  updateExercise();
+  updateWeather();
+}
+
+function drawTimer() {
+  updateTimer();
 }
 
 // Stopwatch
@@ -817,7 +1021,23 @@ function drawSW(init) {
   else if (!sw2) ui.time.sw2.text = timeStr(0);
   else if (init && sw2Pause) ui.time.sw2.text = timeStr(sw2Pause - sw2);
   
-  if (page === TIME && (sw1 && !sw1Pause) || (sw2 && !sw2Pause)) requestAnimationFrame(drawSW);
+  if (timer1Pause === -1) ; // just finished
+  else if (timer1 > now && !timer1Pause) ui.time.tm1.text = timeStr(timer1 - now);
+  else if (!timer1 || timer1 < now) ui.time.tm1.text = '---';
+  else if (init && timer1Pause) ui.time.tm1.text = timeStr(timer1Pause);
+  
+  if (timer2Pause === -1) ; // just finished
+  else if (timer2 > now && !timer2Pause) ui.time.tm2.text = timeStr(timer2 - now);
+  else if (!timer2 || timer2 < now) ui.time.tm2.text = '---';
+  else if (init && timer2Pause) ui.time.tm2.text = timeStr(timer2Pause);
+  
+  if (page === TIME && ((sw1 && !sw1Pause) || (sw2 && !sw2Pause) || (timer1 && !timer1Pause) || (timer2 && !timer2Pause))) requestAnimationFrame(drawSW);
+}
+
+function updateTimer() {
+  if (page === TIMER) {
+    ui.timer.time.text = `${zeroPad(timer.h)}:${zeroPad(timer.m)}:${zeroPad(timer.s)}`;
+  }
 }
 
 function updateColors() {
@@ -828,7 +1048,39 @@ function updateColors() {
   eclass('ekg-line').forEach(l => l.style.fill = settings.graphColor || 'lightgreen');
 }
 
+function initTimers() {
+  const now = Date.now();
+  if (timer1TM) clearTimeout(timer1TM);
+  if (timer2TM) clearTimeout(timer2TM);
+  if (timer1 && timer1 > now && !timer1Pause) timer1TM = setTimeout(() => {
+    timer1 = 0;
+    timer1Pause = -1;
+    vibration.start('alert');
+    display.poke();
+    switchPage(TIME);
+    ui.time.tm1.text = '-+-+-+-+-+-';
+    setTimeout(() => {
+      timer1Pause = 0;
+      ui.time.tm1.text = '---';
+    }, 5000);
+  }, timer1 - now);
+  if (timer2 && timer2 > now && !timer2Pause) console.log('I has timer2', timer2 - now), timer2TM = setTimeout(() => {
+    console.log('timer2 elapsed')
+    timer2 = 0;
+    timer2Pause = -1;
+    vibration.start('alert');
+    display.poke();
+    switchPage(TIME)
+    ui.time.tm2.text = '-+-+-+-+-+-';
+    setTimeout(() => {
+      timer2Pause = 0;
+      ui.time.tm2.text = '---';
+    }, 5000);
+  }, timer2 - now)
+}
+
 // Init view
 updateColors();
 draw();
 getWeather();
+initTimers();

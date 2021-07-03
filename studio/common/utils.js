@@ -36,7 +36,51 @@ export function kelvinToF(temp) {
 }
 
 export function mToMi(m) {
+  if (!m) return 0;
   return Math.round((m / 1609.344) * 100) / 100;
+}
+
+export function mToMiLong(m) {
+  return m / 1609.344;
+}
+
+export function msToKph(ms) {
+  if (!ms) return 0;
+  return ms * 3.6;
+}
+
+export function msToMph(ms) {
+  if (!ms) return 0;
+  return mToMiLong(ms * 3600);
+}
+
+export function skmToMs(skm) {
+  if (!skm) return 0;
+  return 1 / (skm / 1000);
+}
+
+export function skmToSmi(skm) {
+  if (!skm) return 0;
+  return 1 / mToMiLong(skmToMs(skm));
+}
+
+export function formatMilliseconds(ms, padh) {
+  if (!ms) return padh ? '0:00:00' : '0:00';
+  
+  ms = Math.round(ms);
+  
+  const h = Math.floor(ms / 3600000);
+  ms -= h * 3600000;
+  const m = Math.floor(ms / 60000);
+  ms -= m * 60000;
+  const s = Math.floor(ms / 1000);
+  
+  return `${h ? `${h}:` : (padh ? '0:' : '')}${m ? (h || padh ? zeroPad(m) : m) : (padh ? '00' : '0')}:${zeroPad(s)}`;
+}
+
+export function formatSeconds(s, padh) {
+  if (!s) return padh ? '0:00:00' : '0:00';
+  return formatMilliseconds(s * 1000, padh);
 }
 
 export function multiTap(count) {
@@ -45,11 +89,11 @@ export function multiTap(count) {
     let pos;
     let timeout;
     el.addEventListener('mouseup', ev => {
-      if (clicks) {
+      if (clicks || count === 1) {
         clicks++;
         if (timeout) clearTimeout(timeout);
         timeout = 0;
-        if (Math.abs(Math.abs(pos.x - ev.screenX) - Math.abs(pos.y - ev.screenY)) < 40) {
+        if (count === 1 || Math.abs(Math.abs(pos.x - ev.screenX) - Math.abs(pos.y - ev.screenY)) < 40) {
           if (clicks === count) {
             fn();
             clicks = 0;
@@ -70,5 +114,6 @@ export function multiTap(count) {
   };
 }
 
+export const singleTap = multiTap(1);
 export const doubleTap = multiTap(2);
 export const tripleTap = multiTap(3);

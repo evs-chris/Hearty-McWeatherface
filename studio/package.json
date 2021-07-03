@@ -13,7 +13,8 @@
       "access_user_profile",
       "access_heart_rate",
       "access_internet",
-      "access_location"
+      "access_location",
+      "access_exercise"
     ],
     "buildTargets": [
       "atlas",

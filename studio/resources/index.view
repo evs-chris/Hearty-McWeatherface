@@ -1,5 +1,5 @@
 <svg>
-  <g id="main" layer="10">
+  <g id="main">
     <rect class="background" />
     <section x="0" y="0" width="80%" height="30">
       <text id="city" />
@@ -32,22 +32,40 @@
         <text x="25%" y="120" text-anchor="middle" class="weather main-temp" />
       </section>
       <section x="50%" y="0" width="50%" height="100%">
-        <text x="25%" y="22" text-anchor="middle" width="100%" class="weather" id="weather-plus1" />
-        <text x="75%" y="22" text-anchor="middle" width="100%" class="weather" id="weather-plus2" />
-        
-        <rect x="17%-5" y="30" width="3" class="weather-precip-bar" />
-        <rect x="17%+21" y="30" width="3" class="weather-high-bar" />
-        <rect x="17%+25" y="30" width="3" class="weather-low-bar" />
-        <image href="" x="17%" y="30" width="20" height="20" class="weather-img" />
-        <text x="25%" y="50" text-anchor="middle" class="weather main-desc" />
-        <text x="25%" y="70" text-anchor="middle" class="weather main-temp" />
-        
-        <rect x="67%-5" y="30" width="3" class="weather-precip-bar" />
-        <rect x="67%+21" y="30" width="3" class="weather-high-bar" />
-        <rect x="67%+25" y="30" width="3" class="weather-low-bar" />
-        <image href="" x="67%" y="30" width="20" height="20" class="weather-img" />
-        <text x="75%" y="50" text-anchor="middle" class="weather main-desc" />
-        <text x="75%" y="70" text-anchor="middle" class="weather main-temp" />
+        <g id="main-weather-2" layer="1">
+          <rect x="1" y="1" width="100%-1" height="100%-1" fill="inherit" />
+          <text x="25%" y="22" text-anchor="middle" width="100%" class="weather" id="weather-plus1" />
+          <text x="75%" y="22" text-anchor="middle" width="100%" class="weather" id="weather-plus2" />
+
+          <rect x="17%-5" y="30" width="3" class="weather-precip-bar" />
+          <rect x="17%+21" y="30" width="3" class="weather-high-bar" />
+          <rect x="17%+25" y="30" width="3" class="weather-low-bar" />
+          <image href="" x="17%" y="30" width="20" height="20" class="weather-img" />
+          <text x="25%" y="50" text-anchor="middle" class="weather main-desc" />
+          <text x="25%" y="70" text-anchor="middle" class="weather main-temp" />
+
+          <rect x="67%-5" y="30" width="3" class="weather-precip-bar" />
+          <rect x="67%+21" y="30" width="3" class="weather-high-bar" />
+          <rect x="67%+25" y="30" width="3" class="weather-low-bar" />
+          <image href="" x="67%" y="30" width="20" height="20" class="weather-img" />
+          <text x="75%" y="50" text-anchor="middle" class="weather main-desc" />
+          <text x="75%" y="70" text-anchor="middle" class="weather main-temp" />
+        </g>
+        <g id="main-exercise" layer="2">
+          <rect x="1" y="1" width="100%-1" height="100%-1" fill="inherit" />
+          <image id="main-exercise-icon" width="20" height="20" x="5" y="7" />
+          <text id="main-exercise-time" x="25" y="23" class="exercise" text-anchor="start" />
+          <text id="main-exercise-floors" x="110" y="23" fill="orange" class="exercise" />
+          <image y="7" x="100%-14" href="img/stat-floors.png" class="stat-image" />
+          <text id="main-exercise-distance" x="50" y="49" fill="orchid" class="exercise" />
+          <image y="32" x="52" href="img/stat-distance.png" class="stat-image" />
+          <text id="main-exercise-calories" x="110" y="49" fill="red" class="exercise" />
+          <image y="32" x="100%-14" href="img/stat-calories.png" class="stat-image" />
+          <text id="main-exercise-steps" x="50" y="73" fill="yellow" class="exercise" />
+          <image y="57" x="52" href="img/stat-steps.png" class="stat-image" />
+          <text id="main-exercise-speed" x="110" y="73" fill="cyan" class="exercise" />
+          <image y="57" x="100%-14" href="img/stat-speed.png" class="stat-image" />
+        </g>
       </section>
     </section>
     <section x="75%" y="0" width="25%" height="50%">
@@ -73,8 +91,6 @@
       <text y="95%-5" x="100%-20" class="info" id="active-minutes" />
     </section>
     <section x="0" y="50%" width="100%" height="50%">
-      <text class="ekg-rate" id="min-rate" />
-      <text class="ekg-rate" id="max-rate" />
       <rect x="0" y="0" width="100%" height="100%" fill="white" opacity="0.15" />
       <line class="ekg-line long ekg-line-main" x1="0%" x2="2%" y1="0" y2="0" />
       <line class="ekg-line long ekg-line-main" x1="2%" x2="4%" y1="0" y2="0" />
@@ -144,20 +160,28 @@
         <text class="day-text" x="115">F</text>
         <text class="day-text" x="136">S</text>
       </section>
+      <text class="ekg-rate shadow" id="min-rate-shadow" />
+      <text class="ekg-rate shadow" id="max-rate-shadow" />
+      <text class="ekg-rate" id="min-rate" />
+      <text class="ekg-rate" id="max-rate" />
       <rect class="target heart-target" width="33%" fill="red" /> 
       <rect class="target heart-target" x="33%" width="33%" fill="green" />
       <rect class="target heart-target" x="66%" width="33%" fill="blue" />
     </section>
-    <text class="time" id="hours-shadow" />
-    <text class="time" id="minutes-shadow" />
-    <text class="time" id="hours" />
-    <text class="time" id="minutes" />
-    <text id="date" />
-    <rect id="weather-target" class="target" x="0" y="0" width="75%" height="30%" />
-    <rect id="stats-target" class="target" x="75%" width="25%" y="0" height="50%" />
-    <rect id="time-target" class="target" x="25%" width="50%" height="20%" y="30%" />
+    <g layer="5">
+      <text class="time shadow" id="hours-shadow" />
+      <text class="time shadow" id="minutes-shadow" />
+      <text class="shadow" id="date-shadow" />
+      <text class="time" id="hours" />
+      <text class="time" id="minutes" />
+      <text id="date" />
+      <rect id="weather-target" class="target" x="0" y="0" width="75%" height="30%" />
+      <rect id="multi-target" class="target" y="30" x="37%" width="37%" height="30%" />
+      <rect id="stats-target" class="target" x="75%" width="25%" y="0" height="50%" />
+      <rect id="time-target" class="target" x="25%" width="50%" height="20%" y="30%" />
+    </g>
   </g>
-  <g id="heart-long" layer="0" display="none">
+  <g id="heart-long" display="none">
     <rect class="background" />
     <rect class="heart-graph" />
     <text class="time-heart" id="heart-long-time" />
@@ -213,7 +237,7 @@
       <text class="ekg-text ekg-text-l" x="100%" y="0" />
     </section>
   </g>
-  <g id="weather" layer="3" display="none">
+  <g id="weather" display="none">
     <rect class="background" />
     <text class="time-heart" id="weather-time" />
     <text class="battery-heart" id="weather-battery" />
@@ -342,7 +366,7 @@
       </section>
     </section>
   </g>
-  <g id="stats" layer="4" display="none">
+  <g id="stats" display="none">
     <rect class="background" />
     <text class="time-heart" id="stats-time" y="26" />
     <text class="battery-heart" id="stats-battery" />
@@ -390,19 +414,179 @@
     
     <text class="stat-txt" x="302" y="45%+90" fill="red">Peak</text>
     <text class="stat-txt" id="peak-amt" x="302" y="45%+107" fill="red" />
+    
+    <section x="0" y="100%-50" width="49%" height="50">
+      <rect id="stats-exercise" class="target background" fill="white" opacity="0.2" />
+      <image href="img/exercise-walk.png" x="50%-35" y="50%-10" width="20" height="20" />
+      <image href="img/exercise-run.png" x="$+5" y="$-20" width="20" height="20" />
+      <image href="img/exercise-cycle.png" x="$+5" y="$-20" width="20" height="20" />
+      <image href="img/exercise-hike.png" x="$+5" y="$-20" width="20" height="20" />
+    </section>
   </g>
-  <g id="time" layer="5" display="none">
+  <g id="time" display="none">
     <rect class="background" />
     <text class="battery-heart" id="time-battery" />
     <text id="time-time" />
     <text id="time-date" />
     <text id="time-sw1" />
     <text id="time-sw2" />
-    <text x="90%" y="40%" fill="white" text-anchor="middle" font-size="40">×</text>
-    <text x="90%" y="75%" fill="white" text-anchor="middle" font-size="40">×</text>
-    <rect id="time-sw1-start" x="0" y="25%" width="70%" height="20%" fill="white" opacity="0.15" pointer-events="visible" />
-    <rect id="time-sw2-start" x="0" y="60%" width="70%" height="20%" fill="white" opacity="0.15" pointer-events="visible" />
-    <rect id="time-sw1-reset" x="80%" y="25%" width="20%" height="20%" fill="white" opacity="0.15" pointer-events="visible" />
-    <rect id="time-sw2-reset" x="80%" y="60%" width="20%" height="20%" fill="white" opacity="0.15" pointer-events="visible" />
+    <text id="time-tm1" />
+    <text id="time-tm2" />
+    <text x="90%" y="30%" fill="white" text-anchor="middle" font-size="40">×</text>
+    <text x="90%" y="47%" fill="white" text-anchor="middle" font-size="40">×</text>
+    <text x="90%" y="64%" fill="white" text-anchor="middle" font-size="40">×</text>
+    <text x="90%" y="81%" fill="white" text-anchor="middle" font-size="40">×</text>
+    <rect id="time-sw1-start" class="clicky" x="0" y="20%" width="70%" height="12%" fill="white" opacity="0.15" />
+    <rect id="time-sw2-start" class="clicky" x="0" y="37%" width="70%" height="12%" fill="white" opacity="0.15" />
+    <rect id="time-tm1-start" class="clicky" x="0" y="54%" width="70%" height="12%" fill="white" opacity="0.15" />
+    <rect id="time-tm2-start" class="clicky" x="0" y="71%" width="70%" height="12%" fill="white" opacity="0.15" />
+    <rect id="time-sw1-reset" class="clicky" x="80%" y="20%" width="20%" height="12%" fill="white" opacity="0.15" />
+    <rect id="time-sw2-reset" class="clicky" x="80%" y="37%" width="20%" height="12%" fill="white" opacity="0.15" />
+    <rect id="time-tm1-reset" class="clicky" x="80%" y="54%" width="20%" height="12%" fill="white" opacity="0.15" />
+    <rect id="time-tm2-reset" class="clicky" x="80%" y="71%" width="20%" height="12%" fill="white" opacity="0.15" />
+    <image href="img/icons-stopwatch.png" width="20" height="20" x="5" y="20%+11" />
+    <image href="img/icons-stopwatch.png" width="20" height="20" x="5" y="37%+11" />
+    <image href="img/icons-timer.png" width="20" height="20" x="5" y="54%+11" />
+    <image href="img/icons-timer.png" width="20" height="20" x="5" y="71%+11" />
+  </g>
+  <g id="exercise" display="none">
+    <rect class="background target" id="exercise-bg" />
+    <g id="exercise-active" display="none">
+      <text class="time-heart" id="exercise-clock" />
+      <text class="battery-heart" id="exercise-battery" />
+      
+      <line x1="0" x2="100%" y1="80" y2="80" fill="#333333" stroke-width="2" />
+      <line x1="0" x2="100%" y1="120" y2="120" fill="#333333" stroke-width="2" />
+      
+      <image x="50%-30" y="10" id="exercise-active-icon" width="60" height="60" />
+      
+      <text id="exercise-time" x="15%" y="110" class="exercise" text-anchor="start" />
+      
+      <text id="exercise-floors" x="18%-2" y="143" fill="orange" class="exercise" />
+      <image y="127" x="18%" href="img/stat-floors.png" class="stat-image" />
+      <text id="exercise-steps" x="18%-2" y="173" fill="yellow" class="exercise" />
+      <image y="157" x="18%" href="img/stat-steps.png" class="stat-image" />
+      <text id="exercise-distance" x="78%+16" y="143" fill="orchid" class="exercise" text-anchor="start" />
+      <image y="127" x="78%" href="img/stat-distance.png" class="stat-image" />
+      <text id="exercise-calories" x="78%+16" y="173" fill="red" class="exercise" text-anchor="start" />
+      <image y="155" x="78%" href="img/stat-calories.png" class="stat-image" />
+      
+      <section x="30%" width="40%" y="50%-40" height="40%">
+        <arc width="100%" height="100%" start-angle="-90" sweep-angle="180" fill="#333333" opacity="1" arc-width="15" />
+        <arc id="exercise-paceo" width="100%" height="100%" start-angle="-90" sweep-angle="112" fill="yellow" arc-width="15" />
+        <text id="exercise-pace" x="50%+10" y="45%" fill="yellow" class="exercise" />
+        <image y="45%-15" x="50%+12" href="img/stat-pace.png" class="stat-image" />
+      </section>
+      
+      <section x="5%" width="40%" y="50%+20" height="40%">
+        <arc width="100%" height="100%" start-angle="-90" sweep-angle="180" fill="#333333" opacity="1" arc-width="15" />
+        <arc id="exercise-speedo" width="100%" height="100%" start-angle="-90" sweep-angle="125" fill="cyan" arc-width="15" />
+        <text id="exercise-speed" x="50%+10" y="45%" fill="cyan" class="exercise" />
+        <image y="45%-15" x="50%+12" href="img/stat-speed.png" class="stat-image" />
+      </section>
+      
+      <section x="55%" width="40%" y="50%+20" height="40%">
+        <arc width="100%" height="100%" start-angle="-90" sweep-angle="180" fill="#333333" opacity="1" arc-width="15" />
+        <arc id="exercise-hearto" width="100%" height="100%" start-angle="-90" sweep-angle="112" fill="red" arc-width="15" />
+        <text id="exercise-heart" x="50%+10" y="45%" fill="red" class="exercise" />
+        <image y="45%-15" x="50%+12" href="img/stat-heart.png" class="stat-image" />
+      </section>
+      
+      <text id="exercise-speed-avg" x="25%-55" y="100%-60" fill="cyan" class="exercise speedo" />
+      <text id="exercise-speed-max" x="25%+55" y="100%-60" fill="cyan" class="exercise speedo" />
+      <text id="exercise-heart-avg" x="75%-55" y="100%-60" fill="red" class="exercise speedo" />
+      <text id="exercise-heart-max" x="75%+55" y="100%-60" fill="red" class="exercise speedo" />
+      <text id="exercise-pace-avg" x="50%" y="50%+45" fill="yellow" class="exercise speedo" />
+      
+      <section x="0" y="100%-50" width="49%" height="50">
+        <rect id="exercise-stop" class="target background" fill="white" opacity="0.2" />
+        <image href="img/icons-stop.png" width="20" height="20" x="50%+15" y="50%-10" />
+      </section>
+
+      <section x="51%" y="100%-50" width="49%" height="50">
+        <rect id="exercise-btn" class="target background" fill="white" opacity="0.2" />
+        <image id="exercise-btn-img" width="20" height="20" x="50%-35" y="50%-10" />
+      </section>
+      
+      <section x="100%-120" y="0" width="120" height="70">
+        <rect id="exercise-lap" class="target background" fill="white" opacity="0.2" />
+        <image href="img/icons-lap.png" x="10" y="30" width="20" height="20" />
+        <text id="exercise-laps" x="45" y="45" text-anchor="start" class="exercise" pointer-events="none">1</text>
+      </section>
+      
+      <section x="0" y="0" width="120" height="70">
+        <rect x="30%-5" y="30" width="3" class="exercise-precip-bar" />
+        <rect x="30%+21" y="30" width="3" class="exercise-high-bar" />
+        <rect x="30%+25" y="30" width="3" class="exercise-low-bar" />
+        <image x="30%" y="30" width="20" height="20" class="exercise-weather-img" />
+        <text x="40%" y="50" text-anchor="middle" class="exercise exercise-desc" />
+        <text x="40%" y="70" text-anchor="middle" class="exercise exercise-temp" />
+        
+        <rect x="70%-5" y="30" width="3" class="exercise-precip-bar" />
+        <rect x="70%+21" y="30" width="3" class="exercise-high-bar" />
+        <rect x="70%+25" y="30" width="3" class="exercise-low-bar" />
+        <image x="70%" y="30" width="20" height="20" class="exercise-weather-img" />
+        <text x="80%" y="50" text-anchor="middle" class="exercise exercise-desc" />
+        <text x="80%" y="70" text-anchor="middle" class="exercise exercise-temp" />
+      </section>
+    </g>
+    <g id="exercise-pick" display="none">
+      <image x="40" y="50%-40" height="20" width="20" class="clicky" id="exercise-left" href="img/icons-left.png" />
+      <image x="50%-30" y="50%-60" id="exercise-pick-icon" width="60" height="60" />
+      <image x="100%-60" y="50%-40" height="20" width="20" class="clicky" id="exercise-right" href="img/icons-right.png" />
+      
+      <section x="0" y="100%-50" width="49%" height="50">
+        <rect id="exercise-cancel" class="target background" fill="white" opacity="0.2" />
+        <image href="img/icons-x.png" width="20" height="20" x="50%+15" y="50%-10" />
+      </section>
+
+      <section x="51%" y="100%-50" width="49%" height="50">
+        <rect id="exercise-ok" class="target background" fill="white" opacity="0.2" />
+        <image href="img/icons-play.png" width="20" height="20" x="50%-35" y="50%-10" />
+      </section>
+    </g>
+  </g>
+  <g id="timer" display="none">
+    <rect class="background" />
+    
+    <rect id="timer-m-p5" class="clicky timer-button" x="50%-35" y="50%-134" width="74" height="54" />
+    <rect id="timer-h-p5" class="clicky timer-button" x="50%-131" y="50%-134" width="74" height="54" />
+    <rect id="timer-s-p5" class="clicky timer-button" x="50%+60" y="50%-134" width="74" height="54" />
+    
+    <rect id="timer-m-p1" class="clicky" x="50%-35" y="50%-70" width="74" height="54" />
+    <rect id="timer-h-p1" class="clicky" x="50%-131" y="50%-70" width="74" height="54" />
+    <rect id="timer-s-p1" class="clicky" x="50%+60" y="50%-70" width="74" height="54" />
+    
+    <rect id="timer-m-m1" class="clicky timer-button" x="50%-35" y="50%-6" width="74" height="54" />
+    <rect id="timer-h-m1" class="clicky timer-button" x="50%-131" y="50%-6" width="74" height="54" />
+    <rect id="timer-s-m1" class="clicky timer-button" x="50%+60" y="50%-6" width="74" height="54" />
+    
+    <rect id="timer-m-m5" class="clicky timer-button" x="50%-35" y="50%+58" width="74" height="54" />
+    <rect id="timer-h-m5" class="clicky timer-button" x="50%-131" y="50%+58" width="74" height="54" />
+    <rect id="timer-s-m5" class="clicky timer-button" x="50%+60" y="50%+58" width="74" height="54" />
+    
+    <text class="button-text" x="50%" y="50%-94" width="74" height="54">+15</text>
+    <text class="button-text" x="50%-94" y="50%-94" width="74" height="54">+5</text>
+    <text class="button-text" x="50%+94" y="50%-94" width="74" height="54">+15</text>
+    
+    <text class="button-text" x="50%" y="50%+34" width="74" height="54">-1</text>
+    <text class="button-text" x="50%-94" y="50%+34" width="74" height="54">-1</text>
+    <text class="button-text" x="50%+94" y="50%+34" width="74" height="54">-1</text>
+    
+    <text class="button-text" x="50%" y="50%+98" width="74" height="54">-15</text>
+    <text class="button-text" x="50%-94" y="50%+98" width="74" height="54">-5</text>
+    <text class="button-text" x="50%+94" y="50%+98" width="74" height="54">-15</text>
+    
+    <text class="time" id="timer-time" />
+    
+    <section x="0" y="100%-50" width="49%" height="50">
+      <rect id="timer-cancel" class="target background" fill="white" opacity="0.2" />
+      <image href="img/icons-x.png" width="20" height="20" x="50%+15" y="50%-10" />
+    </section>
+    
+    <section x="51%" y="100%-50" width="49%" height="50">
+      <rect id="timer-ok" class="target background" fill="white" opacity="0.2" />
+      <image href="img/icons-check.png" width="20" height="20" x="50%-35" y="50%-10" />
+    </section>
   </g>
 </svg>
