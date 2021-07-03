@@ -1,0 +1,408 @@
+<svg>
+  <g id="main" layer="10">
+    <rect class="background" />
+    <section x="0" y="0" width="80%" height="30">
+      <text id="city" />
+    </section>
+    <section x="0" y="30" width="75%" height="50%-30">
+      <line x1="0" x2="100%-1" y1="0" y2="0" fill="white" opacity="0.2" stroke-width="1" />
+      <section x="0" y="0" height="100%" width="50%">
+        <line x1="100%" x2="100%" y1="1" y2="100%" fill="white" opacity="0.2" stroke-width="1" />
+        <text x="50%" y="22" text-anchor="middle" width="100%" class="weather">Today</text>
+        
+        <rect x="15%-5" y="30" width="3" class="weather-precip-bar" />
+        <rect x="15%+21" y="30" width="3" class="weather-high-bar" />
+        <rect x="15%+25" y="30" width="3" class="weather-low-bar" />
+        <image href="" x="15%" y="30" width="20" height="20" class="weather-img" />
+        <text x="25%" y="50" text-anchor="middle" class="weather main-desc" />
+        <text x="25%" y="70" text-anchor="middle" class="weather main-temp" />
+        
+        <rect x="65%-5" y="30" width="3" class="weather-precip-bar" />
+        <rect x="65%+21" y="30" width="3" class="weather-high-bar" />
+        <rect x="65%+25" y="30" width="3" class="weather-low-bar" />
+        <image href="" x="65%" y="30" width="20" height="20" class="weather-img" />
+        <text x="75%" y="50" text-anchor="middle" class="weather main-desc" />
+        <text x="75%" y="70" text-anchor="middle" class="weather main-temp" />
+        
+        <rect x="15%-5" y="80" width="3" class="weather-precip-bar" />
+        <rect x="15%+21" y="80" width="3" class="weather-high-bar" />
+        <rect x="15%+25" y="80" width="3" class="weather-low-bar" />
+        <image href="" x="15%" y="80" width="20" height="20" class="weather-img" />
+        <text x="25%" y="100" text-anchor="middle" class="weather main-desc" />
+        <text x="25%" y="120" text-anchor="middle" class="weather main-temp" />
+      </section>
+      <section x="50%" y="0" width="50%" height="100%">
+        <text x="25%" y="22" text-anchor="middle" width="100%" class="weather" id="weather-plus1" />
+        <text x="75%" y="22" text-anchor="middle" width="100%" class="weather" id="weather-plus2" />
+        
+        <rect x="17%-5" y="30" width="3" class="weather-precip-bar" />
+        <rect x="17%+21" y="30" width="3" class="weather-high-bar" />
+        <rect x="17%+25" y="30" width="3" class="weather-low-bar" />
+        <image href="" x="17%" y="30" width="20" height="20" class="weather-img" />
+        <text x="25%" y="50" text-anchor="middle" class="weather main-desc" />
+        <text x="25%" y="70" text-anchor="middle" class="weather main-temp" />
+        
+        <rect x="67%-5" y="30" width="3" class="weather-precip-bar" />
+        <rect x="67%+21" y="30" width="3" class="weather-high-bar" />
+        <rect x="67%+25" y="30" width="3" class="weather-low-bar" />
+        <image href="" x="67%" y="30" width="20" height="20" class="weather-img" />
+        <text x="75%" y="50" text-anchor="middle" class="weather main-desc" />
+        <text x="75%" y="70" text-anchor="middle" class="weather main-temp" />
+      </section>
+    </section>
+    <section x="75%" y="0" width="25%" height="50%">
+      <line x1="0" x2="0" y1="0" y2="100%" fill="white" opacity="0.2" stroke-width="1" />
+      <text y="20%-5" x="5" text-anchor="start" class="info" id="battery" />
+      <rect y="22%" x="0" class="info-bar" id="floors-bar" />
+      <image y="22%" x="75%-10"href="img/stat-floors.png" class="stat-image" />
+      <text y="35%-5" x="75%-12" class="info" id="floors" />
+      <rect y="37%" x="0" class="info-bar" id="steps-bar" />
+      <image y="37%" x="100%-20" href="img/stat-steps.png" class="stat-image" />
+      <text y="50%-5" x="100%-24" class="info" id="steps" />
+      <rect y="52%" x="0" class="info-bar" id="distance-bar" />
+      <image y="52%" x="100%-18" href="img/stat-distance.png" class="stat-image" />
+      <text y="65%-5" x="100%-20" class="info" id="distance" />
+      <rect y="67%" x="0" class="info-bar" id="calories-bar" />
+      <image y="67%" x="100%-18" href="img/stat-calories.png" class="stat-image" />
+      <text y="80%-5" x="100%-20" class="info" id="calories" />
+      <rect y="82%" x="0" class="info-bar" id="active-minutes-bar" />
+      <rect y="100%-9" x="0" class="info-detail-bar" id="active-fatburn-bar" />
+      <rect y="100%-9" x="0" class="info-detail-bar" id="active-cardio-bar" />
+      <rect y="100%-9" x="0" class="info-detail-bar" id="active-peak-bar" />
+      <image y="82%" x="100%-18" href="img/stat-minutes.png" class="stat-image" />
+      <text y="95%-5" x="100%-20" class="info" id="active-minutes" />
+    </section>
+    <section x="0" y="50%" width="100%" height="50%">
+      <text class="ekg-rate" id="min-rate" />
+      <text class="ekg-rate" id="max-rate" />
+      <rect x="0" y="0" width="100%" height="100%" fill="white" opacity="0.15" />
+      <line class="ekg-line long ekg-line-main" x1="0%" x2="2%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="2%" x2="4%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="4%" x2="6%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="6%" x2="8%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="8%" x2="10%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="10%" x2="12%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="12%" x2="14%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="14%" x2="16%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="16%" x2="18%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="18%" x2="20%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="20%" x2="22%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="22%" x2="24%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="24%" x2="26%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="26%" x2="28%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="28%" x2="30%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="30%" x2="32%" y1="0" y2="0" />
+      <line class="ekg-line long ekg-line-main" x1="32%" x2="34%" y1="0" y2="0" />
+      <line x1="33%" x2="34%" y1="0" y2="100%-30" fill="white" opacity="0.1" stroke-width="1" />
+      <line class="ekg-line mid ekg-line-main" x1="34%" x2="36%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="36%" x2="38%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="38%" x2="40%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="40%" x2="42%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="42%" x2="44%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="44%" x2="46%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="46%" x2="48%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="48%" x2="50%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="50%" x2="52%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="52%" x2="54%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="54%" x2="56%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="56%" x2="58%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="58%" x2="60%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="60%" x2="62%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="62%" x2="64%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="64%" x2="66%" y1="0" y2="0" />
+      <line class="ekg-line mid ekg-line-main" x1="66%" x2="68%" y1="0" y2="0" />
+      <line x1="66%" x2="67%" y1="0" y2="100%-30" fill="white" opacity="0.1" stroke-width="1" />
+      <line class="ekg-line short ekg-line-main" x1="68%" x2="70%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="70%" x2="72%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="72%" x2="74%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="74%" x2="76%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="76%" x2="78%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="78%" x2="80%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="80%" x2="82%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="82%" x2="84%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="84%" x2="86%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="86%" x2="88%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="88%" x2="90%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="90%" x2="92%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="92%" x2="94%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="94%" x2="96%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="96%" x2="98%" y1="0" y2="0" />
+      <line class="ekg-line short ekg-line-main" x1="98%" x2="100%" y1="0" y2="0" />
+      <section height="20" width="147" y="100%-20" x="50%-73">
+        <rect class="day-box" x="0" />
+        <rect class="day-box" x="21" />
+        <rect class="day-box" x="42" />
+        <rect class="day-box" x="63" />
+        <rect class="day-box" x="84" />
+        <rect class="day-box" x="105" />
+        <rect class="day-box" x="126" />
+        <text class="day-text" x="10">S</text>
+        <text class="day-text" x="31">M</text>
+        <text class="day-text" x="52">T</text>
+        <text class="day-text" x="73">W</text>
+        <text class="day-text" x="94">T</text>
+        <text class="day-text" x="115">F</text>
+        <text class="day-text" x="136">S</text>
+      </section>
+      <rect class="target heart-target" width="33%" fill="red" /> 
+      <rect class="target heart-target" x="33%" width="33%" fill="green" />
+      <rect class="target heart-target" x="66%" width="33%" fill="blue" />
+    </section>
+    <text class="time" id="hours-shadow" />
+    <text class="time" id="minutes-shadow" />
+    <text class="time" id="hours" />
+    <text class="time" id="minutes" />
+    <text id="date" />
+    <rect id="weather-target" class="target" x="0" y="0" width="75%" height="30%" />
+    <rect id="stats-target" class="target" x="75%" width="25%" y="0" height="50%" />
+    <rect id="time-target" class="target" x="25%" width="50%" height="20%" y="30%" />
+  </g>
+  <g id="heart-long" layer="0" display="none">
+    <rect class="background" />
+    <rect class="heart-graph" />
+    <text class="time-heart" id="heart-long-time" />
+    <text class="battery-heart" id="heart-long-battery" />
+    <section x="5%" y="15%" height="80%" width="90%">
+      <line class="ekg-axis" x1="20%" x2="20%" />
+      <line class="ekg-axis" x1="40%" x2="40%" />
+      <line class="ekg-axis" x1="60%" x2="60%" />
+      <line class="ekg-axis" x1="80%" x2="80%" />
+      <text id="heart-20" class="ekg-label" x="20%">8h 48'</text>
+      <text id="heart-40" class="ekg-label" x="40%">6h 40'</text>
+      <text id="heart-60" class="ekg-label" x="60%">4h 26'</text>
+      <text id="heart-80" class="ekg-label" x="80%">2h 13'</text>
+      <line class="ekg-line ekg-line-l" x1="0%" x2="5%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="5%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="5%" x2="10%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="10%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="10%" x2="15%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="15%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="15%" x2="20%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="20%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="20%" x2="25%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="25%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="25%" x2="30%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="30%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="30%" x2="35%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="35%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="35%" x2="40%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="40%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="40%" x2="45%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="45%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="45%" x2="50%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="50%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="50%" x2="55%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="55%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="55%" x2="60%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="60%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="60%" x2="65%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="66%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="65%" x2="70%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="70%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="70%" x2="75%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="75%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="75%" x2="80%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="80%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="80%" x2="85%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="85%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="85%" x2="90%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="90%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="90%" x2="95%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="95%" y="0" />
+      <line class="ekg-line ekg-line-l" x1="95%" x2="100%" y1="0" y2="2" />
+      <text class="ekg-text ekg-text-l" x="100%" y="0" />
+    </section>
+  </g>
+  <g id="weather" layer="3" display="none">
+    <rect class="background" />
+    <text class="time-heart" id="weather-time" />
+    <text class="battery-heart" id="weather-battery" />
+    <text class="weather-detail" id="weather-where" y="18%-4" x="5%" text-anchor="start" />
+    <text class="weather-detail" id="weather-when" y="18%-4" x="95%" text-anchor="end" />
+    <section x="0" y="18%" height="80%" width="100%">
+      <rect x="0" y="2%" height="8%" opacity="0.2" width="100%" class="alt" />
+      <text class="weather-detail" y="9%-3" x="3%">When</text>
+      <text class="weather-detail" y="9%-3" x="30%">Feel</text>
+      <text class="weather-detail" y="9%-3" x="42%">Pr%</text>
+      <text class="weather-detail" y="9%-3" x="52%">Temp</text>
+      <text class="weather-detail" y="9%-3" x="65%">Hu%</text>
+      <text class="weather-detail" y="9%-3" x="76%">Wind</text>
+      <text class="weather-detail" y="9%-3" x="87%">Cloud</text>
+      
+      <section x="0" y="9%" width="100%" height="9%">
+        <text class="weather-detail weather-when"/>
+        <image class="weather-dimg" />
+        <text class="weather-detail weather-desc" />
+        <text class="weather-detail weather-feel" />
+        <text class="weather-detail weather-precip" />
+        <text class="weather-detail weather-temp" />
+        <text class="weather-detail weather-hum" />
+        <text class="weather-detail weather-wind" />
+        <text class="weather-detail weather-cloud" />
+      </section>
+      
+      <section x="0" y="18%" width="100%" height="9%">
+        <rect x="0" y="0" class="alt" height="100%" />
+        <text class="weather-detail weather-when" />
+        <image class="weather-dimg" />
+        <text class="weather-detail weather-desc" />
+        <text class="weather-detail weather-feel" />
+        <text class="weather-detail weather-precip" />
+        <text class="weather-detail weather-temp" />
+        <text class="weather-detail weather-hum" />
+        <text class="weather-detail weather-wind" />
+        <text class="weather-detail weather-cloud" />
+      </section>
+      
+      <section x="0" y="27%" width="100%" height="9%">
+        <text class="weather-detail weather-when" />
+        <image class="weather-dimg" />
+        <text class="weather-detail weather-desc" />
+        <text class="weather-detail weather-feel" />
+        <text class="weather-detail weather-precip" />
+        <text class="weather-detail weather-temp" />
+        <text class="weather-detail weather-hum" />
+        <text class="weather-detail weather-wind" />
+        <text class="weather-detail weather-cloud" />
+      </section>
+      
+      <section x="0" y="36%" width="100%" height="9%">
+        <rect x="0" y="0" class="alt" height="100%" />
+        <text class="weather-detail weather-when" />
+        <image class="weather-dimg" />
+        <text class="weather-detail weather-desc" />
+        <text class="weather-detail weather-feel" />
+        <text class="weather-detail weather-precip" />
+        <text class="weather-detail weather-temp" />
+        <text class="weather-detail weather-hum" />
+        <text class="weather-detail weather-wind" />
+        <text class="weather-detail weather-cloud" />
+      </section>
+      
+      <section x="0" y="45%" width="100%" height="9%">
+        <text class="weather-detail weather-when" />
+        <image class="weather-dimg" />
+        <text class="weather-detail weather-desc" />
+        <text class="weather-detail weather-feel" />
+        <text class="weather-detail weather-precip" />
+        <text class="weather-detail weather-temp" />
+        <text class="weather-detail weather-hum" />
+        <text class="weather-detail weather-wind" />
+        <text class="weather-detail weather-cloud" />
+      </section>
+      
+      <section x="0" y="54%" width="100%" height="9%">
+        <rect x="0" y="0" class="alt" height="100%" />
+        <text class="weather-detail weather-when" />
+        <image class="weather-dimg" />
+        <text class="weather-detail weather-desc" />
+        <text class="weather-detail weather-feel" />
+        <text class="weather-detail weather-precip" />
+        <text class="weather-detail weather-temp" />
+        <text class="weather-detail weather-hum" />
+        <text class="weather-detail weather-wind" />
+        <text class="weather-detail weather-cloud" />
+      </section>
+      
+      <section x="0" y="63%" width="100%" height="9%">
+        <text class="weather-detail weather-when" />
+        <image class="weather-dimg" />
+        <text class="weather-detail weather-desc" />
+        <text class="weather-detail weather-feel" />
+        <text class="weather-detail weather-precip" />
+        <text class="weather-detail weather-temp" />
+        <text class="weather-detail weather-hum" />
+        <text class="weather-detail weather-wind" />
+        <text class="weather-detail weather-cloud" />
+      </section>
+      
+      <section x="0" y="72%" width="100%" height="9%">
+        <rect x="0" y="0" class="alt" height="100%" />
+        <text class="weather-detail weather-when" />
+        <image class="weather-dimg" />
+        <text class="weather-detail weather-desc" />
+        <text class="weather-detail weather-feel" />
+        <text class="weather-detail weather-precip" />
+        <text class="weather-detail weather-temp" />
+        <text class="weather-detail weather-hum" />
+        <text class="weather-detail weather-wind" />
+        <text class="weather-detail weather-cloud" />
+      </section>
+      
+      <section x="0" y="81%" width="100%" height="9%">
+        <text class="weather-detail weather-when" />
+        <image class="weather-dimg" />
+        <text class="weather-detail weather-desc" />
+        <text class="weather-detail weather-feel" />
+        <text class="weather-detail weather-precip" />
+        <text class="weather-detail weather-temp" />
+        <text class="weather-detail weather-hum" />
+        <text class="weather-detail weather-wind" />
+        <text class="weather-detail weather-cloud" />
+      </section>
+    </section>
+  </g>
+  <g id="stats" layer="4" display="none">
+    <rect class="background" />
+    <text class="time-heart" id="stats-time" y="26" />
+    <text class="battery-heart" id="stats-battery" />
+    
+    <text class="stat-txt" x="57" y="18%-4" fill="yellow">Steps</text>
+    <arc class="stat-arc" x="12" y="18%" height="90" width="90" fill="white" opacity="0.2" arc-width="15" start-angle="0" sweep-angle="360" />
+    <arc class="stat-arc" id="step-pct" x="12" y="18%" height="90" width="90" fill="yellow" arc-width="15" start-angle="0" />
+    <text class="stat-txt" id="step-amt" x="57" y="18%+50" fill="yellow" />
+    
+    <text class="stat-txt" x="167" y="18%-4" fill="orange">Floors</text>
+    <arc class="stat-arc" x="122" y="18%" height="90" width="90" fill="white" opacity="0.2" arc-width="15" start-angle="0" sweep-angle="360" />
+    <arc class="stat-arc" id="floor-pct" x="122" y="18%" height="90" width="90" fill="orange" arc-width="15" start-angle="0" />
+    <text class="stat-txt" id="floor-amt" x="167" y="18%+50" fill="orange" />
+   
+    <text class="stat-txt" x="277" y="18%-4" fill="orchid">Distance</text>
+    <arc class="stat-arc" x="232" y="18%" height="90" width="90" fill="white" opacity="0.2" arc-width="15" start-angle="0" sweep-angle="360" />
+    <arc class="stat-arc" id="dist-pct" x="232" y="18%" height="90" width="90" fill="orchid" arc-width="15" start-angle="0" />
+    <text class="stat-txt" id="dist-amt" x="277" y="18%+50" fill="orchid" />
+    
+    <text class="stat-txt" x="112" y="45%+106" fill="red">Calories</text>
+    <arc class="stat-arc" x="67" y="45%" height="90" width="90" fill="white" opacity="0.2" arc-width="15" start-angle="0" sweep-angle="360" />
+    <arc class="stat-arc" id="cal-pct" x="67" y="45%" height="90" width="90" fill="red" arc-width="15" start-angle="0" />
+    <text class="stat-txt" id="cal-amt" x="112" y="45%+50" fill="red" />
+    
+    <text class="stat-txt" x="222" y="45%+106" fill="turquoise">Active Zone</text>
+    <!--<arc class="stat-arc" x="177" y="45%" height="90" width="90" fill="white" opacity="0.2" arc-width="25" start-angle="0" sweep-angle="360" />
+    <arc class="stat-arc" id="active-pct" x="177" y="45%" height="90" width="90" fill="turquoise" arc-width="7" start-angle="0" />-->
+    <arc class="stat-arc" x="177" y="45%" height="90" width="90" fill="white" opacity="0.2" arc-width="10" start-angle="0" sweep-angle="360" />
+    <arc class="stat-arc" id="active-pct" x="177" y="45%" height="90" width="90" fill="turquoise" arc-width="10" start-angle="0" />
+    <text class="stat-txt" id="active-amt" x="222" y="45%+50" fill="turquoise" />
+    
+    <arc class="stat-arc" id="fatburn-pct" x="188" y="45%+11" height="68" width="68" fill="yellow" arc-width="10" start-angle="0" />
+    <arc class="stat-arc" id="cardio-pct" x="188" y="45%+11" height="68" width="68" fill="darkorange" arc-width="10" start-angle="0" />
+    <arc class="stat-arc" id="peak-pct" x="188" y="45%+11" height="68" width="68" fill="darkred" arc-width="10" start-angle="0" />
+    
+    <!--<arc class="stat-arc" id="fatburn-pct" x="185" y="45%+8" height="73" width="73" fill="yellow" arc-width="5" start-angle="0" />
+    <arc class="stat-arc" id="cardio-pct" x="191" y="45%+14" height="61" width="61" fill="darkorange" arc-width="5" start-angle="0" />
+    <arc class="stat-arc" id="peak-pct" x="197" y="45%+20" height="49" width="49" fill="darkred" arc-width="5" start-angle="0" />-->
+    
+    <text class="stat-txt" x="302" y="45%+20" fill="yellow">Fat Burn</text>
+    <text class="stat-txt" id="fatburn-amt" x="302" y="45%+35" fill="yellow" />
+    
+    <text class="stat-txt" x="302" y="45%+55" fill="darkorange">Cardio</text>
+    <text class="stat-txt" id="cardio-amt" x="302" y="45%+70" fill="darkorange" />
+    
+    <text class="stat-txt" x="302" y="45%+90" fill="red">Peak</text>
+    <text class="stat-txt" id="peak-amt" x="302" y="45%+107" fill="red" />
+  </g>
+  <g id="time" layer="5" display="none">
+    <rect class="background" />
+    <text class="battery-heart" id="time-battery" />
+    <text id="time-time" />
+    <text id="time-date" />
+    <text id="time-sw1" />
+    <text id="time-sw2" />
+    <text x="90%" y="40%" fill="white" text-anchor="middle" font-size="40">×</text>
+    <text x="90%" y="75%" fill="white" text-anchor="middle" font-size="40">×</text>
+    <rect id="time-sw1-start" x="0" y="25%" width="70%" height="20%" fill="white" opacity="0.15" pointer-events="visible" />
+    <rect id="time-sw2-start" x="0" y="60%" width="70%" height="20%" fill="white" opacity="0.15" pointer-events="visible" />
+    <rect id="time-sw1-reset" x="80%" y="25%" width="20%" height="20%" fill="white" opacity="0.15" pointer-events="visible" />
+    <rect id="time-sw2-reset" x="80%" y="60%" width="20%" height="20%" fill="white" opacity="0.15" pointer-events="visible" />
+  </g>
+</svg>

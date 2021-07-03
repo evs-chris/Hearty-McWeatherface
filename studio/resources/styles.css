@@ -1,0 +1,424 @@
+text {
+  font-size: 30;
+  font-family: Fabrikat-Bold;
+}
+
+.background {
+  width: 100%;
+  height: 100%;
+  x: 0;
+  y: 0;
+  fill: black;
+}
+
+g {
+  pointer-events: visible;
+}
+
+#weather-time {
+  pointer-events: visible;
+}
+
+.target {
+  pointer-events: visible;
+  x: 0;
+  y: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+#city {
+  width: 100%;
+  height: 100%;
+  x: 90%;
+  font-size: 20;
+  font-family: Fabrikat-Bold;
+  text-length: 30;
+  fill: white;
+  text-anchor: end;
+  opacity: 0.5;
+}
+
+.weather {
+  font-size: 18;
+  font-family: Fabrikat-Bold;
+  text-length: 30;
+  fill: white;
+  text-anchor: start;
+  opacity: 0.55;
+  width: 50%;
+  height: 22;
+}
+
+.weather-img {
+  opacity: 0.8;
+}
+
+.weather-precip-bar {
+  fill: "blue";
+}
+
+.weather-high-bar {
+  fill: "red";
+  opacity: 0.7;
+}
+
+.weather-low-bar {
+  fill: "cyan";
+  opacity: 0.5;
+}
+
+.main-desc {
+  display: none;
+}
+
+.weather-desc {
+  display: none;
+}
+
+.stat-image {
+  width: 12;
+  height: 20;
+  opacity: 0.6;
+}
+
+.time {
+  font-size: 85;
+  font-family: Fabrikat-Bold;
+  text-length: 16;
+  letter-spacing: 1;
+  y: 50%+12;
+  width: 50%;
+}
+
+#hours {
+  text-anchor: end;
+  x: 50%+10;
+  fill: white;
+}
+
+#hours-shadow {
+  text-anchor: end;
+  y: 50%+14;
+  x: 50%+12;
+  fill: black;
+}
+
+#minutes {
+  text-anchor: start;
+  x: 50%+10;
+  fill: blue;
+}
+
+#minutes-shadow {
+  text-anchor: start;
+  y: 50%+14;
+  x: 50%+12;
+  fill: black;
+}
+
+#date {
+  font-size: 20;
+  font-family: Fabrikat-Bold;
+  text-length: 16;
+  y: 50%+35;
+  x: 50%;
+  fill: white;
+  opacity: 0.6;
+  text-anchor: middle;
+}
+
+.ekg-rate {
+  font-size: 20;
+  font-family: Fabrikat-Bold;
+  text-length: 16;
+  width: 50%;
+  fill: red;
+  opacity: 0.8;
+}
+
+.heart-graph {
+  fill: white;
+  opacity: 0.15;
+  x: 0;
+  y: 20%;
+  height: 80%;
+  width: 100%;
+}
+
+#min-rate {
+  y: 85%;
+  x: 90%;
+  text-anchor: end;
+}
+
+#max-rate {
+  y: 0%+20;
+  x: 2%;
+  text-anchor: start;
+}
+
+.ekg-line {
+  opacity: 0.5;
+  stroke-width: 1;
+  fill: lightgreen;
+}
+
+.short {
+  opacity: 1;
+}
+.mid {
+  opacity: 0.6;
+}
+.long {
+  opacity: 0.4;
+}
+
+.ekg-text {
+  font-size: 14;
+  font-family: Fabrikat-Bold;
+  text-length: 4;
+  text-anchor: middle;
+  fill: white;
+  opacity: 0.8;
+}
+
+.ekg-label {
+  font-size: 14;
+  font-family: Fabrikat-Bold;
+  text-length: 8;
+  text-anchor: middle;
+  fill: white;
+  opacity: 0.6;
+  y: 16;
+}
+
+.ekg-axis {
+  y1: 20;
+  y2: 100%;
+  fill: white;
+  opacity: 0.1;
+  stroke-width: 1;
+}
+
+.day-box {
+  width: 20;
+  height: 20;
+  y: 0;
+  fill: white;
+  opacity: 0.1;
+}
+
+.day-text {
+  font-size: 20;
+  font-family: Fabrikat-Bold;
+  text-length: 1;
+  text-anchor: middle;
+  fill: white;
+  opacity: 0.2;
+}
+
+.info {
+  font-size: 20;
+  font-family: Fabrikat-Bold;
+  text-length: 10;
+  text-anchor: end;
+  width: 100%;
+  opacity: 0.65;
+  x: 95%-4;
+}
+
+.info-bar {
+  height: 20;
+  fill: white;
+  width: 100%;
+  opacity: 0.15;
+}
+
+#active-fatburn-bar {
+  fill: yellow;
+}
+
+#active-cardio-bar {
+  fill: darkorange;
+}
+
+#active-peak-bar {
+  fill: darkred;
+}
+
+.info-detail-bar {
+  height: 6;
+  opacity: 0.5;
+}
+
+#battery {
+  fill: lightgreen;
+}
+
+#steps {
+  fill: yellow;
+}
+
+#calories {
+  fill: red;
+}
+
+#floors {
+  fill: orange;
+}
+
+#distance {
+  fill: orchid;
+}
+
+#active-minutes {
+  fill: turquoise;
+}
+
+.time-heart {
+  font-size: 30;
+  font-family: Fabrikat-Bold;
+  text-length: 10;
+  text-anchor: middle;
+  x: 50%;
+  y: 35;
+  fill: white;
+}
+
+.battery-heart {
+  font-size: 20;
+  font-family: Fabrikat-Bold;
+  text-length: 10;
+  text-anchor: end;
+  x: 80%-4;
+  y: 25;
+  fill: green;
+  opacity: 0.8;
+}
+
+.weather-detail {
+  fill: white;
+  font-size: 16;
+  font-family: Fabrikat-Bold;
+  text-length: 16;
+  text-anchor: start;
+  opacity: 0.7;
+}
+
+.weather-when {
+  text-anchor: end;
+  x: 21%-5;
+  y: 100%-5;
+}
+
+.weather-dimg {
+  y: 2;
+  x: 21%;
+  width: 20;
+  height: 20;
+}
+
+.weather-desc {
+  x: 21%;
+  y: 100%-5;
+}
+
+.weather-feel {
+  x: 29%;
+  y: 100%-5;
+}
+
+.weather-precip {
+  x: 42%;
+  y: 100%-5;
+}
+
+.weather-temp {
+  x: 54%+2;
+  y: 100%-5;
+}
+
+.weather-hum {
+  x: 67%;
+  y: 100%-5;
+}
+
+.weather-wind {
+  x: 78%;
+  y: 100%-5;
+}
+
+.weather-cloud {
+  x: 89%;
+  y: 100%-5;
+}
+
+.alt {
+  fill: white;
+  opacity: 0.1;
+  width: 100%;
+  height: 10%;
+}
+
+.alt-row {
+  fill: #aaaaaa;
+}
+
+.stat-txt {
+  font-size: 16;
+  font-family: Fabrikat-Bold;
+  text-length: 16;
+  text-anchor: middle;
+  opacity: 0.6;
+}
+
+.stat-arc {
+  opacity: 0.8;
+}
+
+#time-time {
+  text-anchor: middle;
+  text-length: 6;
+  fill: white;
+  x: 50%;
+  y: 15%;
+  width: 100%;
+  height: 20%;
+}
+
+#time-date {
+  text-anchor: middle;
+  text-length: 60;
+  font-size: 24;
+  fill: white;
+  x: 50%;
+  y: 100%-25;
+  width: 100%;
+  height: 20%;
+}
+
+#time-sw1 {
+  text-anchor: start;
+  text-length: 60;
+  fill: white;
+  x: 10;
+  y: 40%;
+  width: 100%;
+  height: 20%;
+  font-size: 40;
+  font-family: Tungsten-Medium;
+}
+
+#time-sw2 {
+  text-anchor: start;
+  text-length: 60;
+  fill: white;
+  x: 10;
+  y: 75%;
+  width: 100%;
+  height: 20%;
+  font-size: 40;
+  font-family: Tungsten-Medium;
+}

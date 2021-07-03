@@ -1,0 +1,29 @@
+{
+  "devDependencies": {
+    "@fitbit/sdk": "~5.0.0"
+  },
+  "fitbit": {
+    "appUUID": "54af50b0-0f9f-48fb-bc8a-2ce2d5edfa66",
+    "appType": "clockface",
+    "appDisplayName": "Hearty McWeatherface",
+    "iconFile": "resources/icon.png",
+    "wipeColor": "#607d8b",
+    "requestedPermissions": [
+      "access_activity",
+      "access_user_profile",
+      "access_heart_rate",
+      "access_internet",
+      "access_location"
+    ],
+    "buildTargets": [
+      "atlas",
+      "vulcan"
+    ],
+    "i18n": {
+      "en-US": {
+        "name": "Hearty McWeatherface"
+      }
+    },
+    "defaultLanguage": "en-US"
+  }
+}
