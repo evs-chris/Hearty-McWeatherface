@@ -35,9 +35,19 @@ export function kelvinToF(temp) {
   return (Math.round(1.8 * ((+temp * 10) - 2731.5)) / 10) + 32
 }
 
+export function mToF(m) {
+  if (!m) return 0;
+  return m * 3.28084;
+}
+
 export function mToMi(m) {
   if (!m) return 0;
   return Math.round((m / 1609.344) * 100) / 100;
+}
+
+export function mToKm(m) {
+  if (!m) return 0;
+  return Math.floor(m / 1000);
 }
 
 export function mToMiLong(m) {
@@ -81,6 +91,12 @@ export function formatMilliseconds(ms, padh) {
 export function formatSeconds(s, padh) {
   if (!s) return padh ? '0:00:00' : '0:00';
   return formatMilliseconds(s * 1000, padh);
+}
+
+const monodigits = [0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19].map(c => String.fromCharCode(c));
+const digits = /[0-9]/g;
+export function monoDigits(str) {
+  return `${str}`.replace(digits, d => monodigits[+d]);
 }
 
 export function multiTap(count) {

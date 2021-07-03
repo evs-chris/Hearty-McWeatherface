@@ -47,7 +47,8 @@ export const ui = {
     dayText: eclass("day-text"),
     dayBox: eclass("day-box"),
     heart: {
-      lines: eclass('ekg-line-main')
+      lines: eclass('ekg-line-main'),
+      ranges: eclass('ekg-range')
     },
     weather: eid('weather'),
     temps: eclass('main-temp'),
@@ -69,12 +70,18 @@ export const ui = {
       floors: eid('main-exercise-floors'),
       time: eid('main-exercise-time'),
       speed: eid('main-exercise-speed')
-    }
+    },
+    activeTm: eid('active-tm'),
+    activeSw: eid('active-sw')
   },
   heart: {
     long: {
+      min: eid('ekg-l-min'),
+      max: eid('ekg-l-max'),
       lines: eclass('ekg-line-l'),
       texts: eclass('ekg-text-l'),
+      shadows: eclass('ekg-text-shadow'),
+      ranges: eclass('ekg-range-l'),
       time: eid('heart-long-time'),
       battery: eid('heart-long-battery'),
       l20: eid('heart-20'),

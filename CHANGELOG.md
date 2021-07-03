@@ -48,6 +48,7 @@ Unpublished
   * The timer set view is opened with a tap on the timer time slot.
   * Tapping the +/- buttons will add or subtract from the time in their column. Tapping the time will add one to the part that is tapped.
 * Switched to the System-Bold font for most text so that the monospace hack can be used.
+* Added current stopwatch and timer indicators that appear as triangles on the main view time ':', with the top indicating a running stopwatch and the bottom indicating a running timer.
 
 ## 1.1.0
 

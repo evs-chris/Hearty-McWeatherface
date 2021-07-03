@@ -1,7 +1,7 @@
 import clock from "clock";
 import document from "document";
 import { preferences } from "user-settings";
-import { avg, singleTap, doubleTap, tripleTap, fill, find, kelvinToC, kelvinToF, keys, mToMi, msToMph, msToKph, skmToMs, skmToSmi, formatSeconds, formatMilliseconds, zeroPad } from "../common/utils";
+import { avg, singleTap, doubleTap, tripleTap, fill, find, kelvinToC, kelvinToF, keys, mToMi, mToF, msToMph, msToKph, skmToMs, mToKm, skmToSmi, formatSeconds, formatMilliseconds, zeroPad, monoDigits } from "../common/utils";
 import { HeartRateSensor } from "heart-rate";
 import { user } from "user-profile";
 import { battery } from "power";
@@ -34,6 +34,7 @@ let timer2Pause = 0;
 let whichTimer = 0;
 let timer1TM;
 let timer2TM;
+let statsTM;
 
 let timer;
 
@@ -79,7 +80,7 @@ const exercises = ['walk', 'run', 'cycling', 'workout', 'hiking', 'elliptical', 
 
 // Save state
 app.onunload = () => {
-  let data = JSON.stringify({ longs: ekg.longs, mids: ekg.mids, shorts: ekg.shorts });
+  let data = JSON.stringify({ longs: ekg.longs, mids: ekg.mids, shorts: ekg.shorts, minMids: ekg.minMids, minLongs: ekg.minLongs, maxMids: ekg.maxMids, maxLongs: ekg.maxLongs });
   fs.writeFileSync(ekgFile, data, "json");
   data = JSON.stringify({ settings, weather, sw1, sw2, sw1Pause, sw2Pause, timer1, timer2, timer1Pause, timer2Pause });
   fs.writeFileSync(otherFile, data, "json");
@@ -318,7 +319,6 @@ singleTap(ui.timer.sminus5, makeTimerChange(0, 0, -15));
 
 singleTap(ui.timer.ok, () => {
   const time = Date.now() + (timer.s + timer.m * 60 + timer.h * 3600) * 1000;
-  console.log(whichTimer, time)
   if (whichTimer === 1) {
     timer1 = time;
     timer1Pause = 0;
@@ -349,6 +349,10 @@ const ekg = {
   longs: fill([], resting, 0, 20),
   mids: fill([], resting, 0, 20),
   shorts: fill([], resting, 0, 20),
+  minMids: fill([], resting, 0, 20),
+  minLongs: fill([], resting, 0, 20),
+  maxMids: fill([], resting, 0, 20),
+  maxLongs: fill([], resting, 0, 20),
   short: 0,
   mid: 0,
   long: 0,
@@ -363,15 +367,25 @@ try {
   const now = Date.now();
 
   if (json) {
-    ekg.longs = json.longs;
-    ekg.mids = json.mids;
-    ekg.shorts = json.shorts;
+    ekg.longs = json.longs || ekg.longs;
+    ekg.mids = json.mids || ekg.mids;
+    ekg.shorts = json.shorts || ekg.shorts;
+    ekg.minMids = json.minMids || ekg.mids.slice();
+    ekg.minLongs = json.minLongs || ekg.longs.slice();
+    ekg.maxMids = json.maxMids || ekg.mids.slice();
+    ekg.maxLongs = json.maxLongs || ekg.longs.slice();
   }
   
-  // test data
-  //ekg.longs = [97, 99, 88, 86, 71, 71, 72, 68, 69, 69, 65, 50, 56, 57, 56, 59, 63, 75, 80, 85];
-  //ekg.mids = [90, 88, 87, 88, 87, 87, 90, 96, 100, 110, 111, 110, 105, 109, 114, 120, 132, 120, 122, 110];
-  //ekg.shorts = [110, 115, 112, 111, 110, 109, 110, 99, 98, 95, 93, 92, 93, 90, 85, 80, 82, 80, 79, 75];
+  // demo data
+  /*ekg.minLongs = [ 88,  97,  85,  66,  54,  70,  72,  65,  61,  61,  63,  50,  54,  54,  55,  59,  52,  70,  74,  81];
+  ekg.longs =    [ 97,  99,  88,  86,  71,  71,  72,  68,  69,  69,  65,  50,  56,  57,  56,  59,  63,  75,  80,  85];
+  ekg.maxLongs = [102, 133, 100,  88,  78,  79,  92,  68,  69,  79,  67,  55,  58,  59,  59,  59,  78,  79, 169, 155];
+  
+  ekg.minMids =  [ 88,  88,  85,  80,  79,  84,  88,  90,  98,  98, 102, 110, 104, 104, 110, 110, 127, 117, 101,  96];
+  ekg.mids =     [ 90,  88,  87,  88,  87,  87,  90,  96, 100, 110, 111, 110, 105, 109, 114, 120, 132, 120, 122, 110];
+  ekg.maxMids =  [100,  99,  99,  95,  93,  94, 110, 120, 110, 115, 114, 130, 135, 149, 144, 130, 172, 121, 125, 111];
+  
+  ekg.shorts =   [110, 115, 112, 111, 110, 109, 110,  99,  98,  95,  93,  92,  93,  90,  85,  80,  82,  80,  79,  75];*/
   
   ekg.mid = now + ekg.midt;
   ekg.long = now + ekg.longt;
@@ -395,9 +409,9 @@ try {
 
 function updateHeart() {
   if (page === MAIN) {
-    ui.main.minRate.text = `${minRate}/${resting}`;
+    ui.main.minRate.text = monoDigits(`${minRate}/${resting}`);
     ui.main.minRateShadow.text = ui.main.minRate.text;
-    ui.main.maxRate.text = `${currentRate}/${maxRate}`;
+    ui.main.maxRate.text = monoDigits(`${currentRate}/${maxRate}`);
     ui.main.maxRateShadow.text = ui.main.maxRate.text;
   }
 }
@@ -426,12 +440,20 @@ const hrmRead = () => {
   if (now > ekg.long) {
     ekg.longs.push(avg(ekg.mids) || resting || 60);
     if (ekg.longs.length > 20) ekg.longs.shift();
+    ekg.minLongs.push(Math.min.apply(Math, ekg.mids) || resting || 60);
+    if (ekg.minLongs.length > 20) ekg.minLongs.shift();
+    ekg.maxLongs.push(Math.max.apply(Math, ekg.mids) || resting || 60);
+    if (ekg.maxLongs.length > 20) ekg.maxLongs.shift();
     bump = true;
     ekg.long = now + ekg.longt;
   }
   if (now > ekg.mid) {
     ekg.mids.push(avg(ekg.shorts) || resting || 60);
     if (ekg.mids.length > 20) ekg.mids.shift();
+    ekg.minMids.push(Math.min.apply(Math, ekg.shorts) || resting || 60);
+    if (ekg.minMids.length > 20) ekg.minMids.shift();
+    ekg.maxMids.push(Math.max.apply(Math, ekg.shorts) || resting || 60);
+    if (ekg.maxMids.length > 20) ekg.maxMids.shift();
     bump = true;
     ekg.mid = now + ekg.midt;
   }
@@ -462,10 +484,14 @@ setInterval(() => {
 }, 7200000);
 
 function drawEKG() {
-  let lines, points, ekgHeight, offset, texts, ming, start;
+  let lines, points, ekgHeight, offset, texts, ming, start, mins, maxes, ranges;
+  const shadows = ui.heart.long.shadows;
   if (page === MAIN) {
     lines = ui.main.heart.lines;
+    ranges = ui.main.heart.ranges;
     points = [].concat(ekg.longs.slice(3), ekg.mids.slice(3), ekg.shorts.slice(4));
+    mins = [].concat(ekg.minLongs.slice(3), ekg.minMids.slice(3));
+    maxes = [].concat(ekg.maxLongs.slice(3), ekg.maxMids.slice(3));
     ekgHeight = screenHeight / 2;
     offset = 20;
     texts = [];
@@ -473,7 +499,10 @@ function drawEKG() {
     start = resting;
   } else if (page === HEARTL) {
     lines = ui.heart.long.lines;
-    points = ekg.longs.slice();
+    ranges = ui.heart.long.ranges;
+    points = ekg.longs;
+    mins = ekg.minLongs;
+    maxes = ekg.maxLongs;
     ekgHeight = Math.round(screenHeight * 0.8);
     offset = 40;
     texts = ui.heart.long.texts;
@@ -481,7 +510,10 @@ function drawEKG() {
     start = resting;
   } else if (page === HEARTM) {
     lines = ui.heart.long.lines;
-    points = ekg.mids.slice();
+    ranges = ui.heart.long.ranges;
+    points = ekg.mids;
+    mins = ekg.minMids;
+    maxes = ekg.maxMids;
     ekgHeight = Math.round(screenHeight * 0.8);
     offset = 40;
     texts = ui.heart.long.texts;
@@ -489,7 +521,10 @@ function drawEKG() {
     start = ekg.longs[ekg.longs.length - 1];
   } else if (page === HEARTS) {
     lines = ui.heart.long.lines;
-    points = ekg.shorts.slice();
+    ranges = ui.heart.long.ranges;
+    points = ekg.shorts;
+    mins = [];
+    maxes = [];
     ekgHeight = Math.round(screenHeight * 0.8);
     offset = 40;
     texts = ui.heart.long.texts;
@@ -498,22 +533,39 @@ function drawEKG() {
   }
   
   if (lines && points) {
-    const min = minRate = Math.min.apply(Math, points.concat(start));
-    let max = maxRate = Math.max.apply(Math, points.concat(start));
+    const min = minRate = Math.min.apply(Math, points.concat(start, mins));
+    let max = maxRate = Math.max.apply(Math, points.concat(start, maxes));
     if (max - min < ming) max = min + ming;
     const unit = (ekgHeight - (2 * offset)) / (max - min);
-    const ps = [];
+    
+    if (page !== MAIN) {
+      ui.heart.long.min.text = minRate;
+      ui.heart.long.max.text = maxRate;
+    }
 
     points.reduce((a, c, i) => {
       lines[i].y1 = ekgHeight - (offset + ((a - min) * unit));
-      ps.push(lines[i].y1);
       lines[i].y2 = ekgHeight - (offset + ((c - min) * unit));
       if (texts[i]) {
-        texts[i].text = c;
-        texts[i].y = lines[i].y2 + (i % 2 === 0 ? 25 : -10);
+        texts[i].text = shadows[i].text = c;
+        texts[i].y = lines[i].y2 + (i % 2 === 0 ? 25 : -12);
+        shadows[i].y = texts[i].y + 1;
       }
       return c;
     }, start);
+    
+    if (ranges) {
+      mins.forEach((v, i) => {
+        ranges[i].y1 = ekgHeight - (offset + ((Math.min(v, points[i]) - min) * unit));
+        ranges[i].y2 = ekgHeight - (offset + ((Math.max(maxes[i], points[i]) - min) * unit));
+      });
+      if (!mins.length) {
+        points.forEach((p, i) => {
+          ranges[i].y1 = -1;
+          ranges[i].y2 = -1;
+        });
+      }
+    }
     
     updateHeart();
   }
@@ -533,9 +585,9 @@ function ordinal(num) {
 clock.granularity = "minutes";
 function updateTimeCb(evt) {
   const today = evt.date;
-  const hours = (settings.time ? today.getHours() % 12 || 12 : zeroPad(today.getHours())) + ':';
-  const minutes = zeroPad(today.getMinutes());
-  const date = `${today.getFullYear()}-${zeroPad(today.getMonth() + 1)}-${zeroPad(today.getDate())}`;
+  const hours = monoDigits((settings.time ? today.getHours() % 12 || 12 : zeroPad(today.getHours())) + ':');
+  const minutes = monoDigits(zeroPad(today.getMinutes()));
+  const date = monoDigits(`${today.getFullYear()}-${zeroPad(today.getMonth() + 1)}-${zeroPad(today.getDate())}`);
   
   if (page === MAIN) {
     ui.main.hours.text = hours;
@@ -559,6 +611,12 @@ function updateTimeCb(evt) {
     });
     
     if (exercising) updateExercise();
+    
+    if (sw1 && !sw1Pause || sw2 && !sw2Pause) ui.main.activeSw.style.display = 'inline';
+    else ui.main.activeSw.style.display = 'none';
+    
+    if (timer1 && !timer1Pause || timer2 && !timer2Pause) ui.main.activeTm.style.display = 'inline';
+    else ui.main.activeTm.style.display = 'none';
   } else if (page === HEARTL) {
     ui.heart.long.time.text = `${hours}${minutes}`;
   } else if (page === HEARTM) {
@@ -577,7 +635,9 @@ function updateTimeCb(evt) {
   }
 }
 clock.ontick = updateTimeCb;
-function updateTime() { updateTimeCb({ date: new Date() }); }
+function updateTime() {
+  updateTimeCb({ date: new Date() });
+}
 
 // Weather and settings
 messaging.peerSocket.onmessage = function(evt) {
@@ -626,7 +686,7 @@ messaging.peerSocket.onclose = () => {
 }
 
 messaging.peerSocket.onerror = e => {
-  console.log('app peer error', e);
+  console.log('app peer error', e.message, e);
 }
 
 function getWeather(force) {
@@ -707,7 +767,7 @@ function updateWeather() {
     const dt = new Date(weather.when || 0);
     ui.weather.when.text = `${dt.getFullYear()}-${zeroPad(dt.getMonth() + 1)}-${zeroPad(dt.getDate())} ${settings.time ? dt.getHours() % 12 || 12 : zeroPad(dt.getHours())}:${zeroPad(dt.getMinutes())}`;
     ui.weather.where.text = weather.city;
-    weather.list.forEach((w, i) => {
+    (weather.list || []).forEach((w, i) => {
       if (i > 8) return;
       const d = new Date(w.when * 1000);
       ui.weather.whens[i].text = `${zeroPad(d.getMonth() + 1)}-${zeroPad(d.getDate())} ${settings.time ? d.getHours() % 12 || 12 : zeroPad(d.getHours())}`;
@@ -736,13 +796,13 @@ function updateExercise() {
       w.main.layer = 3;
       w.which.href = exerciseIcon[exercising] || exerciseIcon.workout;
       
-      w.time.text = formatMilliseconds(ex.stats.activeTime, true);
+      w.time.text = monoDigits(formatMilliseconds(ex.stats.activeTime, true));
       
-      w.floors.text = `${ex.stats.elevationGain || 0}`;
-      w.calories.text = `${ex.stats.calories || 0}`;
-      w.steps.text = `${ex.stats.steps || 0}`;
-      w.distance.text = `${settings.temp ? mToMi(ex.stats.distance || 0).toFixed(1) : (ex.stats.distance || 0).toFixed(1)}`;
-      w.speed.text = `${settings.temp ? msToMph(ex.stats.speed.current).toFixed(1) : msToKph(ex.stats.speed.current).toFixed(1)}`;
+      w.floors.text = monoDigits(`${settings.temp ? mToF(ex.stats.elevationGain) : ex.stats.elevationGain || 0}`);
+      w.calories.text = monoDigits(`${ex.stats.calories || 0}`);
+      w.steps.text = monoDigits(`${ex.stats.steps || 0}`);
+      w.distance.text = monoDigits(`${settings.temp ? mToMi(ex.stats.distance || 0).toFixed(1) : mToKm(ex.stats.distance || 0).toFixed(1)}`);
+      w.speed.text = monoDigits(`${settings.temp ? msToMph(ex.stats.speed.current).toFixed(1) : msToKph(ex.stats.speed.current).toFixed(1)}`);
     } else {
       w.main.style.dissplay = 'none';
       w.main.layer = 2;
@@ -763,29 +823,29 @@ function updateExercise() {
       
       w.laps.text = `${exerciseLap}`;
       
-      w.time.text = formatMilliseconds(ex.stats.activeTime, true);
+      w.time.text = monoDigits(formatMilliseconds(ex.stats.activeTime, true));
       
-      const speed = ex.type === 'biking' ? 15 : ex.type === 'running' ? 6 : 2.5;
+      const speed = ex.type === 'biking' ? 17 : ex.type === 'running' ? 10 : 3.5;
       
-      w.floors.text = `${ex.stats.elevationGain || 0}`;
-      w.calories.text = `${ex.stats.calories || 0}`;
-      w.steps.text = `${ex.stats.steps || 0}`;
-      w.distance.text = `${settings.temp ? mToMi(ex.stats.distance || 0).toFixed(1) : (ex.stats.distance || 0).toFixed(1)}`;
+      w.floors.text = monoDigits(`${settings.temp ? mToF(ex.stats.elevationGain) : ex.stats.elevationGain || 0}`);
+      w.calories.text = monoDigits(`${ex.stats.calories || 0}`);
+      w.steps.text = monoDigits(`${ex.stats.steps || 0}`);
+      w.distance.text = `${settings.temp ? mToMi(ex.stats.distance || 0).toFixed(1) : mToKm(ex.stats.distance || 0).toFixed(1)}`;
       
       const paceMs = skmToMs(ex.stats.pace.current);
-      w.pace.text = `${settings.temp ? formatSeconds(skmToSmi(ex.stats.pace.current)) : formatSeconds(ex.stats.pace.current)}`;
+      w.pace.text = monoDigits(`${settings.temp ? formatSeconds(skmToSmi(ex.stats.pace.current)) : formatSeconds(ex.stats.pace.current)}`);
       w.paceo.sweepAngle = 180 - Math.floor(Math.min(1, paceMs / speed) * 180);
-      w.paceAvg.text = `${settings.temp ? formatSeconds(skmToSmi(ex.stats.pace.average)) : formatSeconds(ex.stats.pace.average)}`;
+      w.paceAvg.text = monoDigits(`${settings.temp ? formatSeconds(skmToSmi(ex.stats.pace.average)) : formatSeconds(ex.stats.pace.average)}`);
       
-      w.speed.text = `${settings.temp ? msToMph(ex.stats.speed.current).toFixed(1) : msToKph(ex.stats.speed.current).toFixed(1)}`;
+      w.speed.text = monoDigits(`${settings.temp ? msToMph(ex.stats.speed.current).toFixed(1) : msToKph(ex.stats.speed.current).toFixed(1)}`);
       w.speedo.sweepAngle = Math.floor(Math.min(1, (ex.stats.speed.current || 0) / speed) * 180);
-      w.speedAvg.text = `${settings.temp ? msToMph(ex.stats.speed.average).toFixed(1) : msToKph(ex.stats.speed.average).toFixed(1)}`;
-      w.speedMax.text = `${settings.temp ? msToMph(ex.stats.speed.max).toFixed(1) : msToKph(ex.stats.speed.max).toFixed(1)}`;
+      w.speedAvg.text = monoDigits(`${settings.temp ? msToMph(ex.stats.speed.average).toFixed(1) : msToKph(ex.stats.speed.average).toFixed(1)}`);
+      w.speedMax.text = monoDigits(`${settings.temp ? msToMph(ex.stats.speed.max).toFixed(1) : msToKph(ex.stats.speed.max).toFixed(1)}`);
       
-      w.heart.text = `${ex.stats.heartRate.current || 0}`;
+      w.heart.text = monoDigits(`${ex.stats.heartRate.current || 0}`);
       w.hearto.sweepAngle = Math.floor(Math.min(1, (ex.stats.heartRate.current || 0) / 200) * 180);
-      w.heartAvg.text = `${ex.stats.heartRate.average || 0}`;
-      w.heartMax.text = `${ex.stats.heartRate.max || 0}`;
+      w.heartAvg.text = monoDigits(`${ex.stats.heartRate.average || 0}`);
+      w.heartMax.text = monoDigits(`${ex.stats.heartRate.max || 0}`);
       
       if (exerciseTM) clearTimeout(exerciseTM);
       if (ex.state === 'started') exerciseTM = setTimeout(updateExercise, 1000);
@@ -821,15 +881,15 @@ function updateStats() {
   
   if (page === MAIN) {
     const w = ui.main;
-    w.steps.text = `${a.steps}`;
+    w.steps.text = monoDigits(`${a.steps}`);
     w.stepsBar.width = Math.floor(stepPct * barWidth); w.stepsBar.x = barWidth - w.stepsBar.width;
-    w.distance.text = `${settings.temp ? mToMi(a.distance) : a.distance}`;
+    w.distance.text = monoDigits(`${settings.temp ? mToMi(a.distance) : mToKm(a.distance)}`);
     w.distanceBar.width = Math.floor(distPct * barWidth); w.distanceBar.x = barWidth - w.distanceBar.width;
-    w.calories.text = `${a.calories}`;
+    w.calories.text = monoDigits(`${a.calories}`);
     w.caloriesBar.width = Math.floor(calPct * barWidth); w.caloriesBar.x = barWidth - w.caloriesBar.width;
-    w.floors.text = `${a.elevationGain}`;
+    w.floors.text = monoDigits(`${a.elevationGain}`);
     w.floorsBar.width = Math.floor(floorPct * barWidth); w.floorsBar.x = barWidth - w.floorsBar.width;
-    w.activeMinutes.text = `${m.total || 0}`;
+    w.activeMinutes.text = monoDigits(`${m.total || 0}`);
     w.activeMinutesBar.width = Math.floor(actPct * barWidth); w.activeMinutesBar.x = barWidth - w.activeMinutesBar.width;
 
     const twidth = w.activeMinutesBar.width;
@@ -854,11 +914,11 @@ function updateStats() {
     w.pct.cal.sweepAngle = calPct * 360;
     w.pct.floor.sweepAngle = floorPct * 360;
     
-    w.amt.step.text = `${a.steps}`;
-    w.amt.dist.text = `${settings.temp ? mToMi(a.distance) : a.distance}`;
-    w.amt.active.text = `${m.total || 0}`;
-    w.amt.cal.text = `${a.calories}`;
-    w.amt.floor.text = `${a.elevationGain}`;
+    w.amt.step.text = monoDigits(`${a.steps}`);
+    w.amt.dist.text = monoDigits(`${settings.temp ? mToMi(a.distance) : mToKm(a.distance)}`);
+    w.amt.active.text = monoDigits(`${m.total || 0}`);
+    w.amt.cal.text = monoDigits(`${a.calories}`);
+    w.amt.floor.text = monoDigits(`${a.elevationGain}`);
     
     /*const mg = goals.activeZoneMinutes || {};
     const fatPct = Math.min(1, !m.fatBurn ? 0 : (m.fatBurn || 1) / (mg.fatBurn || m.total || 1));
@@ -876,14 +936,13 @@ function updateStats() {
     w.pct.peak.startAngle = w.pct.cardio.startAngle + w.pct.cardio.sweepAngle;
     w.pct.peak.sweepAngle = peakPct * 360;
     
-    w.amt.fatburn.text = `${m.fatBurn || 0}`;
-    w.amt.cardio.text = `${m.cardio || 0}`;
-    w.amt.peak.text = `${m.peak || 0}`;
+    w.amt.fatburn.text = monoDigits(`${m.fatBurn || 0}`);
+    w.amt.cardio.text = monoDigits(`${m.cardio || 0}`);
+    w.amt.peak.text = monoDigits(`${m.peak || 0}`);
   }
   
   if (exercising) updateExercise();
 }
-setInterval(updateStats, 5000);
 
 // Battery
 function updateBattery() {
@@ -1013,30 +1072,30 @@ function timeStr(ms) {
 function drawSW(init) {
   const now = Date.now();
   
-  if (sw1 && !sw1Pause) ui.time.sw1.text = timeStr(now - sw1);
-  else if (!sw1) ui.time.sw1.text = timeStr(0);
-  else if (init && sw1Pause) ui.time.sw1.text = timeStr(sw1Pause - sw1);
+  if (sw1 && !sw1Pause) ui.time.sw1.text = monoDigits(timeStr(now - sw1));
+  else if (!sw1) ui.time.sw1.text = monoDigits(timeStr(0));
+  else if (init && sw1Pause) ui.time.sw1.text = monoDigits(timeStr(sw1Pause - sw1));
   
-  if (sw2 && !sw2Pause) ui.time.sw2.text = timeStr(now - sw2);
-  else if (!sw2) ui.time.sw2.text = timeStr(0);
-  else if (init && sw2Pause) ui.time.sw2.text = timeStr(sw2Pause - sw2);
+  if (sw2 && !sw2Pause) ui.time.sw2.text = monoDigits(timeStr(now - sw2));
+  else if (!sw2) ui.time.sw2.text = monoDigits(timeStr(0));
+  else if (init && sw2Pause) ui.time.sw2.text = monoDigits(timeStr(sw2Pause - sw2));
   
   if (timer1Pause === -1) ; // just finished
-  else if (timer1 > now && !timer1Pause) ui.time.tm1.text = timeStr(timer1 - now);
+  else if (timer1 > now && !timer1Pause) ui.time.tm1.text = monoDigits(timeStr(timer1 - now));
   else if (!timer1 || timer1 < now) ui.time.tm1.text = '---';
-  else if (init && timer1Pause) ui.time.tm1.text = timeStr(timer1Pause);
+  else if (init && timer1Pause) ui.time.tm1.text = monoDigits(timeStr(timer1Pause));
   
   if (timer2Pause === -1) ; // just finished
-  else if (timer2 > now && !timer2Pause) ui.time.tm2.text = timeStr(timer2 - now);
+  else if (timer2 > now && !timer2Pause) ui.time.tm2.text = monoDigits(timeStr(timer2 - now));
   else if (!timer2 || timer2 < now) ui.time.tm2.text = '---';
-  else if (init && timer2Pause) ui.time.tm2.text = timeStr(timer2Pause);
+  else if (init && timer2Pause) ui.time.tm2.text = monoDigits(timeStr(timer2Pause));
   
   if (page === TIME && ((sw1 && !sw1Pause) || (sw2 && !sw2Pause) || (timer1 && !timer1Pause) || (timer2 && !timer2Pause))) requestAnimationFrame(drawSW);
 }
 
 function updateTimer() {
   if (page === TIMER) {
-    ui.timer.time.text = `${zeroPad(timer.h)}:${zeroPad(timer.m)}:${zeroPad(timer.s)}`;
+    ui.timer.time.text = monoDigits(`${zeroPad(timer.h)}:${zeroPad(timer.m)}:${zeroPad(timer.s)}`);
   }
 }
 
@@ -1046,6 +1105,7 @@ function updateColors() {
   ui.main.maxRate.style.fill = settings.heartrateColor || 'red';
   ui.main.minRate.style.fill = settings.heartrateColor || 'red';
   eclass('ekg-line').forEach(l => l.style.fill = settings.graphColor || 'lightgreen');
+  eclass('ekg-range').forEach(l => l.style.fill = settings.graphColor || 'lightgreen');
 }
 
 function initTimers() {
@@ -1060,12 +1120,12 @@ function initTimers() {
     switchPage(TIME);
     ui.time.tm1.text = '-+-+-+-+-+-';
     setTimeout(() => {
+      vibration.stop();
       timer1Pause = 0;
       ui.time.tm1.text = '---';
     }, 5000);
   }, timer1 - now);
-  if (timer2 && timer2 > now && !timer2Pause) console.log('I has timer2', timer2 - now), timer2TM = setTimeout(() => {
-    console.log('timer2 elapsed')
+  if (timer2 && timer2 > now && !timer2Pause) timer2TM = setTimeout(() => {
     timer2 = 0;
     timer2Pause = -1;
     vibration.start('alert');
@@ -1073,11 +1133,23 @@ function initTimers() {
     switchPage(TIME)
     ui.time.tm2.text = '-+-+-+-+-+-';
     setTimeout(() => {
+      vibration.stop();
       timer2Pause = 0;
       ui.time.tm2.text = '---';
     }, 5000);
   }, timer2 - now)
 }
+
+display.addEventListener('change', () => {
+  if (display.on && !statsTM) statsTM = setInterval(updateStats, 5000);
+  else if (!display.on && statsTM) {
+    clearInterval(statsTM);
+    statsTM = 0;
+  }
+  if (display.on) draw();
+});
+
+if (display.on) statsTM = setInterval(updateStats, 5000);
 
 // Init view
 updateColors();
