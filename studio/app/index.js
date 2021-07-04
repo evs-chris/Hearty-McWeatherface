@@ -115,13 +115,13 @@ eclass('heart-target').forEach((el, i) => {
       ui.heart.long.l80.text = '6\' 36"';
       ui.heart.long.l60.text = '13\' 12"';
       ui.heart.long.l40.text = '19\' 48"';
-      ui.heart.long.l20.text = '26\' 24';
+      ui.heart.long.l20.text = '26\' 24"';
       switchPage(HEARTM);
     } else {
       ui.heart.long.l80.text = '0\' 20"';
       ui.heart.long.l60.text = '0\' 40"';
-      ui.heart.long.l40.text = '1\' 0"';
-      ui.heart.long.l20.text = '1\' 20';
+      ui.heart.long.l40.text = '1\' 00"';
+      ui.heart.long.l20.text = '1\' 20"';
       switchPage(HEARTS);
     }
   });
