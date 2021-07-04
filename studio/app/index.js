@@ -1006,7 +1006,9 @@ const maxOffset = Math.floor(screenHeight * 0.1);
 function _draw() {
   if (display.aodActive && !aodPage) {
     aodPage = page;
-    ui.aod.wrapper.x = ui.aod.wrapper.y = Math.floor(Math.random() * maxOffset);
+    ui.aod.wrapper.x = Math.floor(Math.random() * maxOffset);
+    ui.aod.wrapper.y = Math.floor(Math.random() * maxOffset);
+    console.log(`moving aod to ${ui.aod.wrapper.x}:${ui.aod.wrapper.y}`);
     ui.page.aod.style.display = "inline";
     ui.page.aod.layer = 100;
     updateTime();
