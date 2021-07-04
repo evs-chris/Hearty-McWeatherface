@@ -14,7 +14,7 @@ import { display } from "display";
 
 import { ui, eid, eclass } from './elements';
 
-const MAIN = 1, HEARTL = 2, HEARTM = 3, HEARTS = 4, WEATHER = 5, STATS = 6, TIME = 7, EXERCISE = 8, TIMER = 9;
+const MAIN = 1, HEARTL = 2, HEARTM = 3, HEARTS = 4, WEATHER = 5, STATS = 6, TIME = 7, EXERCISE = 8, TIMER = 9, WATER = 10;
 let page = MAIN;
 let aodPage = 0;
 let lastPage = 0;
@@ -41,6 +41,7 @@ let timer;
 
 let settings = {};
 let weather = {};
+let water;
 let canExercise = app.permissions.granted('access_exercise');
 
 let exercising = (exercise.state !== 'stopped' && exercise.type) || exercise.state === 'started';
@@ -84,7 +85,7 @@ const exercises = ['walk', 'run', 'cycling', 'workout', 'hiking', 'elliptical', 
 app.onunload = () => {
   let data = JSON.stringify({ longs: ekg.longs, mids: ekg.mids, shorts: ekg.shorts, minMids: ekg.minMids, minLongs: ekg.minLongs, maxMids: ekg.maxMids, maxLongs: ekg.maxLongs });
   fs.writeFileSync(ekgFile, data, "json");
-  data = JSON.stringify({ settings, weather, sw1, sw2, sw1Pause, sw2Pause, timer1, timer2, timer1Pause, timer2Pause });
+  data = JSON.stringify({ settings, weather, sw1, sw2, sw1Pause, sw2Pause, timer1, timer2, timer1Pause, timer2Pause, water });
   fs.writeFileSync(otherFile, data, "json");
 }
 
@@ -154,6 +155,28 @@ singleTap(ui.stats.exercise, () => {
   if (!canExercise) return;
   beforeExercisePage = 1;
   switchPage(EXERCISE);
+});
+
+tripleTap(ui.stats.water.back, () => {
+  sendMessage({ type: 'water' });
+})
+
+singleTap(ui.stats.water.button, () => {
+  if (!settings.canWater);
+  switchPage(WATER);
+});
+
+doubleTap(ui.water.small, () => {
+  sendMessage({ type: 'waterlog', value: 'small' });
+  switchPage(STATS);
+});
+doubleTap(ui.water.medium, () => {
+  sendMessage({ type: 'waterlog', value: 'medium' });
+  switchPage(STATS);
+});
+doubleTap(ui.water.large, () => {
+  sendMessage({ type: 'waterlog', value: 'large' });
+  switchPage(STATS);
 });
 
 singleTap(eid('time-sw1-start'), () => {
@@ -283,7 +306,11 @@ singleTap(ui.exercise.active.lap, () => {
     exerciseLap++;
     updateExercise();
   }
-})
+});
+
+singleTap(ui.water.cancel, () => {
+  switchPage(STATS);
+});
 
 function makeTimerChange(h, m, s) {
   return function() {
@@ -694,6 +721,10 @@ messaging.peerSocket.onmessage = function(evt) {
     }
     
     updateWeather();
+  } else if (evt.data.type === 'water') {
+    const val = evt.data.value || {};
+    water = { amount: val.amount, goal: val.goal };
+    draw();
   }
 }
 
@@ -723,9 +754,13 @@ messaging.peerSocket.onerror = e => {
   console.log('app peer error', e.message, e);
 }
 
-function getWeather(force) {
-  if (!find(queue, m => m && m.type === 'weather')) queue.push({ type: 'weather', value: weather.when, force: force });
+function sendMessage(msg) {
+  if (!find(queue, m => m && m.type === msg.type)) queue.push(msg);
   flushQueue();
+}
+
+function getWeather(force) {
+  sendMessage({ type: 'weather', value: weather.when, force: force })
 }
 setInterval(getWeather, 1800000);
 
@@ -980,6 +1015,19 @@ function updateStats() {
 
     if (canExercise && ui.stats.exercise.style.display !== 'inline') ui.stats.exercise.style.display = 'inline';
     else if (!canExercise && ui.stats.exercise.style.display !== 'none') ui.stats.exercise.style.display = 'none';
+
+    if (water) {
+      const w = ui.stats.water;
+      if (w.wrapper.style.display !== 'inline') w.wrapper.style.display = 'inline';
+      const max = Math.floor(screenHeight / 5);
+      const pct = water.amount / water.goal;
+      w.goal.text = `${settings.temp ? water.goal : (water.goal / 1000).toFixed(1)}`;
+      w.text.text = `${settings.temp ? water.amount : (water.amount / 1000).toFixed(1)}`;
+      w.bar.height = Math.round(pct * max);
+      w.bar.y = max - w.bar.height;
+    } else {
+      if (ui.stats.water.wrapper.style.display !== 'none') ui.stats.water.wrapper.style.display = 'none';
+    }
   }
   
   if (exercising) updateExercise();
@@ -1025,7 +1073,7 @@ function _draw() {
       ui.page[p].layer = 0;
     }
 
-      if (page === MAIN) {
+    if (page === MAIN) {
       ui.page.main.style.display = 'inline';
       ui.page.main.layer = 20;
     } else if (page === HEARTL) {
@@ -1053,6 +1101,9 @@ function _draw() {
     } else if (page === TIMER) {
       ui.page.timer.style.display = 'inline';
       ui.page.timer.layer = 20;
+    } else if (page === WATER) {
+      ui.page.water.style.display = 'inline';
+      ui.page.water.layer = 20;
     }
     
     lastPage = page;

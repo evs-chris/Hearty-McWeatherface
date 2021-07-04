@@ -17,6 +17,7 @@ export const ui = {
     stats: eid('stats'),
     time: eid('time'),
     exercise: eid('exercise'),
+    water: eid('water'),
     timer: eid('timer')
   },
   aod: {
@@ -149,6 +150,14 @@ export const ui = {
       peak: eid('peak-goal')
     },
     exercise: eid('stats-exercise'),
+    water: {
+      wrapper: eid('stat-water-wrapper'),
+      button: eid('stats-water'),
+      back: eid('stat-water-back'),
+      bar: eid('stat-water'),
+      text: eid('stat-water-text'),
+      goal: eid('stat-water-goal'),
+    },
   },
   time: {
     battery: eid('time-battery'),
@@ -207,6 +216,12 @@ export const ui = {
       ok: eid('exercise-ok'),
       cancel: eid('exercise-cancel')
     }
+  },
+  water: {
+    small: eid('water-pick-small'),
+    medium: eid('water-pick-medium'),
+    large: eid('water-pick-large'),
+    cancel: eid('water-cancel'),
   },
   timer: {
     time: eid('timer-time'),

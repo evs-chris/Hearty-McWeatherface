@@ -62,15 +62,24 @@ messaging.peerSocket.onclose = () => {
 
 // Listen for the onmessage event
 messaging.peerSocket.onmessage = evt => {
-  if (evt.data && evt.data.type === 'weather') {
+  if (!evt.data || !evt.data.type) return;
+  if (evt.data.type === 'weather') {
     if (evt.data.force) localStorage.setItem('lastWeather', 0);
     checkWeather(evt.data.value);
+  } else if (evt.data.type === 'waterlog') {
+    console.log(`got a request to log ${ev.data.value} water`);
+    // add water and return stats
+  } else if (evt.data.type === 'water') {
+    console.log(`got a request to fetch water stats`);
+    // get water stats
   }
 }
 
+const privateSettings = ['fitbitAuth'];
 function sendSettings() {
   const obj = {};
   settings.forEach(k => {
+    if (~privateSettings.indexOf(k)) return;
     try {
       obj[k] = JSON.parse(settingsStorage.getItem(k));
     } catch (e) {

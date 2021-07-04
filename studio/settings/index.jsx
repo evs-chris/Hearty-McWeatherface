@@ -2,6 +2,20 @@ function mySettings(props) {
   return (
     <Page>
       <Section
+        title={<Text bold align="center">Fitbit Account for More Stats</Text>}>
+        <Oauth
+          settingsKey="fitbitAuth"
+          title="Login"
+          label="Fitbit"
+          status="Login"
+          authorizeUrl="https://www.fitbit.com/oauth2/authorize"
+          requestTokenUrl="https://api.fitbit.com/oauth2/token"
+          clientId="FITBIT_OAUTH_CLIENT_ID"
+          clientSecret="FITBIT_OAUTH_CLIENT_SECRET"
+          scope="sleep nutrition"
+        />
+      </Section>
+      <Section
         title={<Text bold align="center">Hour Color</Text>}>
         <ColorSelect label="Hour Color" settingsKey="hourColor" colors={[
             { color: "white" },

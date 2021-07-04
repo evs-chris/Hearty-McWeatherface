@@ -562,6 +562,22 @@
     
     <text class="stat-txt" x="302" y="45%+90" fill="red">Peak</text>
     <text class="stat-txt" id="peak-amt" x="302" y="45%+107" fill="red" />
+
+    <g id="stat-water-wrapper" display="none">
+      <text id="stat-water-goal" class="stat-txt" x="35" y="50%+10" fill="lightblue">GO</text>
+      <text id="stat-water-text" class="stat-txt" x="35" y="70%+30" fill="lightblue">CUR</text>
+      <section x="25" width="20" height="20%" y="50%+15">
+        <rect id="stat-water-back" class="clicky" x="0" width="100%" height="100%" y="0" fill="white" opacity="0.1" />
+        <rect id="stat-water" x="0" width="100%" height="100%" y="0" fill="blue" pointer-events="none" />
+      </section>
+
+      <section x="0" y="100%-50" width="49%" height="50">
+        <rect id="stats-water" class="target background" fill="white" opacity="0.2" />
+        <image href="img/water-small.png" x="50%-15" y="50%-10" width="20" height="20" />
+        <image href="img/water-medium.png" x="$+5" y="$-20" width="20" height="20" />
+        <image href="img/water-big.png" x="$+5" y="$-20" width="20" height="20" />
+      </section>
+    </g>
     
     <section x="52%" y="100%-50" width="49%" height="50">
       <rect id="stats-exercise" class="target background" fill="white" opacity="0.2" />
@@ -695,6 +711,22 @@
         <image href="img/icons-play.png" width="20" height="20" x="50%-35" y="50%-10" />
       </section>
     </g>
+  </g>
+  <g id="water" display="none">
+    <rect class="background" />
+
+    <rect x="0" y="0" width="33%" id="water-pick-small" height="100%-50" class="clicky" />
+    <rect x="33%" y="0" width="34%" id="water-pick-medium" height="100%-50" class="clicky" />
+    <rect x="67%" y="0" width="33%" id="water-pick-large" height="100%-50" class="clicky" />
+
+    <image x="17%-30" y="50%-60" width="60" height="60" href="img/water-small-big.png" />
+    <image x="50%-30" y="50%-60" width="60" height="60" href="img/water-medium-big.png" />
+    <image x="83%-30" y="50%-60" width="60" height="60" href="img/water-big-big.png" />
+
+    <section x="0" y="100%-50" width="100%" height="50">
+      <rect id="water-cancel" class="target background" fill="white" opacity="0.2" />
+      <image href="img/icons-x.png" width="20" height="20" x="50%-10" y="50%-10" />
+    </section>
   </g>
   <g id="timer" display="none">
     <rect class="background" />
