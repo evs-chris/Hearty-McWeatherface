@@ -204,6 +204,8 @@ singleTap(eid('time-tm1-start'), () => {
     switchPage(TIMER);
   } else if (!timer1Pause) {
     timer1Pause = timer1 - Date.now();
+    if (timer1TM) clearTimeout(timer1TM);
+    timer1TM = 0;
   } else {
     timer1 = Date.now() + timer1Pause;
     timer1Pause = 0;
@@ -220,6 +222,8 @@ singleTap(eid('time-tm2-start'), () => {
     switchPage(TIMER);
   } else if (!timer2Pause) {
     timer2Pause = timer2 - Date.now();
+    if (timer2TM) clearTimeout(timer2TM);
+    timer2TM = 0;
   } else {
     timer2 = Date.now() + timer2Pause;
     timer2Pause = 0;
@@ -1131,11 +1135,13 @@ function drawSW(init) {
   
   if (timer1Pause === -1) ; // just finished
   else if (timer1 > now && !timer1Pause) ui.time.tm1.text = monoDigits(timeStr(timer1 - now));
+  else if (timer1 && timer1Pause) ui.time.tm1.text = monoDigits(timeStr(timer1Pause));
   else if (!timer1 || timer1 < now) ui.time.tm1.text = '---';
   else if (init && timer1Pause) ui.time.tm1.text = monoDigits(timeStr(timer1Pause));
   
   if (timer2Pause === -1) ; // just finished
   else if (timer2 > now && !timer2Pause) ui.time.tm2.text = monoDigits(timeStr(timer2 - now));
+  else if (timer2 && timer2Pause) ui.time.tm2.text = monoDigits(timeStr(timer2Pause));
   else if (!timer2 || timer2 < now) ui.time.tm2.text = '---';
   else if (init && timer2Pause) ui.time.tm2.text = monoDigits(timeStr(timer2Pause));
   
