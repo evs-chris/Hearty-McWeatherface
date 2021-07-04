@@ -1,18 +1,18 @@
 <svg>
   <g id="aod" display="none" layer="0">
     <rect class="background" />
-    <section id="aod-wrapper" x="5%" y="5%" width="90%" height="90%">
-      <text x="50%-91" class="aod-time aod-hour1" />
-      <text x="50%-89" class="aod-time aod-hour1" />
-      <text x="50%-90" y="50%-1" class="aod-time aod-hour1" />
-      <text x="50%-90" y="50%+1" class="aod-time aod-hour1" />
-      <text x="50%-90" class="aod-time aod-time-in aod-hour1" />
+    <svg id="aod-wrapper" width="90%" height="90%">
+      <text x="50%-81" class="aod-time aod-hour1" />
+      <text x="50%-79" class="aod-time aod-hour1" />
+      <text x="50%-80" y="50%-1" class="aod-time aod-hour1" />
+      <text x="50%-80" y="50%+1" class="aod-time aod-hour1" />
+      <text x="50%-80" class="aod-time aod-time-in aod-hour1" />
 
-      <text x="50%-41" class="aod-time aod-hour2" />
-      <text x="50%-39" class="aod-time aod-hour2" />
-      <text x="50%-40" y="50%-1" class="aod-time aod-hour2" />
-      <text x="50%-40" y="50%+1" class="aod-time aod-hour2" />
-      <text x="50%-40" class="aod-time aod-time-in aod-hour2" />
+      <text x="50%-36" class="aod-time aod-hour2" />
+      <text x="50%-34" class="aod-time aod-hour2" />
+      <text x="50%-35" y="50%-1" class="aod-time aod-hour2" />
+      <text x="50%-35" y="50%+1" class="aod-time aod-hour2" />
+      <text x="50%-35" class="aod-time aod-time-in aod-hour2" />
 
       <text x="50%-1" class="aod-time">:</text>
       <text x="50%+1" class="aod-time">:</text>
@@ -20,17 +20,17 @@
       <text x="50%" y="50%+1" class="aod-time">:</text>
       <text x="50%" class="aod-time aod-time-in">:</text>
 
-      <text x="50%+41" class="aod-time aod-minute1" />
-      <text x="50%+39" class="aod-time aod-minute1" />
-      <text x="50%+40" y="50%-1" class="aod-time aod-minute1" />
-      <text x="50%+40" y="50%+1" class="aod-time aod-minute1" />
-      <text x="50%+40" class="aod-time aod-time-in aod-minute1" />
+      <text x="50%+36" class="aod-time aod-minute1" />
+      <text x="50%+34" class="aod-time aod-minute1" />
+      <text x="50%+35" y="50%-1" class="aod-time aod-minute1" />
+      <text x="50%+35" y="50%+1" class="aod-time aod-minute1" />
+      <text x="50%+35" class="aod-time aod-time-in aod-minute1" />
 
-      <text x="50%+91" class="aod-time aod-minute2" />
-      <text x="50%+89" class="aod-time aod-minute2" />
-      <text x="50%+90" y="50%-1" class="aod-time aod-minute2" />
-      <text x="50%+90" y="50%+1" class="aod-time aod-minute2" />
-      <text x="50%+90" class="aod-time aod-time-in aod-minute2" />
+      <text x="50%+81" class="aod-time aod-minute2" />
+      <text x="50%+79" class="aod-time aod-minute2" />
+      <text x="50%+80" y="50%-1" class="aod-time aod-minute2" />
+      <text x="50%+80" y="50%+1" class="aod-time aod-minute2" />
+      <text x="50%+80" class="aod-time aod-time-in aod-minute2" />
 
       <text id="aod-date" />
 
@@ -56,7 +56,7 @@
         <line class="aod-ekg-line" x1="90%" x2="95%" y1="0" y2="2" />
         <line class="aod-ekg-line" x1="95%" x2="100%" y1="0" y2="2" />
       </section>
-    </section>
+    </svg>
   </g>
   <g id="main">
     <rect class="background" />
