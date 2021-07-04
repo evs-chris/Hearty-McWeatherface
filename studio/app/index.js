@@ -21,6 +21,8 @@ let page = MAIN;
 let aodPage = 0;
 let lastPage = 0;
 
+const EXERCISE_INTERVAL = 500;
+
 const ekgFile = "ekg-data.json";
 const otherFile = "other.json";
 
@@ -870,7 +872,7 @@ function updateExercise() {
       w.heartMax.text = monoDigits(`${ex.stats.heartRate.max || 0}`);
       
       if (exerciseTM) clearTimeout(exerciseTM);
-      if (ex.state === 'started') exerciseTM = setTimeout(updateExercise, 1000);
+      if (ex.state === 'started' && display.on && !display.aodActive) exerciseTM = setTimeout(updateExercise, EXERCISE_INTERVAL);
     } else {
       main.pickEl.style.display = 'inline';
       main.pickEl.layer = 5;
