@@ -41,6 +41,7 @@ let timer;
 
 let settings = {};
 let weather = {};
+let canExercise = app.permissions.granted('access_exercise');
 
 let exercising = (exercise.state !== 'stopped' && exercise.type) || exercise.state === 'started';
 let pickExercise = 0;
@@ -149,10 +150,12 @@ tripleTap(ui.weather.time, () => {
   getWeather(true);
 });
 
-singleTap(eid('stats-exercise'), () => {
+singleTap(ui.stats.exercise, () => {
+  if (!canExercise) return;
   beforeExercisePage = 1;
   switchPage(EXERCISE);
 });
+
 singleTap(eid('time-sw1-start'), () => {
   if (!sw1) {
     sw1 = Date.now();
@@ -674,6 +677,7 @@ messaging.peerSocket.onmessage = function(evt) {
   console.log('app message');
   if (evt.data.type === 'settings') {
     settings = evt.data.value;
+    canExercise = app.permissions.granted('access_exercise');
     updateColors();
     draw();
   } else if (evt.data.type === 'weather') {
@@ -973,6 +977,9 @@ function updateStats() {
     w.amt.fatburn.text = monoDigits(`${m.fatBurn || 0}`);
     w.amt.cardio.text = monoDigits(`${m.cardio || 0}`);
     w.amt.peak.text = monoDigits(`${m.peak || 0}`);
+
+    if (canExercise && ui.stats.exercise.style.display !== 'inline') ui.stats.exercise.style.display = 'inline';
+    else if (!canExercise && ui.stats.exercise.style.display !== 'none') ui.stats.exercise.style.display = 'none';
   }
   
   if (exercising) updateExercise();
@@ -1034,6 +1041,7 @@ function _draw() {
     } else if (page === STATS) {
       ui.page.stats.style.display = 'inline';
       ui.page.stats.layer = 20;
+      canExercise = app.permissions.granted('access_exercise');
     } else if (page === TIME) {
       ui.page.time.style.display = 'inline';
       ui.page.time.layer = 20;

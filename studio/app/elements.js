@@ -147,7 +147,8 @@ export const ui = {
       fatburn: eid('fatburn-goal'),
       cardio: eid('cardio-goal'),
       peak: eid('peak-goal')
-    }
+    },
+    exercise: eid('stats-exercise'),
   },
   time: {
     battery: eid('time-battery'),
