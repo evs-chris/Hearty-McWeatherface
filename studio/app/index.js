@@ -487,6 +487,8 @@ setInterval(() => {
 }, 7200000);
 
 function drawEKG() {
+  if (!display.on) return;
+  
   let lines, points, ekgHeight, offset, texts, ming, start, mins, maxes, ranges;
   const shadows = ui.heart.long.shadows;
 
@@ -641,6 +643,8 @@ function updateTimeCb(evt) {
     
     if (timer1 && !timer1Pause || timer2 && !timer2Pause) ui.main.activeTm.style.display = 'inline';
     else ui.main.activeTm.style.display = 'none';
+  } else if (!display.on || display.aodActive) {
+    return;
   } else if (page === HEARTL) {
     ui.heart.long.time.text = `${hours}${minutes}`;
   } else if (page === HEARTM) {
@@ -809,6 +813,8 @@ function updateWeather() {
 
 // Exercise
 function updateExercise() {
+  if (!display.on || display.aodActive) return;
+  
   const ex = exercise;
   //const ex = { type: 'run', stats: { elevationGain: 113, speed: 5.49, calories: 1412, distance: 15115.5, steps: 16129, activeTime: 5978141 } };
   
@@ -887,6 +893,8 @@ function updateExercise() {
 
 // Stats
 function updateStats() {
+  if (!display.on || display.aodActive) return;
+  
   const a = activity.local;
   const m = a.activeZoneMinutes || {};
   // demo
@@ -1109,6 +1117,8 @@ function timeStr(ms) {
 }
 
 function drawSW(init) {
+  if (!display.on || display.aodActive) return;
+
   const now = Date.now();
   
   if (sw1 && !sw1Pause) ui.time.sw1.text = monoDigits(timeStr(now - sw1));
@@ -1187,7 +1197,7 @@ display.addEventListener('change', () => {
     clearInterval(statsTM);
     statsTM = 0;
   }
-  if (display.on) draw();
+  if (display.on) _draw();
 });
 
 if (display.on) statsTM = setInterval(updateStats, 5000);
