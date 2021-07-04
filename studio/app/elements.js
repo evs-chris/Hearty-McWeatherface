@@ -10,6 +10,7 @@ export function eclass(name) {
 
 export const ui = {
   page: {
+    aod: eid('aod'),
     main: eid('main'),
     heartl: eid('heart-long'),
     weather: eid('weather'),
@@ -17,6 +18,15 @@ export const ui = {
     time: eid('time'),
     exercise: eid('exercise'),
     timer: eid('timer')
+  },
+  aod: {
+    wrapper: eid('aod-wrapper'),
+    hour1: eclass('aod-hour1'),
+    hour2: eclass('aod-hour2'),
+    minute1: eclass('aod-minute1'),
+    minute2: eclass('aod-minute2'),
+    date: eid('aod-date'),
+    lines: eclass('aod-ekg-line'),
   },
   main: {
     hours: eid("hours"),

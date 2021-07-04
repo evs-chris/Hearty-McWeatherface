@@ -18,6 +18,7 @@ import { ui, eid, eclass } from './elements';
 
 const MAIN = 1, HEARTL = 2, HEARTM = 3, HEARTS = 4, WEATHER = 5, STATS = 6, TIME = 7, EXERCISE = 8, TIMER = 9;
 let page = MAIN;
+let aodPage = 0;
 let lastPage = 0;
 
 const ekgFile = "ekg-data.json";
@@ -408,7 +409,7 @@ try {
 } catch (e) { console.error(e); }
 
 function updateHeart() {
-  if (page === MAIN) {
+  if (!aodPage && page === MAIN) {
     ui.main.minRate.text = monoDigits(`${minRate}/${resting}`);
     ui.main.minRateShadow.text = ui.main.minRate.text;
     ui.main.maxRate.text = monoDigits(`${currentRate}/${maxRate}`);
@@ -486,7 +487,17 @@ setInterval(() => {
 function drawEKG() {
   let lines, points, ekgHeight, offset, texts, ming, start, mins, maxes, ranges;
   const shadows = ui.heart.long.shadows;
-  if (page === MAIN) {
+
+  if (aodPage) {
+    lines = ui.aod.lines;
+    points = ekg.mids;
+    mins = maxes = [];
+    ekgHeight = Math.floor((screenHeight * 0.9) / 2);
+    texts = [];
+    ming = 10;
+    offset = 20;
+    start = ekg.longs[ekg.longs.length - 1];
+  } else if (page === MAIN) {
     lines = ui.main.heart.lines;
     ranges = ui.main.heart.ranges;
     points = [].concat(ekg.longs.slice(3), ekg.mids.slice(3), ekg.shorts.slice(4));
@@ -523,8 +534,7 @@ function drawEKG() {
     lines = ui.heart.long.lines;
     ranges = ui.heart.long.ranges;
     points = ekg.shorts;
-    mins = [];
-    maxes = [];
+    mins = maxes = [];
     ekgHeight = Math.round(screenHeight * 0.8);
     offset = 40;
     texts = ui.heart.long.texts;
@@ -537,8 +547,8 @@ function drawEKG() {
     let max = maxRate = Math.max.apply(Math, points.concat(start, maxes));
     if (max - min < ming) max = min + ming;
     const unit = (ekgHeight - (2 * offset)) / (max - min);
-    
-    if (page !== MAIN) {
+
+    if (page !== MAIN && !aodPage) {
       ui.heart.long.min.text = minRate;
       ui.heart.long.max.text = maxRate;
     }
@@ -589,7 +599,19 @@ function updateTimeCb(evt) {
   const minutes = monoDigits(zeroPad(today.getMinutes()));
   const date = monoDigits(`${today.getFullYear()}-${zeroPad(today.getMonth() + 1)}-${zeroPad(today.getDate())}`);
   
-  if (page === MAIN) {
+  if (aodPage) {
+    const w = ui.aod;
+    if (hours.length === 1) w.hour1.forEach(h => h.text = '');
+    else w.hour1.text = w.hour1.forEach(h => h.text = hours[0]);
+    w.hour2.forEach(h => h.text = hours[1]);
+
+    w.minute1.forEach(m => m.text = minutes[0]);
+    w.minute2.forEach(m => m.text = minutes[1]);
+
+    w.date.text = date;
+
+    drawEKG();
+  } else if (page === MAIN) {
     ui.main.hours.text = hours;
     ui.main.minutes.text = minutes;
     ui.main.hoursShadow.text = hours;
@@ -960,7 +982,22 @@ battery.onchange = updateBattery;
 function draw() {
   requestAnimationFrame(_draw);
 }
+// assumes a square screen, which holds for now
+const maxOffset = Math.floor(screenHeight * 0.1);
 function _draw() {
+  if (display.aodActive && !aodPage) {
+    aodPage = page;
+    ui.aod.wrapper.x = ui.aod.wrapper.y = Math.floor(Math.random() * maxOffset);
+    ui.page.aod.style.display = "inline";
+    ui.page.aod.layer = 100;
+    updateTime();
+    return;
+  } else if (!display.aodActive && aodPage) {
+    aodPage = 0;
+    ui.page.aod.style.display = 'none';
+    ui.page.aod.layer = 0;
+  }
+
   if (page !== lastPage) {
     for (const p in ui.page) {
       ui.page[p].style.display = 'none';
@@ -1139,6 +1176,8 @@ function initTimers() {
     }, 5000);
   }, timer2 - now)
 }
+
+display.aodAllowed = true;
 
 display.addEventListener('change', () => {
   if (display.on && !statsTM) statsTM = setInterval(updateStats, 5000);

@@ -576,7 +576,33 @@ g {
   pointer-events: none;
 }
 
-/*.number {
-  font-family: Seville-Book;
+.aod-time {
+  y: 50%;
+  fill: white;
+  opacity: 0.8;
+  text-anchor: middle;
+  font-size: 85;
+  font-family: Fabrikat-Bold;
 }
-*/
+
+.aod-time-in {
+  fill: black;
+  opacity: 1;
+  font-size: 85;
+}
+
+#aod-date {
+  font-size: 20;
+  text-length: 16;
+  y: 50%+23;
+  x: 50%;
+  fill: white;
+  opacity: 0.6;
+  text-anchor: middle;
+}
+
+.aod-ekg-line {
+  stroke-width: 2;
+  fill: white;
+  opacity: 0.8;
+}
