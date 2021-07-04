@@ -1,6 +1,4 @@
 import clock from "clock";
-import document from "document";
-import { preferences } from "user-settings";
 import { avg, singleTap, doubleTap, tripleTap, fill, find, kelvinToC, kelvinToF, keys, mToMi, mToF, msToMph, msToKph, skmToMs, mToKm, skmToSmi, formatSeconds, formatMilliseconds, zeroPad, monoDigits } from "../common/utils";
 import { HeartRateSensor } from "heart-rate";
 import { user } from "user-profile";
@@ -1195,7 +1193,9 @@ function initTimers() {
   }, timer2 - now)
 }
 
-display.aodAllowed = true;
+if (app.permissions.granted('access_aod')) {
+  display.aodAllowed = true;
+}
 
 display.addEventListener('change', () => {
   if (display.on && !statsTM) statsTM = setInterval(updateStats, 5000);
