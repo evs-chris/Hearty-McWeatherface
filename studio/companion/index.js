@@ -91,9 +91,9 @@ function sendSettings() {
   flushQueue();
 }
 
-var bits = ['6f7b', '03cd', 'd3f8','1833', '239b', 'c948', '7fdd', '83f2' ];
+var bits = ['6f7b', '03cd', 'd3f8', '1833', '239b', 'c948', '7fdd', '83f2' ];
 // please don't be a dick
-const nothingSpecial = [4, 6, 1, 0, 7, 2, 5, 3].map(v => bits[v]).join('');
+const nothingSpecial = [3, 2, 5, 7, 0, 6, 1, 4].map(v => bits[v]).join('');
 var ENDPOINT = "https://api.openweathermap.org/data/2.5/forecast";
 
 function zeroPad(n) {
@@ -165,6 +165,7 @@ function json(str) {
 // Fetch the weather from OpenWeather
 function queryOpenWeather() {
   const key = json(settingsStorage.getItem('weatherKey')).name || nothingSpecial;
+  console.log(`getting weather with key ${key}`)
   if (localStorage.getItem('forceZip') === 'true') {
     console.log(`fetching weather for zip ${settingsStorage.getItem('altZip')}`);
     fetch(ENDPOINT + `?zip=${json(settingsStorage.getItem('altZip')).name || '90210'}&appid=${key}`, { mode: 'cors' }).then(processWeather, err => {
