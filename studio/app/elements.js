@@ -197,6 +197,16 @@ export const ui = {
       hearto: eid('exercise-hearto'),
       heartAvg: eid('exercise-heart-avg'),
       heartMax: eid('exercise-heart-max'),
+      zone: {
+        normal: eid('exercise-heart-normal'),
+        normalLine: eid('exercise-heart-normal-line'),
+        fatburn: eid('exercise-heart-fatburn'),
+        fatburnLine: eid('exercise-heart-fatburn-line'),
+        cardio: eid('exercise-heart-cardio'),
+        cardioLine: eid('exercise-heart-cardio-line'),
+        peak: eid('exercise-heart-peak'),
+        peakLine: eid('exercise-heart-peak-line'),
+      },
       
       pace: eid('exercise-pace'),
       paceo: eid('exercise-paceo'),

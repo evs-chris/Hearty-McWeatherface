@@ -42,7 +42,9 @@ let timer;
 let settings = {};
 let weather = {};
 let water;
+
 let canExercise = app.permissions.granted('access_exercise');
+let zones = { fatburn: 115, cardio: 140, peak: 165 };
 
 let exercising = (exercise.state !== 'stopped' && exercise.type) || exercise.state === 'started';
 let pickExercise = 0;
@@ -705,6 +707,8 @@ messaging.peerSocket.onmessage = function(evt) {
   if (evt.data.type === 'settings') {
     settings = evt.data.value;
     canExercise = app.permissions.granted('access_exercise');
+
+    updateZones();
     updateColors();
     draw();
   } else if (evt.data.type === 'weather') {
@@ -726,6 +730,33 @@ messaging.peerSocket.onmessage = function(evt) {
     water = { amount: val.amount, goal: val.goal };
     draw();
   }
+}
+
+function updateZones() {
+  let zone = 'fat-burn';
+  for (let i = 80; i < 220; i++) {
+    if (user.heartRateZone(i) === zone) {
+      if (zone === 'fat-burn') {
+        zones.fatburn = i;
+        zone = 'cardio';
+      } else if (zone === 'cardio') {
+        zones.cardio = i;
+        zone = 'peak';
+      } else if (zone === 'peak') {
+        zones.peak = i;
+        break;
+      }
+    }
+  }
+
+  console.log(JSON.stringify(zones));
+  const w = ui.exercise.active.zone;
+  w.normal.sweepAngle = Math.floor(((zones.fatburn - 1) / 200) * 180);
+  w.fatburn.sweepAngle = Math.floor(((zones.cardio - 1) / 200) * 180);
+  w.fatburnLine.startAngle = w.normal.sweepAngle - 89;
+  w.cardio.sweepAngle = Math.floor(((zones.peak - 1) / 200) * 180);
+  w.cardioLine.startAngle = w.fatburn.sweepAngle - 89;
+  w.peakLine.startAngle = w.cardio.sweepAngle - 89;
 }
 
 const queue = [];
