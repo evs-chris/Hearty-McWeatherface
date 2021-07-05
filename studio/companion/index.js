@@ -296,6 +296,9 @@ function getSleep() {
 
 sendSettings();
 
+const refreshAuth = 'Basic ' + btoa(shh.fitbitClientId + ':' + shh.fitbitClientSecret);
+console.log(refreshAuth);
+
 async function oauthFetch(auth, url, options, retry = 0) {
   let o = options;
   if (typeof options === 'function') o = options();
@@ -305,9 +308,17 @@ async function oauthFetch(auth, url, options, retry = 0) {
   if (('success' in data && !data.success) || 'errors' in data) {
     console.log(`[oauth fetch err]\n\t${JSON.stringify(data)}\n\t${url} try ${retry + 1}\n\t${JSON.stringify(o)}\n\t${settingsStorage.getItem(auth)}`);
     if (retry) throw new Error('oauth too many fails');
-    const reup = await fetch(`https://api.fitbit.com/oauth2/token?grant_type=refresh_token&refresh_token=${JSON.parse(settingsStorage.getItem('fitbitAuth')).refresh_token}`);
+    const reup = await fetch(
+      `https://api.fitbit.com/oauth2/token?grant_type=refresh_token&refresh_token=${JSON.parse(settingsStorage.getItem(auth)).refresh_token}`,
+      {
+        headers: {
+          Authorization: refreshAuth,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }
+      }
+    );
     const reupVal = await reup.json();
-    settingsStorage.setItem('fitbitAuth', JSON.stringify(reupVal));
+    settingsStorage.setItem(auth, JSON.stringify(reupVal));
     return oauthFetch(auth, url, options, retry + 1);
   }
   return data;
