@@ -1,4 +1,4 @@
-import shh from '../secrets.json';
+import shh from '../secrets.js';
 
 function mySettings(props) {
   return (

@@ -2,3 +2,4 @@ studio/node_modules
 studio/build
 package-lock.json
 secrets.json
+secrets.js

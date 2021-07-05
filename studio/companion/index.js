@@ -3,7 +3,7 @@ import * as messaging from "messaging";
 import { settingsStorage } from "settings";
 import { geolocation } from "geolocation";
 import { localStorage } from "local-storage";
-import shh from '../secrets.json';
+import shh from '../secrets.js';
 
 const settings = ['time', 'temp', 'hourColor', 'minuteColor', 'heartrateColor', 'graphColor'];
 const queue = [];
