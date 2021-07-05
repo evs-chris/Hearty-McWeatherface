@@ -74,6 +74,14 @@ export function skmToSmi(skm) {
   return 1 / mToMiLong(skmToMs(skm));
 }
 
+export function mlToOz(ml) {
+  return Math.round(ml / 29.57);
+}
+
+export function ozToMl(oz) {
+  return Math.round(oz * 29.57);
+}
+
 export function formatMilliseconds(ms, padh) {
   if (!ms) return padh ? '0:00:00' : '0:00';
   

@@ -228,9 +228,11 @@ export const ui = {
     }
   },
   water: {
-    small: eid('water-pick-small'),
-    medium: eid('water-pick-medium'),
-    large: eid('water-pick-large'),
+    oz8: eid('water-pick-8'),
+    oz12: eid('water-pick-12'),
+    oz16: eid('water-pick-16'),
+    oz20: eid('water-pick-20'),
+    oz32: eid('water-pick-32'),
     cancel: eid('water-cancel'),
   },
   timer: {

@@ -723,13 +723,17 @@
   <g id="water" display="none">
     <rect class="background" />
 
-    <rect x="0" y="0" width="33%" id="water-pick-small" height="100%-50" class="clicky" />
-    <rect x="33%" y="0" width="34%" id="water-pick-medium" height="100%-50" class="clicky" />
-    <rect x="67%" y="0" width="33%" id="water-pick-large" height="100%-50" class="clicky" />
+    <rect x="0" y="0" width="33%" id="water-pick-8" height="50%-25" class="clicky" fill="green" opacity="0.5" />
+    <rect x="33%" y="0" width="34%" id="water-pick-16" height="50%-25" class="clicky" fill="red" opacity="0.5" />
+    <rect x="67%" y="0" width="33%" id="water-pick-32" height="50%-25" class="clicky" fill="blue" opacity="0.5" />
+    <rect x="0" y="50%-25" width="50%" id="water-pick-12" height="50%-25" class="clicky" fill="orange" opacity="0.5" />
+    <rect x="50%" y="50%-25" width="50%" id="water-pick-20" height="50%-25" class="clicky" fill="purple" opacity="0.5" />
 
-    <image x="17%-30" y="50%-60" width="60" height="60" href="img/water-small-big.png" />
-    <image x="50%-30" y="50%-60" width="60" height="60" href="img/water-medium-big.png" />
-    <image x="83%-30" y="50%-60" width="60" height="60" href="img/water-big-big.png" />
+    <image x="17%-30" y="35%-80" width="60" height="60" href="img/water-big-big.png" />
+    <image x="50%-30" y="35%-80" width="60" height="60" href="img/water-big-big.png" />
+    <image x="83%-30" y="35%-80" width="60" height="60" href="img/water-big-big.png" />
+    <image x="25%-30" y="75%-70" width="60" height="60" href="img/water-big-big.png" />
+    <image x="75%-30" y="75%-70" width="60" height="60" href="img/water-big-big.png" />
 
     <section x="0" y="100%-50" width="100%" height="50">
       <rect id="water-cancel" class="target background" fill="white" opacity="0.2" />

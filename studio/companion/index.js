@@ -3,6 +3,7 @@ import * as messaging from "messaging";
 import { settingsStorage } from "settings";
 import { geolocation } from "geolocation";
 import { localStorage } from "local-storage";
+import shh from '../secrets.json';
 
 const settings = ['time', 'temp', 'hourColor', 'minuteColor', 'heartrateColor', 'graphColor'];
 const queue = [];
@@ -22,6 +23,11 @@ function flushQueue() {
   }
 }
 
+function sendMessage(type, msg) {
+  queue.push({ type, value: msg });
+  flushQueue();
+}
+
 me.monitorSignificantLocationChanges = true;
 
 me.onsignificantlocationchange = evt => {
@@ -35,14 +41,16 @@ me.onsignificantlocationchange = evt => {
 
 settingsStorage.onchange = evt => {
   console.log('settings changed');
-  if (localStorage.getItem('forceZip') !== settingsStorage.getItem('forceZip') || localStorage.getItem('altZip') !== settingsStorage.getItem('altZip') || localStorage.getItem('weatherKey') !== settingsStorage.getItem('weatherKey')) {
+  const weather = ['forceZip', 'altZip', 'weatherKey'].includes(evt.key);
+
+  if (weather && localStorage.getItem('forceZip') != settingsStorage.getItem('forceZip') || localStorage.getItem('altZip') != settingsStorage.getItem('altZip') || localStorage.getItem('weatherKey') != settingsStorage.getItem('weatherKey')) {
     localStorage.setItem('lastWeather', 0);
   }
   localStorage.setItem('forceZip', settingsStorage.getItem('forceZip'));
   localStorage.setItem('altZip', settingsStorage.getItem('altZip'));
   localStorage.setItem('weatherKey', settingsStorage.getItem('weatherKey'));
   
-  checkWeather();
+  if (weather) checkWeather();
   sendSettings();
 }
 
@@ -67,18 +75,19 @@ messaging.peerSocket.onmessage = evt => {
     if (evt.data.force) localStorage.setItem('lastWeather', 0);
     checkWeather(evt.data.value);
   } else if (evt.data.type === 'waterlog') {
-    console.log(`got a request to log ${ev.data.value} water`);
-    // add water and return stats
+    sendWater(evt.data.value);
   } else if (evt.data.type === 'water') {
-    console.log(`got a request to fetch water stats`);
-    // get water stats
+    getWater();
+  } else if (evt.data.type === 'sleep') {
+    getSleep();
   }
 }
 
-const privateSettings = ['fitbitAuth'];
-function sendSettings() {
+const privateSettings = ['fitbitAuth', 'fitbitOauth'];
+const sendSettings = debounce(function sendSettings() {
   const obj = {};
   settings.forEach(k => {
+    console.log(`setting ${k}: ${settingsStorage.getItem(k)}`);
     if (~privateSettings.indexOf(k)) return;
     try {
       obj[k] = JSON.parse(settingsStorage.getItem(k));
@@ -86,14 +95,21 @@ function sendSettings() {
       obj[k] = settingsStorage.getItem(k);
     }
   });
+
+  try {
+    const auth = JSON.parse(settingsStorage.getItem('fitbitAuth'));
+    if (auth) {
+      obj.canWater = true;
+      obj.canSleep = true;
+    }
+  } catch (e) {
+    console.log(`[auth check err] ${e}`);
+  }
   
   queue.push({ type: 'settings', value: obj });
   flushQueue();
-}
+}, 500);
 
-var bits = ['6f7b', '03cd', 'd3f8', '1833', '239b', 'c948', '7fdd', '83f2' ];
-// please don't be a dick
-const nothingSpecial = [3, 2, 5, 7, 0, 6, 1, 4].map(v => bits[v]).join('');
 var ENDPOINT = "https://api.openweathermap.org/data/2.5/forecast";
 
 function zeroPad(n) {
@@ -164,7 +180,7 @@ function json(str) {
 
 // Fetch the weather from OpenWeather
 function queryOpenWeather() {
-  const key = json(settingsStorage.getItem('weatherKey')).name || nothingSpecial;
+  const key = json(settingsStorage.getItem('weatherKey')).name || shh.openWeatherKey;
   console.log(`getting weather with key ${key}`)
   if (localStorage.getItem('forceZip') === 'true') {
     console.log(`fetching weather for zip ${settingsStorage.getItem('altZip')}`);
@@ -186,14 +202,124 @@ function queryOpenWeather() {
   }
 }
 
-function checkWeather(value) {
-  const last = localStorage.getItem('lastWeather');
+const checkWeather = debounce(function checkWeather(value) {
+  const last = JSON.parse(localStorage.getItem('lastWeather'));
   if (!last || last < (Date.now() - 3600000)) {
     console.log(Date.now() - 3600000, last);
     queryOpenWeather();
   } else {
     if (!value || value != last) sendWeather();
   }
+}, 500);
+
+function fitbitKey() {
+  return JSON.parse(settingsStorage.getItem('fitbitAuth')).access_token;
+}
+
+function today() {
+  return new Date().toISOString().substr(0, 10);
+}
+
+function sendWater(ml) {
+  oauthFetch('fitbitAuth', `https://api.fitbit.com/1/user/-/foods/log/water.json?amount=${ml}&date=${today()}&unit=ml`, () => ({
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${fitbitKey()}`,
+      'Accept-Language': 'en_GB',
+    },
+  }))
+  .then(data => {
+    console.log(JSON.stringify(data))
+    if (data.waterLog && data.waterLog.logId) getWater();
+  })
+  .catch(err => console.log('[send water api]: ' + err));
+};
+
+function getWater() {
+  oauthFetch('fitbitAuth', `https://api.fitbit.com/1/user/-/foods/log/date/${today()}.json`, () => ({
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${fitbitKey()}`,
+      'Accept-Language': 'en_GB'
+    }
+  }))
+  .then(food => {
+    oauthFetch('fitbitAuth', `https://api.fitbit.com/1/user/-/foods/log/water/goal.json`, () => ({
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${fitbitKey()}`,
+        'Accept-Language': 'en_GB'
+      }
+    }))
+    .then(water => {
+      sendMessage('water', { amount: food.summary.water, goal: water.goal.goal });
+    });
+  })
+  .catch(err => console.log('[get water api]: ' + err));
+}
+
+function getSleep() {
+  oauthFetch('fitbitAuth', `https://api.fitbit.com/1.2/user/-/sleep/date/${today()}.json`, () => ({
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${fitbitKey()}`,
+      'Accept-Language': 'en_GB'
+    }
+  }))
+  .then(res => res.json())
+  .then(sleep => {
+    oauthFetch('fitbitAuth', `https://api.fitbit.com/1/user/-/sleep/goal.json`, () => ({
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${fitbitKey()}`,
+        'Accept-Language': 'en_GB'
+      }
+    }))
+    .then(goal => {
+      const main = sleep.sleep.find(s => s.isMainSleep) || sleep.sleep[0];
+      const sum = main.levels.summary;
+      sendMessage('sleep', {
+        goal: goal.goal.minDuration,
+        score: main.efficiency,
+        asleep: main.minutesAsleep,
+        awake: main.minutesAwake,
+        start: main.startTime,
+        deep: { count: sum.deep.count, minutes: sum.deep.minutes, avg: sum.deep.thirtyDayAvgMinutes },
+        light: { count: sum.light.count, minutes: sum.light.minutes, avg: sum.light.thirtyDayAvgMinutes },
+        rem: { count: sum.rem.count, minutes: sum.rem.minutes, avg: sum.rem.thirtyDayAvgMinutes },
+        wake: { count: sum.wake.count, minutes: sum.wake.minutes, avg: sum.wake.thirtyDayAvgMinutes },
+      });
+    });
+  })
+  .catch(err => console.log('[get sleep api]: ' + err));
 }
 
 sendSettings();
+
+async function oauthFetch(auth, url, options, retry = 0) {
+  let o = options;
+  if (typeof options === 'function') o = options();
+  console.log(`oauthFetch: ${url}\n\t${JSON.stringify(o)}`);
+  const res = await fetch(url, o);
+  const data = await res.json();
+  if (('success' in data && !data.success) || 'errors' in data) {
+    console.log(`[oauth fetch err]\n\t${JSON.stringify(data)}\n\t${url} try ${retry + 1}\n\t${JSON.stringify(o)}\n\t${settingsStorage.getItem(auth)}`);
+    if (retry) throw new Error('oauth too many fails');
+    const reup = await fetch(`https://api.fitbit.com/oauth2/token?grant_type=refresh_token&refresh_token=${JSON.parse(settingsStorage.getItem('fitbitAuth')).refresh_token}`);
+    const reupVal = await reup.json();
+    settingsStorage.setItem('fitbitAuth', JSON.stringify(reupVal));
+    return oauthFetch(auth, url, options, retry + 1);
+  }
+  return data;
+}
+
+function debounce(fn, time) {
+  let tm;
+  return function(...args) {
+    if (tm) clearTimeout(tm);
+    setTimeout(() => {
+      tm = 0;
+      fn.apply(this, args);
+    }, time);
+  }
+}

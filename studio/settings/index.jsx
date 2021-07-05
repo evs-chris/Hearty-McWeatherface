@@ -1,3 +1,5 @@
+import shh from '../secrets.json';
+
 function mySettings(props) {
   return (
     <Page>
@@ -10,8 +12,8 @@ function mySettings(props) {
           status="Login"
           authorizeUrl="https://www.fitbit.com/oauth2/authorize"
           requestTokenUrl="https://api.fitbit.com/oauth2/token"
-          clientId="FITBIT_OAUTH_CLIENT_ID"
-          clientSecret="FITBIT_OAUTH_CLIENT_SECRET"
+          clientId={shh.fitbitClientId}
+          clientSecret={shh.fitbitClientSecret}
           scope="sleep nutrition"
         />
       </Section>

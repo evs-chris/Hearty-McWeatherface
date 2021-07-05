@@ -1,5 +1,5 @@
 import clock from "clock";
-import { avg, singleTap, doubleTap, tripleTap, fill, find, kelvinToC, kelvinToF, keys, mToMi, mToF, msToMph, msToKph, skmToMs, mToKm, skmToSmi, formatSeconds, formatMilliseconds, zeroPad, monoDigits } from "../common/utils";
+import { avg, singleTap, doubleTap, tripleTap, fill, find, kelvinToC, kelvinToF, keys, mToMi, mToF, msToMph, msToKph, skmToMs, mToKm, skmToSmi, ozToMl, mlToOz, formatSeconds, formatMilliseconds, zeroPad, monoDigits } from "../common/utils";
 import { HeartRateSensor } from "heart-rate";
 import { user } from "user-profile";
 import { battery } from "power";
@@ -168,16 +168,24 @@ singleTap(ui.stats.water.button, () => {
   switchPage(WATER);
 });
 
-doubleTap(ui.water.small, () => {
-  sendMessage({ type: 'waterlog', value: 'small' });
+doubleTap(ui.water.oz8, () => {
+  sendMessage({ type: 'waterlog', value: settings.temp ? ozToMl(8) : 240 });
   switchPage(STATS);
 });
-doubleTap(ui.water.medium, () => {
-  sendMessage({ type: 'waterlog', value: 'medium' });
+doubleTap(ui.water.oz12, () => {
+  sendMessage({ type: 'waterlog', value: settings.temp ? ozToMl(12) : 360 });
   switchPage(STATS);
 });
-doubleTap(ui.water.large, () => {
-  sendMessage({ type: 'waterlog', value: 'large' });
+doubleTap(ui.water.oz16, () => {
+  sendMessage({ type: 'waterlog', value: settings.temp ? ozToMl(16) : 480 });
+  switchPage(STATS);
+});
+doubleTap(ui.water.oz20, () => {
+  sendMessage({ type: 'waterlog', value: settings.temp ? ozToMl(20) : 600 });
+  switchPage(STATS);
+});
+doubleTap(ui.water.oz32, () => {
+  sendMessage({ type: 'waterlog', value: settings.temp ? ozToMl(32) : 960 });
   switchPage(STATS);
 });
 
@@ -518,7 +526,8 @@ exercise.onstatechange = () => {
 
 setInterval(() => {
   resting = user.restingHeartRate;
-}, 7200000);
+  if (settings.canWater) sendMessage({ type: 'water' });
+}, 3600000);
 
 function drawEKG() {
   if (!display.on) return;
@@ -710,6 +719,7 @@ messaging.peerSocket.onmessage = function(evt) {
 
     updateZones();
     updateColors();
+    if (settings.canWater) sendMessage({ type: 'water' });
     draw();
   } else if (evt.data.type === 'weather') {
     const val = evt.data.value || {};
@@ -749,7 +759,6 @@ function updateZones() {
     }
   }
 
-  console.log(JSON.stringify(zones));
   const w = ui.exercise.active.zone;
   w.normal.sweepAngle = Math.floor(((zones.fatburn - 1) / 200) * 180);
   w.fatburn.sweepAngle = Math.floor(((zones.cardio - 1) / 200) * 180);
@@ -1052,8 +1061,8 @@ function updateStats() {
       if (w.wrapper.style.display !== 'inline') w.wrapper.style.display = 'inline';
       const max = Math.floor(screenHeight / 5);
       const pct = water.amount / water.goal;
-      w.goal.text = `${settings.temp ? water.goal : (water.goal / 1000).toFixed(1)}`;
-      w.text.text = `${settings.temp ? water.amount : (water.amount / 1000).toFixed(1)}`;
+      w.goal.text = `${settings.temp ? mlToOz(water.goal) : (water.goal / 1000).toFixed(1)}`;
+      w.text.text = `${settings.temp ? mlToOz(water.amount) : (water.amount / 1000).toFixed(1)}`;
       w.bar.height = Math.round(pct * max);
       w.bar.y = max - w.bar.height;
     } else {
