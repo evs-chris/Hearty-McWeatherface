@@ -114,16 +114,16 @@
           <rect x="1" y="1" width="100%-1" height="100%-1" fill="inherit" />
           <image id="main-exercise-icon" width="20" height="20" x="5" y="7" />
           <text id="main-exercise-time" x="25" y="23" class="main-exercise number" text-anchor="start" />
-          <text id="main-exercise-floors" x="110" y="23" fill="orange" class="main-exercise number" />
-          <image y="7" x="100%-14" href="img/stat-floors.png" class="stat-image" />
+          <text id="main-exercise-speed" x="114" y="23" fill="cyan" class="main-exercise number" />
+          <image y="7" x="100%-12" href="img/stat-speed.png" class="stat-image" />
           <text id="main-exercise-distance" x="50" y="49" fill="orchid" class="main-exercise number" />
           <image y="32" x="52" href="img/stat-distance.png" class="stat-image" />
           <text id="main-exercise-calories" x="110" y="49" fill="red" class="main-exercise number" />
           <image y="32" x="100%-14" href="img/stat-calories.png" class="stat-image" />
           <text id="main-exercise-steps" x="50" y="73" fill="yellow" class="main-exercise number" />
           <image y="57" x="52" href="img/stat-steps.png" class="stat-image" />
-          <text id="main-exercise-speed" x="110" y="73" fill="cyan" class="main-exercise number" />
-          <image y="57" x="100%-14" href="img/stat-speed.png" class="stat-image" />
+          <text id="main-exercise-floors" x="110" y="73" fill="orange" class="main-exercise number" />
+          <image y="57" x="100%-14" href="img/stat-floors.png" class="stat-image" />
         </g>
       </section>
     </section>

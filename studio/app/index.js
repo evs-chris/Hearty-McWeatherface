@@ -948,13 +948,13 @@ function updateExercise() {
       w.main.layer = 3;
       w.which.href = exerciseIcon[ex.type] || exerciseIcon.workout;
       
-      w.time.text = monoDigits(formatMilliseconds(ex.stats.activeTime, true));
+      w.time.text = monoDigits(formatMilliseconds(ex.stats.activeTime));
       
       w.floors.text = monoDigits(`${settings.temp ? Math.round(mToF(ex.stats.elevationGain)) : ex.stats.elevationGain || 0}`);
       w.calories.text = monoDigits(`${ex.stats.calories || 0}`);
       w.steps.text = monoDigits(`${ex.stats.steps || 0}`);
       w.distance.text = monoDigits(`${settings.temp ? mToMi(ex.stats.distance || 0).toFixed(1) : mToKm(ex.stats.distance || 0).toFixed(1)}`);
-      w.speed.text = monoDigits(`${settings.temp ? msToMph(ex.stats.speed.current).toFixed(1) : msToKph(ex.stats.speed.current).toFixed(1)}`);
+      w.speed.text = `${settings.temp ? msToMph(ex.stats.speed.current).toFixed(1) : msToKph(ex.stats.speed.current).toFixed(1)}`;
     } else {
       w.main.style.dissplay = 'none';
       w.main.layer = 2;
