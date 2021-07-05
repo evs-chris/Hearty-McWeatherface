@@ -14,6 +14,11 @@ import { display } from "display";
 
 import { ui, eid, eclass } from './elements';
 
+// import { demo } from './demo';
+// const DEMO = true;
+const DEMO = false;
+const demo = {};
+
 const MAIN = 1, HEARTL = 2, HEARTM = 3, HEARTS = 4, WEATHER = 5, STATS = 6, TIME = 7, EXERCISE = 8, TIMER = 9, WATER = 10;
 let page = MAIN;
 let aodPage = 0;
@@ -59,7 +64,7 @@ const weatherIcon = {
   Clear: 'img/weather-sun.png',
   Drizzle: 'img/weather-drizzle.png',
   Snow: 'img/weather-snow.png',
-  Thunderstorm: 'img/weather-thunderstorm.png',
+  Thunderstorm: 'img/weather-thunder.png',
   Clouds: 'img/weather-cloud.png',
   Fog: 'img/weather-fog.png',
   Mist: 'img/weather-fog.png',
@@ -160,7 +165,7 @@ singleTap(ui.stats.exercise, () => {
 });
 
 tripleTap(ui.stats.water.back, () => {
-  sendMessage({ type: 'water' });
+  getWater();
 })
 
 singleTap(ui.stats.water.button, () => {
@@ -169,23 +174,23 @@ singleTap(ui.stats.water.button, () => {
 });
 
 doubleTap(ui.water.oz8, () => {
-  sendMessage({ type: 'waterlog', value: settings.temp ? ozToMl(8) : 240 });
+  sendWater(settings.temp ? ozToMl(8) : 250);
   switchPage(STATS);
 });
 doubleTap(ui.water.oz12, () => {
-  sendMessage({ type: 'waterlog', value: settings.temp ? ozToMl(12) : 360 });
+  sendWater(settings.temp ? ozToMl(12) : 355);
   switchPage(STATS);
 });
 doubleTap(ui.water.oz16, () => {
-  sendMessage({ type: 'waterlog', value: settings.temp ? ozToMl(16) : 480 });
+  sendWater(settings.temp ? ozToMl(16) : 500);
   switchPage(STATS);
 });
 doubleTap(ui.water.oz20, () => {
-  sendMessage({ type: 'waterlog', value: settings.temp ? ozToMl(20) : 600 });
+  sendWater(settings.temp ? ozToMl(20) : 750);
   switchPage(STATS);
 });
 doubleTap(ui.water.oz32, () => {
-  sendMessage({ type: 'waterlog', value: settings.temp ? ozToMl(32) : 960 });
+  sendWater(settings.temp ? ozToMl(32) : 1000);
   switchPage(STATS);
 });
 
@@ -288,33 +293,58 @@ singleTap(ui.exercise.pick.cancel, () => {
   else switchPage(MAIN);
 });
 singleTap(ui.exercise.pick.ok, () => {
-  if (exercise.state !== 'stopped') return;
-  exercise.start(exercises[pickExercise]);
-  exerciseLap = 1;
+  if (DEMO) {
+    demo.exercise.state = 'started';
+    exercising = true;
+    exerciseLap = 1;
+    draw();
+  } else {
+    if (exercise.state !== 'stopped') return;
+    exercise.start(exercises[pickExercise]);
+    exerciseLap = 1;
+  }
 });
 singleTap(ui.exercise.pick.left, () => {
   if (pickExercise === 0) pickExercise = exercises.length - 1;
   else pickExercise--;
-  updateExercise();
+  draw();
 });
 singleTap(ui.exercise.pick.right, () => {
   if (pickExercise >= exercises.length - 1) pickExercise = 0;
   else pickExercise++;
-  updateExercise();
+  draw();
 });
 singleTap(ui.exercise.active.stop, () => {
-  if (exercise.state !== 'stopped') exercise.stop();
-  exerciseLap = 0;
+  if (DEMO) {
+    exercising = false;
+    demo.exercise.state = 'stopped';
+    exerciseLap = 0;
+    draw();
+  } else {
+    if (exercise.state !== 'stopped') exercise.stop();
+    exerciseLap = 0;
+  }
 });
 singleTap(ui.exercise.active.btn, () => {
-  if (exercise.state === 'started') exercise.pause();
-  else if (exercise.state === 'paused') exercise.resume();
+  if (DEMO) {
+    if (demo.exercise.state === 'started') demo.exercise.state = 'paused';
+    else demo.exercise.state = 'started';
+    draw();
+  } else {
+    if (exercise.state === 'started') exercise.pause();
+    else if (exercise.state === 'paused') exercise.resume();
+  }
 });
 singleTap(ui.exercise.active.lap, () => {
-  if (exercise.state === 'started') {
-    exercise.splitLap();
+  if (DEMO) {
     exerciseLap++;
-    updateExercise();
+    draw();
+  } else {
+    if (exercise.state === 'started') {
+      exercise.splitLap();
+      exerciseLap++;
+      updateExercise();
+    }
   }
 });
 
@@ -411,7 +441,11 @@ try {
   const json = JSON.parse(fs.readFileSync(ekgFile, "json"));
   const now = Date.now();
 
-  if (json) {
+  if (DEMO) {
+    for (const k in demo.ekg) {
+      ekg[k] = demo.ekg[k];
+    }
+  } else if (json) {
     ekg.longs = json.longs || ekg.longs;
     ekg.mids = json.mids || ekg.mids;
     ekg.shorts = json.shorts || ekg.shorts;
@@ -420,17 +454,6 @@ try {
     ekg.maxMids = json.maxMids || ekg.mids.slice();
     ekg.maxLongs = json.maxLongs || ekg.longs.slice();
   }
-  
-  // demo data
-  /*ekg.minLongs = [ 88,  97,  85,  66,  54,  70,  72,  65,  61,  61,  63,  50,  54,  54,  55,  59,  52,  70,  74,  81];
-  ekg.longs =    [ 97,  99,  88,  86,  71,  71,  72,  68,  69,  69,  65,  50,  56,  57,  56,  59,  63,  75,  80,  85];
-  ekg.maxLongs = [102, 133, 100,  88,  78,  79,  92,  68,  69,  79,  67,  55,  58,  59,  59,  59,  78,  79, 169, 155];
-  
-  ekg.minMids =  [ 88,  88,  85,  80,  79,  84,  88,  90,  98,  98, 102, 110, 104, 104, 110, 110, 127, 117, 101,  96];
-  ekg.mids =     [ 90,  88,  87,  88,  87,  87,  90,  96, 100, 110, 111, 110, 105, 109, 114, 120, 132, 120, 122, 110];
-  ekg.maxMids =  [100,  99,  99,  95,  93,  94, 110, 120, 110, 115, 114, 130, 135, 149, 144, 130, 172, 121, 125, 111];
-  
-  ekg.shorts =   [110, 115, 112, 111, 110, 109, 110,  99,  98,  95,  93,  92,  93,  90,  85,  80,  82,  80,  79,  75];*/
   
   ekg.mid = now + ekg.midt;
   ekg.long = now + ekg.longt;
@@ -526,7 +549,7 @@ exercise.onstatechange = () => {
 
 setInterval(() => {
   resting = user.restingHeartRate;
-  if (settings.canWater) sendMessage({ type: 'water' });
+  if (DEMO || settings.canWater) getWater();
 }, 3600000);
 
 function drawEKG() {
@@ -719,7 +742,7 @@ messaging.peerSocket.onmessage = function(evt) {
 
     updateZones();
     updateColors();
-    if (settings.canWater) sendMessage({ type: 'water' });
+    if (DEMO || settings.canWater) getWater();
     draw();
   } else if (evt.data.type === 'weather') {
     const val = evt.data.value || {};
@@ -799,8 +822,27 @@ function sendMessage(msg) {
   flushQueue();
 }
 
+function getWater() {
+  if (DEMO) {
+    water = demo.water;
+    draw();
+  } else {
+    sendMessage({ type: 'water' });
+  }
+}
+
+function sendWater(ml) {
+  if (!DEMO) {
+    sendMessage({ type: 'waterlog', value: ml });
+  }
+}
+
 function getWeather(force) {
-  sendMessage({ type: 'weather', value: weather.when, force: force })
+  if (DEMO) {
+    weather = demo.weather;
+  } else {
+    sendMessage({ type: 'weather', value: weather.when, force: force })
+  }
 }
 setInterval(getWeather, 1800000);
 
@@ -896,8 +938,7 @@ function updateWeather() {
 function updateExercise() {
   if (!display.on || display.aodActive) return;
   
-  const ex = exercise;
-  //const ex = { type: 'run', stats: { elevationGain: 113, speed: 5.49, calories: 1412, distance: 15115.5, steps: 16129, activeTime: 5978141 } };
+  const ex = DEMO ? demo.exercise : exercise;
   
   if (page === MAIN) {
     const w = ui.main.exercise;
@@ -905,7 +946,7 @@ function updateExercise() {
     if (exercising) {
       w.main.style.display = 'inline';
       w.main.layer = 3;
-      w.which.href = exerciseIcon[exercising] || exerciseIcon.workout;
+      w.which.href = exerciseIcon[ex.type] || exerciseIcon.workout;
       
       w.time.text = monoDigits(formatMilliseconds(ex.stats.activeTime, true));
       
@@ -928,7 +969,7 @@ function updateExercise() {
       main.pickEl.layer = 0;
       
       const w = main.active;
-      w.which.href = (exerciseIcon[exercising] || exerciseIcon.workout).replace(/\.png/, '-big.png');
+      w.which.href = (exerciseIcon[ex.type] || exerciseIcon.workout).replace(/\.png/, '-big.png');
       if (ex.state === 'paused') w.btnImg.href = 'img/icons-play.png';
       else if (ex.state === 'started') w.btnImg.href = 'img/icons-pause.png';
       
@@ -976,17 +1017,15 @@ function updateExercise() {
 function updateStats() {
   if (!display.on || display.aodActive) return;
   
-  const a = activity.local;
+  const a = DEMO ? demo.stats : activity.local;
   const m = a.activeZoneMinutes || {};
-  // demo
-  //const m = { fatBurn: 0, cardio: 0, peak: 0, total: 0 };
-  //const m = { fatBurn: 22, cardio: 37, peak: 13, total: 72 };
+  const g = DEMO ? demo.goals : goals || {};
   
-  const stepPct = Math.min(1, !a.steps ? 0 : (a.steps || 1) / (goals.steps || 1));
-  const distPct = Math.min(1, !a.distance ? 0 : (a.distance || 1) / (goals.distance || 1));
-  const actPct = Math.min(1, !m.total ? 0 : (m.total || 1) / ((goals.activeZoneMinutes || {}).total || 1));
-  const calPct = Math.min(1, !a.calories ? 0 : (a.calories || 1) / (goals.calories || 1));
-  const floorPct = Math.min(1, !a.elevationGain ? 0 : (a.elevationGain || 1) / (goals.elevationGain || 1));
+  const stepPct = Math.min(1, !a.steps ? 0 : (a.steps || 1) / (g.steps || 1));
+  const distPct = Math.min(1, !a.distance ? 0 : (a.distance || 1) / (g.distance || 1));
+  const actPct = Math.min(1, !m.total ? 0 : (m.total || 1) / ((g.activeZoneMinutes || {}).total || 1));
+  const calPct = Math.min(1, !a.calories ? 0 : (a.calories || 1) / (g.calories || 1));
+  const floorPct = Math.min(1, !a.elevationGain ? 0 : (a.elevationGain || 1) / (g.elevationGain || 1));
   
   const fatPct = Math.min(1, !m.fatBurn ? 0 : (m.fatBurn || 1) / (m.total || 1));
   const cardioPct = Math.min(1, !m.cardio ? 0 : (m.cardio || 1) / (m.total || 1));
@@ -1033,7 +1072,7 @@ function updateStats() {
     w.amt.cal.text = monoDigits(`${a.calories}`);
     w.amt.floor.text = monoDigits(`${a.elevationGain}`);
     
-    /*const mg = goals.activeZoneMinutes || {};
+    /*const mg = g.activeZoneMinutes || {};
     const fatPct = Math.min(1, !m.fatBurn ? 0 : (m.fatBurn || 1) / (mg.fatBurn || m.total || 1));
     const cardioPct = Math.min(1, !m.cardio ? 0 : (m.cardio || 1) / (mg.cardio || m.total || 1));
     const peakPct = Math.min(1, !m.peak ? 0 : (m.peak || 1) / (mg.peak || m.total || 1));
