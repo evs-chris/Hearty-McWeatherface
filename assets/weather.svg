@@ -9,9 +9,9 @@
    id="svg5"
    inkscape:version="1.1 (c68e22c387, 2021-05-23)"
    sodipodi:docname="weather.svg"
-   inkscape:export-filename="/home/chris/Pictures/icons-lap.png"
-   inkscape:export-xdpi="20"
-   inkscape:export-ydpi="20"
+   inkscape:export-filename="/home/chris/dev/fitbit/Hearty-McWeatherface/studio/resources/img/water-16oz.png"
+   inkscape:export-xdpi="60"
+   inkscape:export-ydpi="60"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -28,15 +28,15 @@
      showgrid="false"
      units="in"
      width="1in"
-     inkscape:zoom="6.4041007"
-     inkscape:cx="35.602188"
-     inkscape:cy="59.024681"
+     inkscape:zoom="8.8517285"
+     inkscape:cx="43.042441"
+     inkscape:cy="50.837529"
      inkscape:window-width="1920"
      inkscape:window-height="1060"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer30" />
+     inkscape:current-layer="layer33" />
   <defs
      id="defs2">
     <filter
@@ -179,23 +179,34 @@
   <g
      inkscape:groupmode="layer"
      id="layer30"
-     inkscape:label="Water"
+     inkscape:label="Water 16oz"
      style="display:inline">
     <path
        id="rect4897"
-       style="fill:#f2f2f2;stroke-width:2.34636;stroke-linecap:round;stroke-linejoin:round"
-       d="m 7.7006645,7.8379987 c 0,0 2.0622619,1.8173606 4.9993345,0 2.320443,-1.4358112 4.999336,0 4.999336,0 L 17.151911,23.812499 H 8.2831429 Z"
+       style="fill:#f2f2f2;stroke-width:2.39664;stroke-linecap:round;stroke-linejoin:round"
+       d="m 7.8865154,6.502471 c 0,0 1.985597,1.9692987 4.8134846,0 2.23418,-1.5558503 4.813485,0 4.813485,0 L 16.986411,23.812499 H 8.4473402 Z"
        sodipodi:nodetypes="cscccc" />
     <path
        id="rect4979"
-       style="fill:none;stroke:#f2f2f2;stroke-width:0.450503;stroke-linecap:square;stroke-opacity:1"
-       d="m 7.3730961,5.1603409 c 0,0 -0.2798333,-0.7202471 0.4212552,-0.4904812 h 4.9110967 4.911096 c 0.666034,-0.2680602 0.421256,0.4904812 0.421256,0.4904812 0,0 -0.897968,10.3085131 -0.897968,18.4269071 H 8.2710642 c 0,-8.004977 -0.8979681,-18.4269071 -0.8979681,-18.4269071 z"
+       style="fill:none;stroke:#f2f2f2;stroke-width:0.460158;stroke-linecap:square;stroke-opacity:1"
+       d="m 7.5711446,3.6009511 c 0,0 -0.2694304,-0.7804624 0.4055951,-0.5314874 h 4.7285263 4.728525 c 0.641274,-0.2904709 0.405596,0.5314874 0.405596,0.5314874 0,0 -0.864585,11.1703439 -0.864585,19.9674649 H 8.4357307 c 0,-8.674223 -0.8645861,-19.9674649 -0.8645861,-19.9674649 z"
        sodipodi:nodetypes="cccccccc" />
   </g>
   <g
      inkscape:groupmode="layer"
+     id="layer33"
+     inkscape:label="Water 12oz"
+     style="display:none">
+    <path
+       id="rect14443"
+       style="fill:#f2f2f2;stroke-width:0.508;stroke-linecap:square"
+       d="m 8.1727686,7.9653867 c 0.5978117,-0.085881 0.099151,-0.9107714 0.5293745,-0.994178 2.7434429,-0.5318663 5.4347189,-0.5884268 8.2505439,0 0.379284,0.07926 -0.08711,0.8951177 0.510698,0.994178 V 23.502754 c 0,0 -0.543493,0.437578 -0.870472,0.529167 -2.454333,0.687473 -5.211371,0.753022 -7.6463912,0 -0.2985172,-0.09231 -0.7737532,-0.529167 -0.7737532,-0.529167 z"
+       sodipodi:nodetypes="cssccaacc" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
      id="g10020"
-     inkscape:label="Short Water"
+     inkscape:label="Water 8oz"
      style="display:none">
     <g
        id="g10127"
@@ -215,11 +226,11 @@
   <g
      inkscape:groupmode="layer"
      id="layer31"
-     inkscape:label="Long Water"
+     inkscape:label="Water 32oz"
      style="display:none">
     <g
        id="g14178"
-       transform="matrix(0.70710678,0.70710678,-0.85604242,0.85604242,15.384607,-8.1712823)">
+       transform="matrix(0.78125287,0.78125287,-0.88198079,0.88198079,14.902529,-9.525501)">
       <path
          id="rect10152"
          style="fill:none;stroke:#f2f2f2;stroke-width:0.508;stroke-linecap:square"
@@ -227,6 +238,27 @@
          sodipodi:nodetypes="szszssssss" />
       <path
          id="path13626"
+         style="fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.508;stroke-linecap:square"
+         d="m 9.2148665,5.744434 c 0,0 1.4692205,1.652587 3.6339965,0 2.164776,-1.652587 3.633996,0 3.633996,0 l 2.116667,2.8829828 V 20.506233 c 0,2.889191 -0.672688,2.881922 -1.287832,3.175 -2.935367,1.398524 -5.70642,1.278155 -8.6961642,0 -0.673074,-0.287748 -1.51733,-0.260504 -1.51733,-3.175 V 8.6274168 Z"
+         sodipodi:nodetypes="czccsssscc" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer32"
+     inkscape:label="Water 20oz"
+     style="display:none">
+    <g
+       id="g14178-3"
+       transform="matrix(0.96973926,0,0,1.0238703,0.38631866,-0.40861051)"
+       style="display:inline">
+      <path
+         id="rect10152-6"
+         style="fill:none;stroke:#f2f2f2;stroke-width:0.508;stroke-linecap:square"
+         d="m 7.0981998,8.919434 c 0,-2.01374 4.3837022,-3.8788941 3.8633612,-5.8208334 -0.520341,-1.9419393 0.625058,-2.11666667 1.887302,-2.11666667 1.262244,0 2.371529,0.30950517 1.887302,2.11666667 -0.484228,1.8071615 3.863361,3.8070933 3.863361,5.8208334 0,0 0,8.569136 0,11.586799 0,2.889191 -0.672688,2.881922 -1.287832,3.175 -2.935367,1.398524 -5.70642,1.278155 -8.6961642,0 -0.673074,-0.287748 -1.51733,-0.260504 -1.51733,-3.175 0,-3.242579 0,-11.586799 0,-11.586799 z"
+         sodipodi:nodetypes="szszssssss" />
+      <path
+         id="path13626-7"
          style="fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:0.508;stroke-linecap:square"
          d="m 9.2148665,5.744434 c 0,0 1.4692205,1.652587 3.6339965,0 2.164776,-1.652587 3.633996,0 3.633996,0 l 2.116667,2.8829828 V 20.506233 c 0,2.889191 -0.672688,2.881922 -1.287832,3.175 -2.935367,1.398524 -5.70642,1.278155 -8.6961642,0 -0.673074,-0.287748 -1.51733,-0.260504 -1.51733,-3.175 V 8.6274168 Z"
          sodipodi:nodetypes="czccsssscc" />
