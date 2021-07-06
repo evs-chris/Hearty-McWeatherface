@@ -689,7 +689,7 @@
       <section x="100%-120" y="0" width="120" height="70">
         <rect id="exercise-lap" class="target background" fill="white" opacity="0.2" />
         <image href="img/icons-lap.png" x="10" y="30" width="20" height="20" />
-        <text id="exercise-laps" x="45" y="45" text-anchor="start" class="exercise" pointer-events="none">1</text>
+        <text id="exercise-laps" x="45" y="48" text-anchor="start" class="exercise" pointer-events="none">1</text>
       </section>
       
       <section x="0" y="0" width="120" height="70">
