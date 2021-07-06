@@ -9,9 +9,9 @@
    id="svg5"
    inkscape:version="1.1 (c68e22c387, 2021-05-23)"
    sodipodi:docname="weather.svg"
-   inkscape:export-filename="/home/chris/dev/fitbit/Hearty-McWeatherface/studio/resources/img/water-16oz.png"
-   inkscape:export-xdpi="60"
-   inkscape:export-ydpi="60"
+   inkscape:export-filename="/home/chris/dev/fitbit/Hearty-McWeatherface/studio/resources/img/weather-thunder.png"
+   inkscape:export-xdpi="20"
+   inkscape:export-ydpi="20"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -29,14 +29,14 @@
      units="in"
      width="1in"
      inkscape:zoom="8.8517285"
-     inkscape:cx="43.042441"
-     inkscape:cy="50.837529"
+     inkscape:cx="47.787277"
+     inkscape:cy="32.987908"
      inkscape:window-width="1920"
      inkscape:window-height="1060"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer33" />
+     inkscape:current-layer="layer8" />
   <defs
      id="defs2">
     <filter
@@ -180,7 +180,7 @@
      inkscape:groupmode="layer"
      id="layer30"
      inkscape:label="Water 16oz"
-     style="display:inline">
+     style="display:none">
     <path
        id="rect4897"
        style="fill:#f2f2f2;stroke-width:2.39664;stroke-linecap:round;stroke-linejoin:round"
@@ -924,7 +924,7 @@
      inkscape:groupmode="layer"
      id="layer21"
      inkscape:label="Weather"
-     style="display:none">
+     style="display:inline">
     <g
        inkscape:groupmode="layer"
        id="layer10"
@@ -1140,14 +1140,14 @@
        inkscape:groupmode="layer"
        id="layer8"
        inkscape:label="Thunder"
-       style="display:none">
+       style="display:inline">
       <path
          id="rect101-7"
          style="display:inline;vector-effect:non-scaling-stroke;fill:#e6e6e6;fill-opacity:1;stroke:none;stroke-width:2.64583e-05;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;-inkscape-stroke:hairline"
-         d="m 10.300025,2.794329 a 4.2010292,4.2010292 0 0 0 -4.2012934,4.2007771 4.2010292,4.2010292 0 0 0 0.02584,0.4402833 c -1.905161,0.3488698 -3.340882,2.008877 -3.340882,4.0178426 v 0.571541 c 0,2.264041 1.822532,4.087089 4.086572,4.087089 H 19.044712 c 2.26404,0 4.087089,-1.823048 4.087089,-4.087089 v -0.571541 c 0,-2.2640406 -1.823049,-4.0865723 -4.087089,-4.0865723 h -0.02842 A 2.800686,2.800686 0 0 0 16.215426,4.5657972 2.800686,2.800686 0 0 0 14.196945,5.4272432 4.2010292,4.2010292 0 0 0 10.300025,2.794329 Z" />
+         d="m 10.04228,0.67766223 a 4.2010292,4.2010292 0 0 0 -4.2012937,4.20077707 4.2010292,4.2010292 0 0 0 0.02584,0.4402833 c -1.905161,0.3488698 -3.340882,2.008877 -3.340882,4.017842 v 0.5715407 c 0,2.2640407 1.822532,4.0870887 4.086572,4.0870887 H 18.786967 c 2.26404,0 4.087089,-1.823048 4.087089,-4.0870887 V 9.3365646 c 0,-2.26404 -1.823049,-4.0865717 -4.087089,-4.0865717 h -0.02842 A 2.800686,2.800686 0 0 0 15.957681,2.4491304 2.800686,2.800686 0 0 0 13.9392,3.3105764 4.2010292,4.2010292 0 0 0 10.04228,0.67766223 Z" />
       <path
-         style="vector-effect:non-scaling-stroke;fill:#ffd42a;fill-opacity:1;stroke:none;stroke-width:0.000446756;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;-inkscape-stroke:hairline"
-         d="M 10.408948,23.034731 12.282311,17.50479 H 9.304145 l 1.111608,-5.73253 h 4.693938 l -1.986109,4.089233 3.097594,-0.03545 z"
+         style="fill:#ffd42a;fill-opacity:1;stroke:#030303;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 9.4123543,25.151399 11.981785,17.566754 H 7.8970513 l 1.524637,-7.862509 h 6.4380177 l -2.724067,5.608629 4.248535,-0.04862 z"
          id="path3540"
          sodipodi:nodetypes="cccccccc" />
     </g>

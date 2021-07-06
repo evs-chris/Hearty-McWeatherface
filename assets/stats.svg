@@ -7,7 +7,7 @@
    viewBox="0 0 15.240001 25.400001"
    version="1.1"
    id="svg3952"
-   inkscape:export-filename="/home/chris/Pictures/stat-speed.png"
+   inkscape:export-filename="/home/chris/Pictures/stat-slope.png"
    inkscape:export-xdpi="20"
    inkscape:export-ydpi="20"
    inkscape:version="1.1 (c68e22c387, 2021-05-23)"
@@ -27,15 +27,15 @@
      inkscape:document-units="in"
      showgrid="false"
      units="in"
-     inkscape:zoom="4.5435454"
-     inkscape:cx="28.612017"
-     inkscape:cy="64.0469"
+     inkscape:zoom="6.2153467"
+     inkscape:cx="24.616487"
+     inkscape:cy="49.393866"
      inkscape:window-width="1920"
      inkscape:window-height="1060"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer29"
      inkscape:snap-global="false" />
   <defs
      id="defs3949" />
@@ -160,10 +160,11 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="Speed">
+     inkscape:label="Speed"
+     style="display:none">
     <g
        id="g1386"
-       transform="translate(-0.19707045,-0.13023405)">
+       transform="matrix(1.0621285,0,0,1.0621285,-0.68273335,-0.92735728)">
       <circle
          style="display:inline;fill:#00ffff;stroke-width:0.195914"
          id="path1821"
@@ -274,5 +275,79 @@
          ry="0.61644781"
          transform="rotate(3.266386)" />
     </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer26"
+     inkscape:label="Heart"
+     style="display:none">
+    <path
+       id="path2085"
+       style="fill:#ff0000;stroke:none;stroke-width:5.60949;stroke-linecap:round;stroke-linejoin:round"
+       d="M 4.8152512,7.5404405 C 2.8040135,7.5406077 1.1885507,9.465542 1.1734578,11.182233 c -0.027199,3.093685 6.4465439,6.677327 6.4465439,6.677327 0,0 6.4737403,-3.583643 6.4465413,-6.677327 C 14.05145,9.4655423 12.435987,7.5406077 10.424751,7.5404405 9.3402527,7.5411137 8.3124816,8.0251064 7.6210972,8.8606455 6.9292242,8.0245157 5.9005169,7.5404887 4.8152512,7.5404405 Z"
+       sodipodi:nodetypes="cacaccc" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer27"
+     inkscape:label="Pace"
+     style="display:none">
+    <g
+       id="g2726"
+       transform="translate(0.1458461,0.58168602)">
+      <circle
+         style="display:inline;fill:#ffff00;stroke-width:0.272395"
+         id="path1821-3"
+         cx="8.0241861"
+         cy="4.6760478"
+         r="2.3570545" />
+      <path
+         id="path3543"
+         style="display:inline;fill:#ffff00;stroke-width:0.499033"
+         d="M 6.1178811,7.2735372 C 5.6135135,7.2660272 5.1683641,7.6263702 5.0825147,8.1397571 L 4.8156616,9.7366693 4.433243,12.023828 6.0254279,14.781657 c 0.017536,0.05491 0.040867,0.109207 0.070918,0.161266 l 4.2582061,6.567828 c 0.22504,0.389778 0.254115,0.52236 0.643895,0.29732 l 0.794785,-0.459113 c 0.389776,-0.22504 0.0563,-0.72018 -0.168745,-1.109959 C 10.510221,18.306686 9.8540433,16.040786 8.854516,14.14692 L 10.330787,9.0175306 C 10.425527,8.4510369 10.045774,7.9187822 9.4792773,7.8240518 L 6.2759959,7.2882456 C 6.2228779,7.2793597 6.1700576,7.2743148 6.1178811,7.2735372 Z"
+         sodipodi:nodetypes="ccccccccccccccc" />
+      <path
+         id="rect3145"
+         style="display:inline;fill:#ffff00;stroke-width:0.258195"
+         d="m 4.3723083,13.512005 c -0.045244,0.04693 -0.085635,0.100049 -0.1197687,0.159166 l -3.49336978,6.944127 c -0.1801568,0.4061 -0.36622597,0.524942 -9.248e-4,0.733661 l 0.79477918,0.459113 c 0.3897801,0.225039 0.4183308,0.09246 0.6433707,-0.297321 l 3.65306,-5.519854 z"
+         sodipodi:nodetypes="cccccccc" />
+      <rect
+         style="display:inline;fill:#ffff00;fill-opacity:1;stroke-width:0.229335"
+         id="rect3901"
+         width="1.3938078"
+         height="3.9786873"
+         x="6.3220825"
+         y="4.6032481"
+         ry="0.43985492"
+         transform="rotate(30)" />
+      <rect
+         style="display:inline;fill:#ffff00;fill-opacity:1;stroke-width:0.287596"
+         id="rect3903"
+         width="1.3938078"
+         height="6.2569408"
+         x="-3.3215728"
+         y="11.775225"
+         ry="0.69172221"
+         transform="rotate(-60)" />
+      <rect
+         style="display:inline;fill:#ffff00;fill-opacity:1;stroke-width:0.201533"
+         id="rect3985"
+         width="1.3938078"
+         height="3.0724626"
+         x="7.2998018"
+         y="-6.175384"
+         ry="0.33966926"
+         transform="rotate(90)" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer29"
+     inkscape:label="Timer Indicator">
+    <path
+       id="rect3391"
+       style="fill:#999999;stroke-width:12.6987;stroke-linecap:round;stroke-linejoin:round"
+       d="M 15.239572,6.0400877 V 21.278593 H 0.00106695 Z"
+       sodipodi:nodetypes="cccc" />
   </g>
 </svg>
