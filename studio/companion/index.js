@@ -5,8 +5,10 @@ import { geolocation } from "geolocation";
 import { localStorage } from "local-storage";
 import shh from '../secrets.js';
 
-const settings = ['time', 'temp', 'hourColor', 'minuteColor', 'heartrateColor', 'graphColor'];
+const settings = ['time', 'temp', 'hourColor', 'minuteColor', 'heartrateColor', 'graphColor', 'fitbitAuth'];
 const queue = [];
+
+const fitbitOAuth = 'https://api.fitbit.com/oauth2/token';
 
 console.log('starting companion');
 
@@ -221,7 +223,7 @@ function today() {
 }
 
 function sendWater(ml) {
-  oauthFetch('fitbitAuth', `https://api.fitbit.com/1/user/-/foods/log/water.json?amount=${ml}&date=${today()}&unit=ml`, () => ({
+  oauthFetch('fitbitAuth', fitbitOAuth, `https://api.fitbit.com/1/user/-/foods/log/water.json?amount=${ml}&date=${today()}&unit=ml`, () => ({
     method: 'POST',
     headers: {
       Authorization: `Bearer ${fitbitKey()}`,
@@ -236,7 +238,7 @@ function sendWater(ml) {
 };
 
 function getWater() {
-  oauthFetch('fitbitAuth', `https://api.fitbit.com/1/user/-/foods/log/date/${today()}.json`, () => ({
+  oauthFetch('fitbitAuth', fitbitOAuth, `https://api.fitbit.com/1/user/-/foods/log/date/${today()}.json`, () => ({
     method: "GET",
     headers: {
       Authorization: `Bearer ${fitbitKey()}`,
@@ -244,7 +246,7 @@ function getWater() {
     }
   }))
   .then(food => {
-    oauthFetch('fitbitAuth', `https://api.fitbit.com/1/user/-/foods/log/water/goal.json`, () => ({
+    oauthFetch('fitbitAuth', fitbitOAuth, `https://api.fitbit.com/1/user/-/foods/log/water/goal.json`, () => ({
       method: "GET",
       headers: {
         Authorization: `Bearer ${fitbitKey()}`,
@@ -259,7 +261,7 @@ function getWater() {
 }
 
 function getSleep() {
-  oauthFetch('fitbitAuth', `https://api.fitbit.com/1.2/user/-/sleep/date/${today()}.json`, () => ({
+  oauthFetch('fitbitAuth', fitbitOAuth, `https://api.fitbit.com/1.2/user/-/sleep/date/${today()}.json`, () => ({
     method: "GET",
     headers: {
       Authorization: `Bearer ${fitbitKey()}`,
@@ -268,7 +270,7 @@ function getSleep() {
   }))
   .then(res => res.json())
   .then(sleep => {
-    oauthFetch('fitbitAuth', `https://api.fitbit.com/1/user/-/sleep/goal.json`, () => ({
+    oauthFetch('fitbitAuth', fitbitOAuth, `https://api.fitbit.com/1/user/-/sleep/goal.json`, () => ({
       method: "GET",
       headers: {
         Authorization: `Bearer ${fitbitKey()}`,
@@ -299,7 +301,9 @@ sendSettings();
 const refreshAuth = 'Basic ' + btoa(shh.fitbitClientId + ':' + shh.fitbitClientSecret);
 console.log(refreshAuth);
 
-async function oauthFetch(auth, url, options, retry = 0) {
+async function oauthFetch(auth, oauthurl, url, options, retry = 0) {
+  if (!settingsStorage.getItem(auth)) throw new Error(`No auth for ${auth}`);
+
   let o = options;
   if (typeof options === 'function') o = options();
   console.log(`oauthFetch: ${url}\n\t${JSON.stringify(o)}`);
@@ -308,20 +312,31 @@ async function oauthFetch(auth, url, options, retry = 0) {
   if (('success' in data && !data.success) || 'errors' in data) {
     console.log(`[oauth fetch err]\n\t${JSON.stringify(data)}\n\t${url} try ${retry + 1}\n\t${JSON.stringify(o)}\n\t${settingsStorage.getItem(auth)}`);
     if (retry) throw new Error('oauth too many fails');
-    const reup = await fetch(
-      `https://api.fitbit.com/oauth2/token?grant_type=refresh_token&refresh_token=${JSON.parse(settingsStorage.getItem(auth)).refresh_token}`,
-      {
-        headers: {
-          Authorization: refreshAuth,
-          'Content-Type': 'application/x-www-form-urlencoded',
-        }
-      }
-    );
-    const reupVal = await reup.json();
-    settingsStorage.setItem(auth, JSON.stringify(reupVal));
+    await reauth(auth, oauthurl);
     return oauthFetch(auth, url, options, retry + 1);
   }
   return data;
+}
+
+async function reauth(auth, oauthurl) {
+  const obj = JSON.parse(settingsStorage.getItem(auth));
+  console.log(`original: ${JSON.stringify(obj)}`);
+  const reup = await fetch(
+    `${oauthurl}?grant_type=refresh_token&refresh_token=${obj.refresh_token}`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: refreshAuth,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }
+    }
+  );
+  const reupVal = await reup.json();
+  console.log(`reup: ${JSON.stringify(reupVal)}`);
+  if (reupVal.refresh_token) obj.refresh_token = reupVal.refresh_token;
+  if (reupVal.access_token) obj.access_token = reupVal.access_token;
+  settingsStorage.setItem(auth, JSON.stringify(obj));
+  console.log(`after: ${settingsStorage.getItem(auth)}`);
 }
 
 function debounce(fn, time) {
