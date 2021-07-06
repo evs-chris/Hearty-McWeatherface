@@ -1098,12 +1098,16 @@ function updateStats() {
     if (water) {
       const w = ui.stats.water;
       if (w.wrapper.style.display !== 'inline') w.wrapper.style.display = 'inline';
-      const max = Math.floor(screenHeight / 5);
+      const max = 71;
       const pct = water.amount / water.goal;
       w.goal.text = `${settings.temp ? mlToOz(water.goal) : (water.goal / 1000).toFixed(1)}`;
       w.text.text = `${settings.temp ? mlToOz(water.amount) : (water.amount / 1000).toFixed(1)}`;
-      w.bar.height = Math.round(pct * max);
-      w.bar.y = max - w.bar.height;
+      if (pct > 1) {
+        w.bar.style.display = 'none';
+      } else {
+        w.bar.style.display = 'inline';
+        w.bar.height = max - Math.round(pct * max);
+      }
     } else {
       if (ui.stats.water.wrapper.style.display !== 'none') ui.stats.water.wrapper.style.display = 'none';
     }

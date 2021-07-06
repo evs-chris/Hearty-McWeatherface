@@ -564,11 +564,17 @@
     <text class="stat-txt" id="peak-amt" x="302" y="45%+107" fill="red" />
 
     <g id="stat-water-wrapper" display="none">
-      <text id="stat-water-goal" class="stat-txt" x="35" y="50%+10" fill="lightblue">GO</text>
-      <text id="stat-water-text" class="stat-txt" x="35" y="70%+30" fill="lightblue">CUR</text>
-      <section x="25" width="20" height="20%" y="50%+15">
-        <rect id="stat-water-back" class="clicky" x="0" width="100%" height="100%" y="0" fill="white" opacity="0.1" />
-        <rect id="stat-water" x="0" width="100%" height="100%" y="0" fill="blue" pointer-events="none" />
+      <text id="stat-water-goal" class="stat-txt" x="35" y="50%+8" fill="lightblue" />
+      <text id="stat-water-text" class="stat-txt" x="35" y="70%+30" fill="lightblue" />
+      <section x="25" width="20" height="71" y="50%+10">
+        <circle cx="10" cy="10" r="10" fill="blue" />
+        <circle cx="10" cy="100%-10" r="10" fill="blue" />
+        <rect x="0" width="100%" height="100%-20" y="10" fill="blue" pointer-events="none" />
+        <svg id="stat-water" x="0" y="0" width="20" height="25">
+          <rect x="0" width="20" height="51" y="10" fill="#303030" height="100%-10" />
+          <circle cx="10" cy="10" r="10" fill="#303030" />
+        </svg>
+        <rect id="stat-water-back" class="clicky" x="0" width="100%" height="100%" y="0" opacity="0" />
       </section>
 
       <section x="0" y="100%-50" width="49%" height="50">
