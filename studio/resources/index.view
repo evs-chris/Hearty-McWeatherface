@@ -564,7 +564,7 @@
     <text class="stat-txt" id="peak-amt" x="302" y="45%+107" fill="red" />
 
     <g id="stat-water-wrapper" display="none">
-      <section x="20" width="30" height="101" y="50%+5">
+      <section x="20" width="31" height="101" y="50%+5">
         <text id="stat-water-goal" class="stat-txt" x="50%" y="-5" fill="lightblue" />
         <circle cx="15" cy="15" r="15" fill="blue" />
         <circle cx="15" cy="100%-15" r="15" fill="blue" />
