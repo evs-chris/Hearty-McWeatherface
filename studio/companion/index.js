@@ -227,7 +227,6 @@ function sendWater(ml) {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${fitbitKey()}`,
-      'Accept-Language': 'en_GB',
     },
   }))
   .then(data => {
@@ -242,7 +241,6 @@ function getWater() {
     method: "GET",
     headers: {
       Authorization: `Bearer ${fitbitKey()}`,
-      'Accept-Language': 'en_GB'
     }
   }))
   .then(food => {
@@ -250,7 +248,6 @@ function getWater() {
       method: "GET",
       headers: {
         Authorization: `Bearer ${fitbitKey()}`,
-        'Accept-Language': 'en_GB'
       }
     }))
     .then(water => {
@@ -265,7 +262,7 @@ function getSleep() {
     method: "GET",
     headers: {
       Authorization: `Bearer ${fitbitKey()}`,
-      'Accept-Language': 'en_GB'
+      'Accept-Language': 'en_CA'
     }
   }))
   .then(res => res.json())
@@ -274,7 +271,6 @@ function getSleep() {
       method: "GET",
       headers: {
         Authorization: `Bearer ${fitbitKey()}`,
-        'Accept-Language': 'en_GB'
       }
     }))
     .then(goal => {
@@ -306,7 +302,6 @@ async function oauthFetch(auth, oauthurl, url, options, retry = 0) {
 
   let o = options;
   if (typeof options === 'function') o = options();
-  console.log(`oauthFetch: ${url}\n\t${JSON.stringify(o)}`);
   const res = await fetch(url, o);
   const data = await res.json();
   if (('success' in data && !data.success) || 'errors' in data) {
@@ -333,10 +328,15 @@ async function reauth(auth, oauthurl) {
   );
   const reupVal = await reup.json();
   console.log(`reup: ${JSON.stringify(reupVal)}`);
-  if (reupVal.refresh_token) obj.refresh_token = reupVal.refresh_token;
-  if (reupVal.access_token) obj.access_token = reupVal.access_token;
-  settingsStorage.setItem(auth, JSON.stringify(obj));
-  console.log(`after: ${settingsStorage.getItem(auth)}`);
+  if (JSON.stringify(reupVal).match(/refresh token invalid/i)) {
+    console.log(`oauth reup failed due to invalid token, clearing oauth token`);
+    settingsStorage.removeItem(auth);
+    sendSettings();
+  } else {
+    if (reupVal.refresh_token) obj.refresh_token = reupVal.refresh_token;
+    if (reupVal.access_token) obj.access_token = reupVal.access_token;
+    settingsStorage.setItem(auth, JSON.stringify(obj));
+  }
 }
 
 function debounce(fn, time) {
