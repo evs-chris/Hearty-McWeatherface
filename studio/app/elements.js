@@ -83,7 +83,8 @@ export const ui = {
       speed: eid('main-exercise-speed')
     },
     activeTm: eid('active-tm'),
-    activeSw: eid('active-sw')
+    activeSw: eid('active-sw'),
+    connected: eid('main-connected'),
   },
   heart: {
     long: {

@@ -47,6 +47,7 @@ let timer;
 let settings = {};
 let weather = {};
 let water;
+let connected = false;
 
 let canExercise = app.permissions.granted('access_exercise');
 let zones = { fatburn: 115, cardio: 140, peak: 165 };
@@ -806,11 +807,13 @@ function flushQueue() {
 }
 messaging.peerSocket.onopen = () => {
   console.log('app peer open');
+  connected = true;
   flushQueue();
 }
 
 messaging.peerSocket.onclose = () => {
   console.log('app peer closed');
+  connected = false;
 }
 
 messaging.peerSocket.onerror = e => {
@@ -1123,6 +1126,10 @@ function updateBattery() {
 }
 battery.onchange = updateBattery;
 
+function updateConnection() {
+  ui.main.connected.style.display = connected ? 'inline' : none;
+}
+
 // Pages
 function draw() {
   requestAnimationFrame(_draw);
@@ -1205,6 +1212,7 @@ function drawMain() {
   updateStats();
   updateWeather();
   updateExercise();
+  updateConnection();
   drawEKG();
 }
 

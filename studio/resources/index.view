@@ -154,6 +154,8 @@
       <rect x="34%" y="0" width="34%" height="100%" fill="white" opacity="0.14" />
       <rect x="68%" y="0" width="32%" height="100%" fill="white" opacity="0.15" />
 
+      <image id="main-connected" width="12" height="20" x="100%-16" y="4" href="img/connection.png" display="none" />
+
       <line class="ekg-range long-range" x1="2%" x2="2%" />
       <line class="ekg-range long-range" x1="4%" x2="4%" />
       <line class="ekg-range long-range" x1="6%" x2="6%" />
