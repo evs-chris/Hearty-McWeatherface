@@ -1,4 +1,4 @@
-# Hearty McWeatherface
+# [Hearty McWeatherface](https://evs-chris.github.io/Hearty-McWeatherface/)
 
 Do you have a Fitbit Sense or Versa 3? Do You like seeing a crapload of stats in one glance? If you answered 'yes' to both of those questions, and you have pretty ok eyesight, then you might be interested in this watch face.
 
