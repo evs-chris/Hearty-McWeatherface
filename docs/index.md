@@ -2,6 +2,10 @@
 
 Welcome to the Hearty McWeatherface documentation! This site is more or less required by Fitbit in order to get access to their web APIs to do things like access sleep and water data. So you can check out our [Terms of Use](./terms) and [Privacy Policy](./privacy) while you're here, but the summary is we don't want your data, we're not responsible for horrible things that happen while you use our software, and we really just want to be able to use all the features of our own watch face, which requires publishing it. This site also serves as a convenient location to describe the features and details of the watch face and its operation, since this face is slightly more complicated than most.
 
+![Watch face navigation animation](./img/screenshots.webp)
+
+If you're interested in what's changed from version to version, you could check out the commit history or visit the [changelog](./changelog).
+
 ### What's with the name?
 
 The two most difficult and common issues related to software development are naming things, cache invalidation, and off-by-one errors. This watch face prominently features heart rates and weather, so taking a page from the name-a-polar-research-ship playbook.

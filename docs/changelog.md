@@ -1,6 +1,26 @@
+## 1.3.0
+
+2021-07-09
+
+* __BUG:__ Fixed display and pausing of timers.
+* __BUG:__ Added missing minute characters on heart detail view graphs.
+* __BUG:__ All of the weather images are now correctly linked.
+
+* Added always on display support that will likely never get approved for actual use, though I think it meets all the requirements.
+  * The time renders as outlined text roughly the same as the main face. The date is rendered as plain text just below. The 30 minute heart rate graph is rendered at the bottom.
+  * The full rendered area only occupies 90% of the available space, and on each activation, the view is shifted to random x and y coordinates.
+  * The display only updates every minute.
+* The exercise view now updates every half second while active.
+* Several sections avoid triggering updates if the display is off or they are irrelevant.
+* The main view heart rate graph backgrounds now fade out slightly with represented age.
+* There is now an option to sign in to your Fitbit account from the settings app to log water consumption from the watch. This is accessed from the stats view, and there are five sizes supported that differ slightly in metric vs imperial: 250ml, 355ml, 500ml, 750ml, 1000ml vs 8oz, 12oz, 16oz, 20oz, 32oz. Double tapping a size will try to fire a request to the companion app, but it gets disconnected quite often.
+  * The current water consumption for the day (as of UTC, the web API isn't super clear) is displayed as something that's meant to bring to mind a water gauge with a float.
+* Added heart rate zones to the exercise heart rate dial.
+* The thunderstorm icon is a bit more visible.
+
 ## 1.2.2
 
-Submitted for approval
+Unpublished
 
 * __BUG__: Fixed imperial rendering of elevation gained.
 
