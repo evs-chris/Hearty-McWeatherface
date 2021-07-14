@@ -7,7 +7,7 @@
    viewBox="0 0 15.240001 25.400001"
    version="1.1"
    id="svg3952"
-   inkscape:export-filename="/home/chris/Pictures/stat-slope.png"
+   inkscape:export-filename="/home/chris/dev/fitbit/Hearty-McWeatherface/studio/resources/img/connection.png"
    inkscape:export-xdpi="20"
    inkscape:export-ydpi="20"
    inkscape:version="1.1 (c68e22c387, 2021-05-23)"
@@ -27,15 +27,15 @@
      inkscape:document-units="in"
      showgrid="false"
      units="in"
-     inkscape:zoom="6.2153467"
-     inkscape:cx="24.616487"
-     inkscape:cy="49.393866"
+     inkscape:zoom="7.3077367"
+     inkscape:cx="25.452477"
+     inkscape:cy="49.673382"
      inkscape:window-width="1920"
      inkscape:window-height="1060"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer29"
+     inkscape:current-layer="layer3"
      inkscape:snap-global="false" />
   <defs
      id="defs3949" />
@@ -343,11 +343,22 @@
   <g
      inkscape:groupmode="layer"
      id="layer29"
-     inkscape:label="Timer Indicator">
+     inkscape:label="Timer Indicator"
+     style="display:none">
     <path
        id="rect3391"
        style="fill:#999999;stroke-width:12.6987;stroke-linecap:round;stroke-linejoin:round"
        d="M 15.239572,6.0400877 V 21.278593 H 0.00106695 Z"
        sodipodi:nodetypes="cccc" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Connection">
+    <path
+       style="fill:none;stroke:#000080;stroke-width:2.11666674;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 1.8511665,8.0718253 12.746606,17.513035 7.0937315,22.866279 V 2.3347818 L 12.746606,8.1137202 1.8511665,17.025763"
+       id="path1452"
+       sodipodi:nodetypes="cccccc" />
   </g>
 </svg>
