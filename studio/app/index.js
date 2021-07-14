@@ -1119,7 +1119,7 @@ function updateStats() {
       const w = ui.stats.water;
       if (w.wrapper.style.display !== 'inline') w.wrapper.style.display = 'inline';
       const max = 101;
-      const pct = Math.min(water.amount / water.goal);
+      const pct = Math.min(1, water.amount / water.goal);
       w.goal.text = `${settings.temp ? mlToOz(water.goal) : (water.goal / 1000).toFixed(1)}`;
       w.text.text = `${settings.temp ? mlToOz(water.amount) : (water.amount / 1000).toFixed(1)}`;
       w.bar.height = max - Math.round(pct * (max - 30));
