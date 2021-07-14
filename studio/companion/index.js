@@ -12,6 +12,9 @@ const fitbitOAuth = 'https://api.fitbit.com/oauth2/token';
 
 console.log('starting companion');
 
+// try suggesting we check in every two hours to see if that helps with disconnections
+me.wakeInterval = 7200000;
+
 function flushQueue() {
   if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
     const msgs = queue.splice(0, queue.length);

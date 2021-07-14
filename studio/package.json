@@ -16,7 +16,8 @@
       "access_heart_rate",
       "access_internet",
       "access_location",
-      "access_exercise"
+      "access_exercise",
+      "run_background"
     ],
     "buildTargets": [
       "atlas",
