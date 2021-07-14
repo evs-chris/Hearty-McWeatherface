@@ -243,9 +243,14 @@ singleTap(eid('time-tm1-start'), () => {
     timer = { h: 0, m: 0, s: 0 };
     switchPage(TIMER);
   } else if (!timer1Pause) {
-    timer1Pause = timer1 - Date.now();
-    if (timer1TM) clearTimeout(timer1TM);
-    timer1TM = 0;
+    const now = Date.now();
+    if (timer1 < now) {
+      timer1 = 0;
+    } else {
+      timer1Pause = timer1 - now;
+      if (timer1TM) clearTimeout(timer1TM);
+      timer1TM = 0;
+    }
   } else {
     timer1 = Date.now() + timer1Pause;
     timer1Pause = 0;
@@ -261,9 +266,14 @@ singleTap(eid('time-tm2-start'), () => {
     timer = { h: 0, m: 0, s: 0 };
     switchPage(TIMER);
   } else if (!timer2Pause) {
-    timer2Pause = timer2 - Date.now();
-    if (timer2TM) clearTimeout(timer2TM);
-    timer2TM = 0;
+    const now = Date.now();
+    if (timer2 < now) {
+      timer2 = 0;
+    } else {
+      timer2Pause = timer2 - now;
+      if (timer2TM) clearTimeout(timer2TM);
+      timer2TM = 0;
+    }
   } else {
     timer2 = Date.now() + timer2Pause;
     timer2Pause = 0;
@@ -274,7 +284,7 @@ singleTap(eid('time-tm2-start'), () => {
 });
 
 singleTap(eid('time-tm1-reset'), () => {
-  if (timer1Pause) {
+  if (timer1Pause || timer1 < Date.now()) {
     timer1 = 0;
     timer1Pause = 0;
     drawSW();
@@ -282,7 +292,7 @@ singleTap(eid('time-tm1-reset'), () => {
 });
 
 singleTap(eid('time-tm2-reset'), () => {
-  if (timer2Pause) {
+  if (timer2Pause || timer2 < Date.now()) {
     timer2 = 0;
     timer2Pause = 0;
     drawSW();
@@ -1298,14 +1308,14 @@ function drawSW(init) {
   if (timer1Pause === -1) ; // just finished
   else if (timer1 > now && !timer1Pause) ui.time.tm1.text = monoDigits(timeStr(timer1 - now));
   else if (timer1 && timer1Pause) ui.time.tm1.text = monoDigits(timeStr(timer1Pause));
-  else if (!timer1 || timer1 < now) ui.time.tm1.text = '---';
-  else if (init && timer1Pause) ui.time.tm1.text = monoDigits(timeStr(timer1Pause));
+  else if (timer1 && timer1 <= now) ui.time.tm1.text = monoDigits(timeStr(now - timer1));
+  else if (!timer1) ui.time.tm1.text = '---';
   
   if (timer2Pause === -1) ; // just finished
   else if (timer2 > now && !timer2Pause) ui.time.tm2.text = monoDigits(timeStr(timer2 - now));
   else if (timer2 && timer2Pause) ui.time.tm2.text = monoDigits(timeStr(timer2Pause));
-  else if (!timer2 || timer2 < now) ui.time.tm2.text = '---';
-  else if (init && timer2Pause) ui.time.tm2.text = monoDigits(timeStr(timer2Pause));
+  else if (timer2 && timer2 <= now) ui.time.tm2.text = monoDigits(timeStr(now - timer2));
+  else if (!timer2) ui.time.tm2.text = '---';
   
   if (page === TIME && ((sw1 && !sw1Pause) || (sw2 && !sw2Pause) || (timer1 && !timer1Pause) || (timer2 && !timer2Pause))) requestAnimationFrame(drawSW);
 }
@@ -1330,7 +1340,6 @@ function initTimers() {
   if (timer1TM) clearTimeout(timer1TM);
   if (timer2TM) clearTimeout(timer2TM);
   if (timer1 && timer1 > now && !timer1Pause) timer1TM = setTimeout(() => {
-    timer1 = 0;
     timer1Pause = -1;
     vibration.start('alert');
     display.poke();
@@ -1339,11 +1348,10 @@ function initTimers() {
     setTimeout(() => {
       vibration.stop();
       timer1Pause = 0;
-      ui.time.tm1.text = '---';
+      drawSW();
     }, 5000);
   }, timer1 - now);
   if (timer2 && timer2 > now && !timer2Pause) timer2TM = setTimeout(() => {
-    timer2 = 0;
     timer2Pause = -1;
     vibration.start('alert');
     display.poke();
@@ -1352,7 +1360,7 @@ function initTimers() {
     setTimeout(() => {
       vibration.stop();
       timer2Pause = 0;
-      ui.time.tm2.text = '---';
+      drawSW();
     }, 5000);
   }, timer2 - now)
 }
