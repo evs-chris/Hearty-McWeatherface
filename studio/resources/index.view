@@ -631,7 +631,12 @@
       
       <line x1="0" x2="100%" y1="80" y2="80" fill="#333333" stroke-width="2" />
       <line x1="0" x2="100%" y1="120" y2="120" fill="#333333" stroke-width="2" />
-      
+
+      <rect id="exercise-minutes-bar" x="-1" y="79" height="4" width="0" fill="cyan" opacity="0.7" />
+      <rect id="exercise-peak-bar" x="-1" y="119" height="4" width="0" fill="darkred" opacity="0.7" />
+      <rect id="exercise-cardio-bar" x="-1" y="119" height="4" width="0" fill="darkorange" opacity="0.7" />
+      <rect id="exercise-fatburn-bar" x="-1" y="119" height="4" width="0" fill="yellow" opacity="0.7" />
+
       <image x="50%-30" y="10" id="exercise-active-icon" width="60" height="60" />
       
       <text id="exercise-time" x="10%" y="108" class="exercise" text-anchor="start" />

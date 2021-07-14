@@ -421,6 +421,7 @@ let maxRate = resting;
 let currentRate = '--';
 let lastRate = 0;
 const screenHeight = (device.screen || { height: 250 }).height;
+const screenWidth = (device.screen || { width: 348 }).width;
 const ekg = {
   longs: fill([], resting, 0, 20),
   mids: fill([], resting, 0, 20),
@@ -1004,6 +1005,22 @@ function updateExercise() {
       
       if (exerciseTM) clearTimeout(exerciseTM);
       if (ex.state === 'started' && display.on && !display.aodActive) exerciseTM = setTimeout(updateExercise, EXERCISE_INTERVAL);
+
+      // maybe this should be relative to the start of exercise, but for now, global numbers
+      const a = DEMO ? demo.stats : activity.local;
+      const m = a.activeZoneMinutes || {};
+      const g = DEMO ? demo.goals : goals || {};
+  
+      const actPct = Math.min(1, !m.total ? 0 : (m.total || 1) / ((g.activeZoneMinutes || {}).total || 1));
+      const fatPct = Math.min(1, !m.fatBurn ? 0 : (m.fatBurn || 1) / (m.total || 1));
+      const cardioPct = Math.min(1, !m.cardio ? 0 : (m.cardio || 1) / (m.total || 1));
+
+      const actWidth = Math.round(actPct * screenWidth);
+
+      w.minutes.total.width = actWidth;
+      w.minutes.peak.width = actWidth;
+      w.minutes.cardio.width = Math.round((cardioPct + fatPct) * actWidth);
+      w.minutes.fatburn.width = Math.round(fatPct * actWidth);
     } else {
       main.pickEl.style.display = 'inline';
       main.pickEl.layer = 5;

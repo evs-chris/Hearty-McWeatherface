@@ -208,6 +208,13 @@ export const ui = {
         peak: eid('exercise-heart-peak'),
         peakLine: eid('exercise-heart-peak-line'),
       },
+
+      minutes: {
+        total: eid('exercise-minutes-bar'),
+        peak: eid('exercise-peak-bar'),
+        cardio: eid('exercise-cardio-bar'),
+        fatburn: eid('exercise-fatburn-bar'),
+      },
       
       pace: eid('exercise-pace'),
       paceo: eid('exercise-paceo'),
