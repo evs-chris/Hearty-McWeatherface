@@ -1,3 +1,14 @@
+## 1.4.0
+
+2021-07-15
+
+* __BUG:__ The water meter bubble will no longer ascend to the top of the screen if you happen to be really thirsty.
+
+* Timers will now count up after they have elapsed until you tap them or the reset, so if you want to know how far past the designated time you are, you can tell.
+* The companion/settings app now requests the run_background permission and suggests a two hour wake interval. This seems to help a good deal with communications issues between the face and the app.
+* There is now a subtle connection indicator on the top right of the current heart rate graph on the main view. If it is not rendered, the face is not connected to the companion.
+* The horizontal lines on the exercise view now have additional bars that cross them that represent active zone minutes. The top bar represents the total, and the bottom bar represents the split of zones across the total minutes. This could possbily change to the active zone minutes during the current workout at some point.
+
 ## 1.3.0
 
 2021-07-09
